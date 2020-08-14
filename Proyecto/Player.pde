@@ -8,9 +8,10 @@
 
 player Player1;
 player Player2;
-
+PImage spritehug;
 //Generación de los jugadores
 void genPlayers(){
+  spritehug = loadImage("Spritesheet Azul caminante Todas.png");
   for(int i = 0; i < level.length; i++){
     for(int j = 0; j < level[i].length; j++){
       if(level[i][j] == '1'){
@@ -29,9 +30,11 @@ class player{
   int velY = 0, velY0 = 0;
   
   int g = 10;
-  int size = sizeBlock/2;  //La mitad del tamaño de los bloques
+  int size = 2*sizeBlock;  //La mitad del tamaño de los bloques
   boolean jjump = false;
   float t;
+  int frame;
+  int afterVelX=1;
   
   player(int _x, int _y){
     x = _x;
@@ -146,8 +149,9 @@ class player{
       for(int a = velX; a < 0; a++){
         if(!checkLeftWall()){
           x--;
-          velX = 0;
+          
         }else{
+          velX = 0;
           break;
         }
       }
@@ -188,7 +192,32 @@ class player{
   void display(){
     fill(255);
     noStroke();
-    square(x, y, size);
+   // square(x, y, size);
+  //  copy(spritehug,0,0,320,320,x,y,size,size);
+  frames();
+    
+  }
+  void frames(){
+    frame=(frameCount/6)%10; 
+    
+    if (velX!=0){
+     if(velX>0){
+       //println("whatsaaaap");
+       afterVelX=1;
+       copy(spritehug,frame*320,0,320,320,x,y,size,size);
+       
+        }
+     if(velX<0){
+       afterVelX=2;
+       copy(spritehug,frame*320,320,320,320,x,y,size,size);
+       println("holaaaaa");
+       
+       }  
+     }
+    else{
+     if(afterVelX==1)copy(spritehug,0,0,320,320,x,y,size,size);
+     if(afterVelX==2 )copy(spritehug,0,320,320,320,x,y,size,size); 
+    }
   }
   
 }

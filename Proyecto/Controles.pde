@@ -108,4 +108,7 @@ void control(){
   if(!aKey && !dKey){
     Player1.velX = 0;
   }
+  if(aKey && dKey){
+    Player1.velX = 0;
+  }
 }

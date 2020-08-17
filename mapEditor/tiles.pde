@@ -3,11 +3,10 @@
 
 tile [][] Tiles = new tile[numTilesY][numTilesX];
 
-void generarTiles(){
+void setupTiles(){
   for(int i = 0; i < Tiles.length; i++){
     for(int j = 0; j < Tiles[i].length; j++){
       Tiles[i][j] = new tile(j*sizeTiles, i*sizeTiles, sizeTiles);
-      
     }
   }
   
@@ -37,10 +36,10 @@ void showGrid(){
 
 //----------------------DIBUJAR TILES----------------------//
 
-void showTiles(){
+void displayTiles(){
   for(int i = 0; i < Tiles.length; i++){
     for(int j = 0; j < Tiles[i].length; j++){
-      Tiles[i][j].show();
+      Tiles[i][j].display();
     }
   }
 }
@@ -49,16 +48,11 @@ void showTiles(){
 
 class tile{
   int x, y;  //Cordenadas superior izquierda del tile
-  int size;  //Tamaño
-  PImage tileset;  //Imagen del tile 
+  int size;  //Tamaño 
   
-  int typeBlock;
+  int typeBlock = typeTiles.length;
   int tile;
   
-  boolean prsd = false;  //Presionado o no
-  boolean mslc = false;  //Mouse sobre el botón o no
-  
-  //Cuando el botón cambia de color al presionarse y tiene varias opciones
   tile(int _x, int _y, int _size){
     x = _x;
     y = _y;
@@ -66,40 +60,29 @@ class tile{
   }
   
   void changeType(int _type){
-    int typeBlock = _type;
+    typeBlock = _type;
   }
   
   void changeTile(int _i, int _j){
     
   }
   
-  boolean checarMouse(){
+  boolean checkMouse(){
     if(mouseX > x && mouseX < x + size && mouseY > y && mouseY < y + size){  //Si el puntero está sobre el botón
-      mslc = true;
-      return true;
-    }else{
-      mslc = false;
+      if(mousePressed && mouseButton == LEFT){
+        return true;
+        }
+      }
       return false;
     }
-  }
-  /*
-  int cambiarEstado(){
-    prsd = !prsd;
-    estado++;
-    if(estado == numEstados)  estado = 0;  //Se resetea al llegar al máximo
-    return estado;
-  }
-  */
-  void show(){
-    square(x, y, size);
+  void display(){
+    
+    if(checkMouse())  changeType(tileSelected);
+    
+    //fill(color(round(random(255))));
+    //square(x, y, size);
+    if(typeBlock != typeTiles.length){  //Es vacio
+      copy(tilesImages[typeBlock], configImages[typeBlock][1], configImages[typeBlock][2], 32,32, x,y, size,size);  //Pone la imagen del tile que corresponde
+    }
   }
 }
-
- /*
-  if(Botones[8].prsd){
-    PImage Chart = get(xGrafica - 50, 0, xBotones - 30, height);  //Solo exporta la gráfica
-    Chart.save("charts/"+Titulo1+"_"+Titulo2+numImagen+".png");  //La almacena en la carpeta "charts"
-    numImagen++;
-    Botones[8].prsd = false;
-  }
-  */

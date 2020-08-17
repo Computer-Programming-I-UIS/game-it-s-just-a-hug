@@ -15,10 +15,10 @@ void setupButtons(){
   int xButton = 0;
   int yButton = +2;
   
-  //Vacio - Import - Export
+  //Vacio - Cuadícula - Export
   Botones[typeTiles.length] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, typeTiles.length);  //Vacio
   xButton += dxButtons;
-  Botones[typeTiles.length +1] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, "Imp");  //Import
+  Botones[typeTiles.length +1] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, "Grid");  //Cuadrícula
   xButton += dxButtons;
   Botones[typeTiles.length +2] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, "Save");  //Export
   xButton = 0;
@@ -97,14 +97,14 @@ class boton{
     //Borde del botón
     if(typeTile == tileSelected)  stroke(Color2);  //Si el tile seleccionado es el mismo del del boton lo colera de otro color
     else  stroke(Color1);
-    if(mslc)  strokeWeight(5);  //Si el mouse está sobre el botón, el borde es más grueso
+    if(mslc || typeTile == tileSelected)  strokeWeight(5);  //Si el mouse está sobre el botón, el borde es más grueso
     else  strokeWeight(3);
     
     //Dibujar botón
     fill(0);
     square(x, y, size);
     if(typeTile != -1 && typeTile != typeTiles.length){
-      copy(tilesImages[typeTile], 32, 32, 32,32, x,y, size,size);
+      copy(tilesImages[typeTile], configImages[typeTile][1], configImages[typeTile][2], 32,32, x,y, size,size);  //Pone la imagen del tile que corresponde
     }
     
     //Texto
@@ -121,18 +121,47 @@ class boton{
 
 void actionButtons(){
   
+  //----------------------CUADRÍCULA----------------------//
+  
+  if(Botones[typeTiles.length +1].prsd){
+      showGrid = !showGrid;
+      Botones[typeTiles.length +1].prsd = false;
+  }
+  
   //----------------------EXPORTAR NIVEL----------------------//
   
   if(Botones[typeTiles.length +2].prsd){
+    
+    //Imagen
     PImage Level = get(0, 0, numTilesX*sizeTiles+1, numTilesY*sizeTiles+1);  //Solo exporta la gráfica
     Level.save("levels/Level"+numLevel+".png");  //La almacena en la carpeta "charts"
     numLevel++;
     Botones[typeTiles.length +2].prsd = false;
+    
+    //Archivo texto
+    String [] level = new String[Tiles.length];
+    //Inicial el string vacio  (no nulo)
+    for(int i = 0; i < level.length; i++){
+      level[i] = "";
+    }
+    
+    for(int i = 0; i < Tiles.length; i++){
+      for(int j = 0; j < Tiles[i].length; j++){
+        if(Tiles[i][j].typeBlock == typeTiles.length){  //Es vacio
+          level[i] += ' ';  //Deja un espacio en blanco
+        }else{
+          level[i] += typeTiles[Tiles[i][j].typeBlock][1];  //Pone la letra que está definida para ese tipo de bloque
+          
+        }
+      }
+    }
+    saveStrings("levels/Level"+numLevel+".txt", level);    //Guarda el nuevo archivo sin las demás lineas
   }
+  
   
   //----------------------TILE SELECCIONADO----------------------//
   
-  for(int b = 0; b < typeTiles.length; b++){
+  for(int b = 0; b <= typeTiles.length; b++){
     if(Botones[b].prsd){
       tileSelected = Botones[b].typeTile;
       Botones[b].prsd = false;

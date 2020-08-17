@@ -10,7 +10,7 @@ int dxButtons = sizeTiles;  //Separacion de los botones
 
 int tileSelected = tilesImages.length;  //Almacena el tipo de tile seleccionado
 
-void iniciarBotones(){
+void setupButtons(){
   
   int xButton = 0;
   int yButton = +2;
@@ -34,7 +34,6 @@ void iniciarBotones(){
     }
     
   }
-  
   
 }
 
@@ -76,6 +75,7 @@ class boton{
     y = _y;
     size = _size;
     info = _info;
+    typeTile = -1;
   }
   
   boolean checkMouse(){
@@ -103,6 +103,9 @@ class boton{
     //Dibujar botón
     fill(0);
     square(x, y, size);
+    if(typeTile != -1 && typeTile != typeTiles.length){
+      copy(tilesImages[typeTile], 32, 32, 32,32, x,y, size,size);
+    }
     
     //Texto
     if(info != null){
@@ -125,6 +128,16 @@ void actionButtons(){
     Level.save("levels/Level"+numLevel+".png");  //La almacena en la carpeta "charts"
     numLevel++;
     Botones[typeTiles.length +2].prsd = false;
+  }
+  
+  //----------------------TILE SELECCIONADO----------------------//
+  
+  for(int b = 0; b < typeTiles.length; b++){
+    if(Botones[b].prsd){
+      tileSelected = Botones[b].typeTile;
+      Botones[b].prsd = false;
+      break;
+    }
   }
   
 }

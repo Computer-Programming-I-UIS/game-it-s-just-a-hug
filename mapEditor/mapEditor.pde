@@ -28,7 +28,7 @@ int numTilesY = 18;
 
 */
 String [][] typeTiles = {{"tileground01.jpg","S","Y","N"},
-                         {"tileground01.jpg","S","Y","N"},
+                         {"tileground02.jpg","S","Y","N"},
                          {"tileground01.jpg","S","Y","N"},
                          {"tileground01.jpg","S","Y","N"},
                          {"tileground01.jpg","S","Y","N"},
@@ -55,7 +55,7 @@ int numLevel = 0;
 void setup(){
   setupScreen();
   importTiles();
-  iniciarBotones();
+  setupButtons();
 }
 
 void draw(){
@@ -70,6 +70,8 @@ void draw(){
   actionButtons();
 }
 
+
+
 void setupScreen(){
   int sizeScreenX = numTilesX+5;
   surface.setSize((sizeScreenX)*sizeTiles, numTilesY*sizeTiles+1);  //Define el tamaño de la ventana
@@ -82,7 +84,7 @@ void setupScreen(){
 void importTiles(){
   for(int i = 0; i < typeTiles.length; i++){
     if(fileExists(typeTiles[i][0])){  //Si el archivo existe
-      tilesImages[i] = loadImage("data/"+typeTiles[i]);;
+      tilesImages[i] = loadImage("data/"+typeTiles[i][0]);
       
     }else{
       println("¡ERROR!");

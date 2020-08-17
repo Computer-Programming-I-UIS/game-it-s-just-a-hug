@@ -1,4 +1,3 @@
-
 /*****************************************************
 
 Este es el editor de niveles
@@ -23,11 +22,10 @@ int numTilesY = 18;
 /*
   1 - nombre del archivo con la extensión
   2 - Carácter que se almacena en el archivo de texto (no puede estar repetido)
-  3 - Si es un tipo de bloque con colisión = "Y", Si no, entonces es un bloque decorativo = "N"
   4 - Si es un tipo de bloque con animación = "Y", Si no, entonces es un bloque estático = "N"
 
 */
-String [][] typeTiles = {{"tileground01.png","S","Y","N"}};  //
+String [][] typeTiles = {{"tileground01.png","S","N"}};  //
 PImage [] tilesImages = new PImage [typeTiles.length];  //Imágenes
 int [][] configImages = new int [typeTiles.length][3];  //Almacena las cordenadas del la imagen que se pone en el boton
 //Background
@@ -126,20 +124,31 @@ boolean fileExists(String fileName){
 }
 
 void mouseMoved(){
-  for(int b = 0; b < numBotones; b++){
-    if(Botones[b].checkMouse()){
+  for(int b = 0; b < TButtons.length; b++){
+    if(TButtons[b].checkMouse()){
       cursor(HAND);
       break;
     }else  cursor(ARROW);
   }
-  
+  for(int b = 0; b < EButtons.length; b++){
+    if(EButtons[b].checkMouse()){
+      cursor(HAND);
+      break;
+    }else  cursor(ARROW);
+  }
 }
 
 void mousePressed(){
   //Botones
-  for(int b = 0; b < numBotones; b++){
-    if(Botones[b].checkMouse()){
-      Botones[b].changeState();
+  for(int b = 0; b < TButtons.length; b++){
+    if(TButtons[b].checkMouse()){
+      TButtons[b].changeState();
+      break;
+    }
+  }
+  for(int b = 0; b < EButtons.length; b++){
+    if(EButtons[b].checkMouse()){
+      EButtons[b].changeState();
       break;
     }
   }

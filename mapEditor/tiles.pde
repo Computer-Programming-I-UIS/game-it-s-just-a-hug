@@ -124,6 +124,20 @@ void updateTiles(){
   
 }
 
+//----------------------REVISAR SI HAY OTRO BLOQUE CON EL JUGADOR----------------------//
+
+void checkPlayer(int _p){
+  for(int i = 0; i < Tiles.length; i++){
+    for(int j = 0; j < Tiles[i].length; j++){
+      if(Tiles[i][j].typeBlock == _p){  //Si ya hay otro bloque con ese jugador
+        Tiles[i][j].typeBlock = typeTiles.length;  //Establece ese bloque como vacio
+        break;
+      }
+    }
+  }
+}
+
+
 //----------------------CLASE----------------------//
 
 class tile{
@@ -141,6 +155,7 @@ class tile{
   }
   
   void changeType(int _type){
+    if(_type < 0)  checkPlayer(_type);
     typeBlock = _type;
   }
   
@@ -160,10 +175,12 @@ class tile{
     
     if(checkMouse())  changeType(tileSelected);
     updateTiles();
-    //fill(color(round(random(255))));
-    //square(x, y, size);
-    if(typeBlock != typeTiles.length){  //Es vacio
+    if(typeBlock >= 0 && typeBlock != typeTiles.length){  //Es vacio
       copy(tilesImages[typeBlock], xTile, yTile, sizeTiles,sizeTiles, x,y, size,size);  //Pone la imagen del tile que corresponde
+      
+    }else if(typeBlock < 0){
+      fill(color(round(random(255))));
+      square(x, y, size);
     }
   }
 }

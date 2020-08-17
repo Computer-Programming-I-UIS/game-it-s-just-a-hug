@@ -15,7 +15,7 @@ int numAlto = 18;
 
 void setup(){
   setupScreen();
-  configLevel(1);
+  configLevel(2);
   
   genBlocks();
   genPlayers();

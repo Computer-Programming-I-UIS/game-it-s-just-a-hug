@@ -44,6 +44,86 @@ void displayTiles(){
   }
 }
 
+//----------------------ACTUALIZAR TILES----------------------//
+
+void updateTiles(){
+  
+  //Recorre cada tipo de tile
+  for(int t = 0; t < typeTiles.length; t++){
+    
+    //Tipo de tiles de 3x3
+    if(configImages[t][0] == 3){
+      //Recorremos cada tile del nivel
+      for(int i = 0; i < Tiles.length; i++){
+        for(int j = 0; j < Tiles[i].length; j++){
+          
+          if(Tiles[i][j].typeBlock != t){  //Si es un tipo de bloque diferente 
+            continue;
+          }else{
+            if(i > 0 && i < Tiles.length-1 && j > 0 && j < Tiles[i].length -1){  //Si ese tile no es de los de borde o esquina
+              
+              int upB = Tiles[i-1][j].typeBlock;
+              int downB = Tiles[i+1][j].typeBlock;
+              int leftB = Tiles[i][j-1].typeBlock;
+              int rightB = Tiles[i][j+1].typeBlock;
+              
+              if(upB != t && downB == t && leftB != t && rightB == t){  //Bloque arriba izquierda
+                Tiles[i][j].xTile = 0;
+                Tiles[i][j].yTile = 0;
+                
+              }else if(upB != t && downB == t && leftB == t && rightB == t){  //Bloque arriba centro
+                Tiles[i][j].xTile = sizeTiles;
+                Tiles[i][j].yTile = 0;
+                
+              }else if(upB != t && downB == t && leftB == t && rightB != t){  //Bloque arriba derecha
+                Tiles[i][j].xTile = 2*sizeTiles;
+                Tiles[i][j].yTile = 0;
+                
+              }else if(upB == t && downB == t && leftB != t && rightB == t){  //Bloque centro izquierda
+                Tiles[i][j].xTile = 0;
+                Tiles[i][j].yTile = sizeTiles;
+                
+              }else if(upB == t && downB == t && leftB == t && rightB == t){  //Bloque centro
+                Tiles[i][j].xTile = sizeTiles;
+                Tiles[i][j].yTile = sizeTiles;
+                
+              }else if(upB == t && downB == t && leftB == t && rightB != t){  //Bloque centro derecha
+                Tiles[i][j].xTile = 2*sizeTiles;
+                Tiles[i][j].yTile = sizeTiles;
+                
+              }else if(upB == t && downB != t && leftB != t && rightB == t){  //Bloque abajo izquierda
+                Tiles[i][j].xTile = 0;
+                Tiles[i][j].yTile = 2*sizeTiles;
+                
+              }else if(upB == t && downB != t && leftB == t && rightB == t){  //Bloque abajo centro
+                Tiles[i][j].xTile = sizeTiles;
+                Tiles[i][j].yTile = 2*sizeTiles;
+                
+              }else if(upB == t && downB != t && leftB == t && rightB != t){  //Bloque abajo derecha
+                Tiles[i][j].xTile = 2*sizeTiles;
+                Tiles[i][j].yTile = 2*sizeTiles;
+                
+              }else{
+                Tiles[i][j].xTile = sizeTiles;
+                Tiles[i][j].yTile = 0;
+              }
+            }
+            else{
+              Tiles[i][j].xTile = sizeTiles;
+              Tiles[i][j].yTile = sizeTiles;
+            }
+          }
+          
+        }
+      }
+      
+    }
+    
+  }
+  
+  
+}
+
 //----------------------CLASE----------------------//
 
 class tile{
@@ -51,7 +131,8 @@ class tile{
   int size;  //Tamaño 
   
   int typeBlock = typeTiles.length;
-  int tile;
+  int xTile = 0;
+  int yTile = 0;
   
   tile(int _x, int _y, int _size){
     x = _x;
@@ -78,11 +159,11 @@ class tile{
   void display(){
     
     if(checkMouse())  changeType(tileSelected);
-    
+    updateTiles();
     //fill(color(round(random(255))));
     //square(x, y, size);
     if(typeBlock != typeTiles.length){  //Es vacio
-      copy(tilesImages[typeBlock], configImages[typeBlock][1], configImages[typeBlock][2], 32,32, x,y, size,size);  //Pone la imagen del tile que corresponde
+      copy(tilesImages[typeBlock], xTile, yTile, sizeTiles,sizeTiles, x,y, size,size);  //Pone la imagen del tile que corresponde
     }
   }
 }

@@ -18,9 +18,9 @@ void setupButtons(){
   //Vacio - Cuadícula - Export
   Botones[typeTiles.length] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, typeTiles.length);  //Vacio
   xButton += dxButtons;
-  Botones[typeTiles.length +1] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, "Grid");  //Cuadrícula
+  Botones[typeTiles.length +1] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, "G");  //Cuadrícula
   xButton += dxButtons;
-  Botones[typeTiles.length +2] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, "Save");  //Export
+  Botones[typeTiles.length +2] = new boton(xButtons + xButton, yButtons + yButton, sizeTiles - 4, "S");  //Export
   xButton = 0;
   yButton += dxButtons;
   
@@ -104,15 +104,15 @@ class boton{
     fill(0);
     square(x, y, size);
     if(typeTile != -1 && typeTile != typeTiles.length){
-      copy(tilesImages[typeTile], configImages[typeTile][1], configImages[typeTile][2], 32,32, x,y, size,size);  //Pone la imagen del tile que corresponde
+      copy(tilesImages[typeTile], configImages[typeTile][1], configImages[typeTile][2], sizeTiles,sizeTiles, x,y, size,size);  //Pone la imagen del tile que corresponde
     }
     
     //Texto
     if(info != null){
       fill(255);
       textAlign(CENTER, CENTER);
-      textSize(10);
-      text(info,x + size/2 ,y + size/2);
+      textSize(15);
+      text(info,x + size/2, y + size/2 -2);
     }
   }
 }
@@ -135,8 +135,6 @@ void actionButtons(){
     //Imagen
     PImage Level = get(0, 0, numTilesX*sizeTiles+1, numTilesY*sizeTiles+1);  //Solo exporta la gráfica
     Level.save("levels/Level"+numLevel+".png");  //La almacena en la carpeta "charts"
-    numLevel++;
-    Botones[typeTiles.length +2].prsd = false;
     
     //Archivo texto
     String [] level = new String[Tiles.length];
@@ -156,6 +154,9 @@ void actionButtons(){
       }
     }
     saveStrings("levels/Level"+numLevel+".txt", level);    //Guarda el nuevo archivo sin las demás lineas
+    
+    numLevel++;
+    Botones[typeTiles.length +2].prsd = false;
   }
   
   

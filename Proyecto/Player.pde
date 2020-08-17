@@ -202,19 +202,14 @@ class player{
     
     if (velX!=0){
      if(velX>0){
-       //println("whatsaaaap");
        afterVelX=1;
        copy(spritehug,frame*320,0,320,320,x,y,size,size);
        
-        }
-     if(velX<0){
+     }if(velX<0){
        afterVelX=2;
        copy(spritehug,frame*320,320,320,320,x,y,size,size);
-       println("holaaaaa");
-       
-       }  
-     }
-    else{
+     }  
+   }else{
      if(afterVelX==1)copy(spritehug,0,0,320,320,x,y,size,size);
      if(afterVelX==2 )copy(spritehug,0,320,320,320,x,y,size,size); 
     }

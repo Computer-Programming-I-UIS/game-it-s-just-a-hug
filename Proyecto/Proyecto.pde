@@ -9,13 +9,12 @@
 //Tamaño de los Bloques
 int sizeBlock = 35;
 //Cantidad de Bloques
-int numAncho = 34;
-int numAlto = 17;
+int numAncho = 35;
+int numAlto = 18;
 
 
 void setup(){
   setupScreen();
-  
   configLevel(1);
   
   genBlocks();

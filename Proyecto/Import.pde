@@ -1,9 +1,7 @@
 /***************************************************************************************
  Permite importar un dato de un archivo que se almacena en la carpeta "data"
  
-  *  Este programa sólo funciona cuando se importa una sola variable
-     del archivo
-  Referencia:
+ Referencia:
   *  https://discourse.processing.org/t/checking-if-a-file-exists-strange-runtime-error/20276
   *  https://forum.processing.org/two/discussion/23031/determining-file-existance-in-the-specified-directory
   *  https://discourse.processing.org/t/how-to-check-if-a-file-is-exist-in-data-folder-by-code/589

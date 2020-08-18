@@ -11,7 +11,7 @@ player Player2;
 PImage spritehug;
 //Generación de los jugadores
 void genPlayers(){
-  spritehug = loadImage("Spritesheet Azul caminante Todas.png");
+  spritehug = loadImage("HugCaminante.png");
   for(int i = 0; i < level.length; i++){
     for(int j = 0; j < level[i].length; j++){
       if(level[i][j] == '1'){
@@ -203,15 +203,16 @@ class player{
     if (velX!=0){
      if(velX>0){
        afterVelX=1;
-       copy(spritehug,frame*320,0,320,320,x,y,size,size);
+       copy(spritehug,frame*64,0,64,64,x,y,size,size);
        
      }if(velX<0){
        afterVelX=2;
-       copy(spritehug,frame*320,320,320,320,x,y,size,size);
+      
+       copy(spritehug,frame*64,64,64,64,x,y,size,size);
      }  
    }else{
-     if(afterVelX==1)copy(spritehug,0,0,320,320,x,y,size,size);
-     if(afterVelX==2 )copy(spritehug,0,320,320,320,x,y,size,size); 
+     if(afterVelX==1)copy(spritehug,0,0,64,64,x,y,size,size);
+     if(afterVelX==2 )copy(spritehug,0,64,64,64,x,y,size,size); 
     }
   }
   

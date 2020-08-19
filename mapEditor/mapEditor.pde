@@ -25,11 +25,11 @@ int numTilesY = 18;
   4 - Si es un tipo de bloque con animación = "Y", Si no, entonces es un bloque estático = "N"
 
 */
-String [][] typeTiles = {{"tileground01.png","S","N"}};  //
+String [][] typeTiles = {{"Tierra Minimalista.png","S","N"}};  //
 PImage [] tilesImages = new PImage [typeTiles.length];  //Imágenes
 int [][] configImages = new int [typeTiles.length][3];  //Almacena las cordenadas del la imagen que se pone en el boton
 //Background
-String [] backgroundsFilesNames = {"background01.jpg"};
+String [] backgroundsFilesNames = {"Tierra Minimalista.png"};
 PImage [] backgroundsImages = new PImage [backgroundsFilesNames.length];
 
 //Bloques del Nivel

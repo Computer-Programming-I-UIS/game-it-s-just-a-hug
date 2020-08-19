@@ -1,18 +1,18 @@
                                    
                                    
                                    
+               1                   
+                           SSS     
+                           S SS    
+                          S   S   S
+             SSSSSSSSSSSSSSSSSSSSSS
+            SSSSSSSSSS             
+         SSSSSSSSSSSSS             
+        SSSSSSSSSSSSSS             
+      SSS SSSSSSSSSSSS             
+   SSSS                            
+SSSS                               
+S                                  
                                    
                                    
                                    
-                   1               
-                                   
-                                   
-              SSS                  
-             SSSSSS                
-           SS SSS SSSS             
-         SS          SSSS          
-       SS             SSSSSS      S
-     SS                   SSSSS   S
-   SSS                     SSSSSS S
-  SS                          SSSSS
-SS                                 

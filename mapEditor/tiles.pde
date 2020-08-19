@@ -1,186 +1,76 @@
 
-//----------------------GENERACIÖN DE LOS TILES----------------------//
-
-tile [][] Tiles = new tile[numTilesY][numTilesX];
+tile [] Tile = new tile[4];
 
 void setupTiles(){
-  for(int i = 0; i < Tiles.length; i++){
-    for(int j = 0; j < Tiles[i].length; j++){
-      Tiles[i][j] = new tile(j*sizeTiles, i*sizeTiles, sizeTiles);
-    }
-  }
+  //Siempre debe de ir primero el Vacio - Juagdor 1 - Jugador 2, en ese mismo orden y luego ya puede ir cualquier otro tile
+  Tile[0] = new tile(' ');
+  Tile[1] = new tile("Jugador1", "player01.png", '1', true, false);
+  Tile[2] = new tile("Jugador2", "player02.png", '2', true, false);
   
+  Tile[3] = new tile("Tierra", "tileground01.png", 'S', true, true);
 }
-
-//----------------------DIBUJAR CUADRÍCULA----------------------//
-
-void showGrid(){
-  
-  stroke(255);
-  strokeWeight(1);
-  
-  //Lineas horizontales
-  for(int i = 0; i < Tiles.length; i++){
-    line(0, i*sizeTiles, Tiles[0].length*sizeTiles, i*sizeTiles);
-    if(i == Tiles.length - 1)
-      line(0, i*sizeTiles + sizeTiles, Tiles[0].length*sizeTiles , i*sizeTiles + sizeTiles);
-  }
-  //Lineas verticales
-  for(int j = 0; j < Tiles[0].length; j++){
-    line(j*sizeTiles, 0, j*sizeTiles, Tiles.length*sizeTiles);
-    if(j == Tiles[0].length - 1)
-      line(j*sizeTiles + sizeTiles, 0, j*sizeTiles + sizeTiles, Tiles.length*sizeTiles);
-  }
-  
-}
-
-//----------------------DIBUJAR TILES----------------------//
-
-void displayTiles(){
-  for(int i = 0; i < Tiles.length; i++){
-    for(int j = 0; j < Tiles[i].length; j++){
-      Tiles[i][j].display();
-    }
-  }
-}
-
-//----------------------ACTUALIZAR TILES----------------------//
-
-void updateTiles(){
-  
-  //Recorre cada tipo de tile
-  for(int t = 0; t < typeTiles.length; t++){
-    
-    //Tipo de tiles de 3x3
-    if(configImages[t][0] == 3){
-      //Recorremos cada tile del nivel
-      for(int i = 0; i < Tiles.length; i++){
-        for(int j = 0; j < Tiles[i].length; j++){
-          
-          if(Tiles[i][j].typeBlock != t){  //Si es un tipo de bloque diferente 
-            continue;
-          }else{
-            if(i > 0 && i < Tiles.length-1 && j > 0 && j < Tiles[i].length -1){  //Si ese tile no es de los de borde o esquina
-              
-              int upB = Tiles[i-1][j].typeBlock;
-              int downB = Tiles[i+1][j].typeBlock;
-              int leftB = Tiles[i][j-1].typeBlock;
-              int rightB = Tiles[i][j+1].typeBlock;
-              
-              if(upB != t && downB == t && leftB != t && rightB == t){  //Bloque arriba izquierda
-                Tiles[i][j].xTile = 0;
-                Tiles[i][j].yTile = 0;
-                
-              }else if(upB != t && downB == t && leftB == t && rightB == t){  //Bloque arriba centro
-                Tiles[i][j].xTile = sizeTiles;
-                Tiles[i][j].yTile = 0;
-                
-              }else if(upB != t && downB == t && leftB == t && rightB != t){  //Bloque arriba derecha
-                Tiles[i][j].xTile = 2*sizeTiles;
-                Tiles[i][j].yTile = 0;
-                
-              }else if(upB == t && downB == t && leftB != t && rightB == t){  //Bloque centro izquierda
-                Tiles[i][j].xTile = 0;
-                Tiles[i][j].yTile = sizeTiles;
-                
-              }else if(upB == t && downB == t && leftB == t && rightB == t){  //Bloque centro
-                Tiles[i][j].xTile = sizeTiles;
-                Tiles[i][j].yTile = sizeTiles;
-                
-              }else if(upB == t && downB == t && leftB == t && rightB != t){  //Bloque centro derecha
-                Tiles[i][j].xTile = 2*sizeTiles;
-                Tiles[i][j].yTile = sizeTiles;
-                
-              }else if(upB == t && downB != t && leftB != t && rightB == t){  //Bloque abajo izquierda
-                Tiles[i][j].xTile = 0;
-                Tiles[i][j].yTile = 2*sizeTiles;
-                
-              }else if(upB == t && downB != t && leftB == t && rightB == t){  //Bloque abajo centro
-                Tiles[i][j].xTile = sizeTiles;
-                Tiles[i][j].yTile = 2*sizeTiles;
-                
-              }else if(upB == t && downB != t && leftB == t && rightB != t){  //Bloque abajo derecha
-                Tiles[i][j].xTile = 2*sizeTiles;
-                Tiles[i][j].yTile = 2*sizeTiles;
-                
-              }else{
-                Tiles[i][j].xTile = sizeTiles;
-                Tiles[i][j].yTile = 0;
-              }
-            }
-            else{
-              Tiles[i][j].xTile = sizeTiles;
-              Tiles[i][j].yTile = sizeTiles;
-            }
-          }
-          
-        }
-      }
-      
-    }
-    
-  }
-  
-  
-}
-
-//----------------------REVISAR SI HAY OTRO BLOQUE CON EL JUGADOR----------------------//
-
-void checkPlayer(int _p){
-  for(int i = 0; i < Tiles.length; i++){
-    for(int j = 0; j < Tiles[i].length; j++){
-      if(Tiles[i][j].typeBlock == _p){  //Si ya hay otro bloque con ese jugador
-        Tiles[i][j].typeBlock = typeTiles.length;  //Establece ese bloque como vacio
-        break;
-      }
-    }
-  }
-}
-
-
-//----------------------CLASE----------------------//
 
 class tile{
-  int x, y;  //Cordenadas superior izquierda del tile
-  int size;  //Tamaño 
+  PImage tileImage;
   
-  int typeBlock = typeTiles.length;
-  int xTile = 0;
-  int yTile = 0;
+  char letter;  //Letra que se imprime en el archivo de texto
+  boolean showInFile;  //Mostrar letra en el archivo de texto (false por ejemplo para decoraciones)
+  boolean showInImage;  //Mostrar bloque en la imagen (false por ejemplo para posiciones de jugadores o bloques móviles o tiles animados)
   
-  tile(int _x, int _y, int _size){
-    x = _x;
-    y = _y;
-    size = _size;
-  }
+  int [] sizeTile = new int [2];  //Tamaño del tile (3x3, 1x1, etc)
+  int [] defaultTile = new int [2];  //Posición del tile por default (el que se muestra en el boton)
   
-  void changeType(int _type){
-    if(_type < 0)  checkPlayer(_type);
-    typeBlock = _type;
-  }
   
-  void changeTile(int _i, int _j){
+  tile(String _n, String _fileName, char _letter, boolean _showInFile, boolean _showInImage){
     
-  }
-  
-  boolean checkMouse(){
-    if(mouseX > x && mouseX < x + size && mouseY > y && mouseY < y + size){  //Si el puntero está sobre el botón
-      if(mousePressed && mouseButton == LEFT){
-        return true;
-        }
-      }
-      return false;
-    }
-  void display(){
-    
-    if(checkMouse())  changeType(tileSelected);
-    updateTiles();
-    if(typeBlock >= 0 && typeBlock != typeTiles.length){  //Es vacio
-      copy(tilesImages[typeBlock], xTile, yTile, sizeTiles,sizeTiles, x,y, size,size);  //Pone la imagen del tile que corresponde
+    if(fileExists(_fileName)){  //Si existe el archivo
+      tileImage = loadImage("data/"+_fileName);
       
-    }else if(typeBlock < 0){
-      fill(color(round(random(255))));
-      square(x, y, size);
+      if(tileImage.width%sizeTiles != 0 || tileImage.height%sizeTiles != 0){  //Si el tamaño de la imagen no es correcta  (multiplo del tamaño de los tiles)
+        println("¡ERROR!");
+        println("La imagen",_fileName,"NO tiene el tamaño correcto \nCada tile de la imagen debe de ser de",sizeTiles,"x",sizeTiles,"píxeles");
+        exit();  //Acaba el programa
+      }
+    }else{
+      println("¡ERROR!");
+      println("El archivo",_fileName,"NO existe o no se ecuentra en la carpeta \"data\"");
+      println("Revisa el nombre del archivo y la carpeta \"data\" \nO elimina el tipo de tile");
+      exit();  //Acaba el programa
     }
+    
+    letter = _letter;
+    showInFile = _showInFile;
+    showInImage = _showInImage;
+    
+    int [] sizeTile = new int [2];  //Tamaño del tile (3x3, 1x1, etc)
+    int [] defaultTile = new int [2];  //Posición del tile por default (el que se muestra en el boton)
+    
+    sizeTile[0] = tileImage.width/sizeTiles;  //Catidad de tiles horizontal
+    sizeTile[1] = tileImage.height/sizeTiles;  //Cantidad de tiles vertical
+    
+    if(sizeTile[0] == 1 && sizeTile[1] == 1){
+      defaultTile[0] = 0;
+      defaultTile[1] = 0;
+    }else if(sizeTile[0] == 3 && sizeTile[1] == 3){
+      defaultTile[0] = 1;
+      defaultTile[1] = 1;
+    }else if(sizeTile[0] == 4 && sizeTile[1] == 4){
+      defaultTile[0] = 1;
+      defaultTile[1] = 1;
+    }else{
+      defaultTile[0] = 0;
+      defaultTile[1] = 0;
+    }
+    
   }
+  //Vacío
+  tile(char _letter){
+    letter = _letter;
+  }
+  
+  void updateTile(tile up, tile down, tile left, tile right){
+    
+    
+    
+  } 
 }

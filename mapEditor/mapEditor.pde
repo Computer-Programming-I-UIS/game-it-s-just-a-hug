@@ -33,7 +33,6 @@ String [] backgroundsFilesNames = {"Tierra Minimalista.png"};
 PImage [] backgroundsImages = new PImage [backgroundsFilesNames.length];
 
 //Bloques del Nivel
-char [][] blocks = new char [numTilesY][numTilesX];
 
 //Mostrar Cuadrícula
 boolean showGrid = true;
@@ -46,12 +45,11 @@ void setup(){
   setupScreen();
   importTiles();
   setupButtons();
-  setupTiles();
+  setupBlocks();
 }
 
 void draw(){
   background(150);
-  
   //Tiles
   displayTiles();
   

@@ -40,7 +40,7 @@ class player{
   int frame;
   int afterVelX=1;
   
-  player(int _x, int _y, int _color){
+  player(int _x, int _y, int _num){
     x = _x;
     y = _y;
     

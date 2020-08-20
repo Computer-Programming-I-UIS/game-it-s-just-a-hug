@@ -1,22 +1,20 @@
-
 /*****************************************************
 
-
-
+La cantidad máxima de bloques de tierra es igual a la mitad de la cantidad total de bloques en pantalla
+Dado que cuando se configuran los mapas si en la matriz map[][] hay una 'S' al lado de otra estas dos se unen formando un solo bloque
+Entonces el nivel se forma de rectángulos y en el peor de los casos usando esta forma de unir los bloques que estan uno al lado de otro
+Se formaría un tablero de ajedrez y la cantidad de bloques sería la mitad de la cantidad total de bloques en pantalla.
 
 *****************************************************/
 
-roca suelos [][] = new roca [numAlto][numAncho];
-lava lavas [][] = new lava [numAlto][numAncho];
+block Ground [] = new block [(numBlocksX*numBlocksY)/2];
+int numBGroundMap;  //Número de rectángulos de bloque tierra que tiene el mapa
 
 //Generar Bloques
 void setupBlocks(){
   
-  for(int y = 0; y < map.length; y++){
-    for(int x = 0; x < map[y].length; x++){
-      suelos[y][x] = new roca(x*sizeBlocks, y*sizeBlocks);
-      lavas[y][x] = new lava(x*sizeBlocks, y*sizeBlocks);
-    }
+  for(int i = 0; i < Ground.length; i++){
+    Ground[i] = new block(0, 0);  //Como cada vez que se configura un map se establece unas nuevas cordenadas entonces se pueden iniciar todos en (0,0)
   }
   
 }
@@ -25,40 +23,25 @@ void setupBlocks(){
 
 class block{
   int x, y;
-  int size = sizeBlocks;
+  int sizeX = sizeBlocks;
+  int sizeY = sizeBlocks;
+  
   color color1 = color(100,100,100);
   
   block(int _x, int _y){
     x = _x;
     y = _y;
   }
-  //Colisión con la parte de arriba del bloque (el objeto está sobre el bloque)
-  boolean checkUpCollision(int _x, int _y, int _xSize, int _ySize){
-    if(_x + _xSize > x && _x < x + size && _y + _ySize == y){
-      return true;
-    }
-    return false;
+  
+  void updateBlock(int _x, int _y, int _sX, int _sY){
+    x = _x;
+    y = _y;
+    sizeX = _sX;
+    sizeY = _sY;
   }
   
-  //Colisión con la parte de abajo del bloque (el objeto saltó y está tocando "techo")
-  boolean checkDownCollision(int _x, int _y, int _xSize, int _ySize){
-    if(_x + _xSize > x && _x < x + size && _y == y + size){
-      return true;
-    }
-    return false;
-  }
-  
-  //Colisión con la parte izquierda del bloque (el objeto está moviendose hacia la derecha)
-  boolean checkRightCollision(int _x, int _y, int _xSize, int _ySize){
-    if(_y + _ySize > y && _y < y + size && _x + _xSize == x){
-      return true;
-    }
-    return false;
-  }
-  
-  //Colisión con la parte derecha del bloque (el objeto está moviendose hacia la izqurierda)
-  boolean checkLeftCollision(int _x, int _y, int _xSize, int _ySize){
-    if(_y + _ySize > y && _y < y + size && _x == x + size){
+  boolean checkCol(int _x, int _y, int _sizeX, int _sizeY){
+    if(_x + _sizeX >= x && _x <= x + sizeX && _y + _sizeY >= y && _y <= y + sizeY){
       return true;
     }
     return false;
@@ -66,27 +49,9 @@ class block{
   
   void display(){
     noStroke();
-    //stroke(0);
+    stroke(0);
     fill(color1);
-    square(x, y, size);
-  }
-  
-}
-
-class roca extends block{
-  
-  roca(int _x, int _y){
-    super(_x, _y);
-    color1 = color(255,0,0);
-  }
-  
-}
-
-class lava extends block{
-  
-  lava(int _x, int _y){
-    super(_x, _y);
-    color1 = color(0,0,255);
+    rect(x, y, sizeX, sizeY);
   }
   
 }

@@ -97,18 +97,18 @@ void keyControl(int k, boolean state){
 
 void control(){
   if(wKey){
-    Player1.jump();
+    Players[0].jump();
   }
   if(aKey){
-    Player1.velX = -3;
+    Players[0].velX = -3;
   }
   if(dKey){
-    Player1.velX = 3;
+    Players[0].velX = 3;
   }
   if(!aKey && !dKey){
-    Player1.velX = 0;
+    Players[0].velX = 0;
   }
   if(aKey && dKey){
-    Player1.velX = 0;
+    Players[0].velX = 0;
   }
 }

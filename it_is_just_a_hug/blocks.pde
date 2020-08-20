@@ -10,12 +10,12 @@ roca suelos [][] = new roca [numAlto][numAncho];
 lava lavas [][] = new lava [numAlto][numAncho];
 
 //Generar Bloques
-void genBlocks(){
+void setupBlocks(){
   
-  for(int y = 0; y < level.length; y++){
-    for(int x = 0; x < level[y].length; x++){
-      suelos[y][x] = new roca(x*sizeBlock, y*sizeBlock);
-      lavas[y][x] = new lava(x*sizeBlock, y*sizeBlock);
+  for(int y = 0; y < map.length; y++){
+    for(int x = 0; x < map[y].length; x++){
+      suelos[y][x] = new roca(x*sizeBlocks, y*sizeBlocks);
+      lavas[y][x] = new lava(x*sizeBlocks, y*sizeBlocks);
     }
   }
   
@@ -25,7 +25,7 @@ void genBlocks(){
 
 class block{
   int x, y;
-  int size = sizeBlock;
+  int size = sizeBlocks;
   color color1 = color(100,100,100);
   
   block(int _x, int _y){

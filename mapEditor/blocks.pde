@@ -60,6 +60,9 @@ void updateBlocks(){
         
         Blocks[i][j].updateTile(leftB, upB, rightB, downB); 
       }
+      else{  //Es un bloque de borde o esquina
+        Blocks[i][j].updateTile(true);
+      }
     }
   }
   
@@ -113,6 +116,13 @@ class block{
     
     xTile = xy[0];
     yTile = xy[1];
+  }
+  
+  void updateTile(boolean _border){
+    if(_border && Tiles[type].sizeTile[0] == 3 && Tiles[type].sizeTile[1] == 3){  //Si es un bloque de borde o esquina y el tile es de 3x3
+      xTile = sizeTiles;  //El tile por defecto es el de la mitad
+      yTile = sizeTiles;
+    }
   }
   
   boolean checkMouse(){

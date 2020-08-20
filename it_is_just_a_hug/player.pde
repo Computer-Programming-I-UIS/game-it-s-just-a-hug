@@ -6,16 +6,16 @@
 
 *****************************************************/
 
-player Player1;
-player Player2;
-PImage spritehug;
+player [] Players = new player[2];
+
 //Generación de los jugadores
-void genPlayers(){
-  spritehug = loadImage("HugCaminante.png");
-  for(int i = 0; i < level.length; i++){
-    for(int j = 0; j < level[i].length; j++){
-      if(level[i][j] == '1'){
-        Player1 = new player(j*sizeBlock, i*sizeBlock);
+void setupPlayers(){
+  for(int i = 0; i < map.length; i++){
+    for(int j = 0; j < map[i].length; j++){
+      if(map[i][j] == '1'){
+        Players[0] = new player(j*sizeBlocks, i*sizeBlocks, 1);
+      }else if(map[i][j] == '2'){
+        Players[1] = new player(j*sizeBlocks, i*sizeBlocks, 2);
       }
     }
   }
@@ -26,36 +26,42 @@ void genPlayers(){
 //Clase
 class player{
   int x,y;
+  int sizeX = sizeBlocks;
+  int sizeY = 2*sizeBlocks;
+  
   int velX = 0, velX0 = 0;
   int velY = 0, velY0 = 0;
-  
   int g = 10;
-  int size = 2*sizeBlock;  //La mitad del tamaño de los bloques
-  boolean jjump = false;
   float t;
+  
+  boolean jump = false;
+  
+  PImage spritehug;
   int frame;
   int afterVelX=1;
   
-  player(int _x, int _y){
+  player(int _x, int _y, int _color){
     x = _x;
     y = _y;
+    
+    spritehug = loadImage("HugCaminante.png");
   } 
   
   //--------------------------------COLISIONES--------------------------------//
   
   boolean checkRoof(){
     if(velY <= 0){
-      for(int _y = 0; _y < level.length; _y++){
-        for(int _x = 0; _x < level[_y].length; _x++){
-          if(level[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
+      for(int _y = 0; _y < map.length; _y++){
+        for(int _x = 0; _x < map[_y].length; _x++){
+          if(map[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
             continue;
-          }else if(suelos[_y][_x].checkDownCollision(x, y, size, size) && level[_y][_x] == 'S'){
+          }else if(suelos[_y][_x].checkDownCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'S'){
             t = 0;
             velY0 = 0;
             velY = 0;
             return true;
             
-          }else if(lavas[_y][_x].checkDownCollision(x, y, size, size) && level[_y][_x] == 'L'){
+          }else if(lavas[_y][_x].checkDownCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'L'){
             x = width/2;
             y = height/2;
             return true;
@@ -68,17 +74,17 @@ class player{
   
   boolean checkGround(){
     if(velY >= 0){
-      for(int _y = 0; _y < level.length; _y++){
-        for(int _x = 0; _x < level[_y].length; _x++){
-          if(level[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
+      for(int _y = 0; _y < map.length; _y++){
+        for(int _x = 0; _x < map[_y].length; _x++){
+          if(map[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
             continue;
-          }else if(suelos[_y][_x].checkUpCollision(x, y, size, size) && level[_y][_x] == 'S'){
+          }else if(suelos[_y][_x].checkUpCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'S'){
             t = 0;
             velY0 = 0;
             velY = 0;
             return true;
             
-          }else if(lavas[_y][_x].checkUpCollision(x, y, size, size) && level[_y][_x] == 'L'){
+          }else if(lavas[_y][_x].checkUpCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'L'){
             x = width/2;
             y = height/2;
             return true;
@@ -91,15 +97,15 @@ class player{
   
   boolean checkLeftWall(){
     if(velX <= 0){
-      for(int _y = 0; _y < level.length; _y++){
-        for(int _x = 0; _x < level[_y].length; _x++){
-          if(level[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
+      for(int _y = 0; _y < map.length; _y++){
+        for(int _x = 0; _x < map[_y].length; _x++){
+          if(map[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
             continue;
-          }else if(suelos[_y][_x].checkLeftCollision(x, y, size, size) && level[_y][_x] == 'S'){
+          }else if(suelos[_y][_x].checkLeftCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'S'){
             velX = 0;
             return true;
             
-          }else if(lavas[_y][_x].checkLeftCollision(x, y, size, size) && level[_y][_x] == 'L'){
+          }else if(lavas[_y][_x].checkLeftCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'L'){
             x = width/2;
             y = height/2;
             return true;
@@ -112,15 +118,15 @@ class player{
   
   boolean checkRightWall(){
     if(velX >= 0){
-      for(int _y = 0; _y < level.length; _y++){
-        for(int _x = 0; _x < level[_y].length; _x++){
-          if(level[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
+      for(int _y = 0; _y < map.length; _y++){
+        for(int _x = 0; _x < map[_y].length; _x++){
+          if(map[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
             continue;
-          }else if(suelos[_y][_x].checkRightCollision(x, y, size, size) && level[_y][_x] == 'S'){
+          }else if(suelos[_y][_x].checkRightCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'S'){
             velX = 0;
             return true;
             
-          }else if(lavas[_y][_x].checkRightCollision(x, y, size, size) && level[_y][_x] == 'L'){
+          }else if(lavas[_y][_x].checkRightCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'L'){
             x = width/2;
             y = height/2;
             return true;
@@ -137,7 +143,7 @@ class player{
     if(checkGround()){
       velY0 = -6;
       t = 0;
-      jjump = true;
+      jump = true;
       //y--;
     }
   }
@@ -192,28 +198,24 @@ class player{
   void display(){
     fill(255);
     noStroke();
-   // square(x, y, size);
-  //  copy(spritehug,0,0,320,320,x,y,size,size);
-  frames();
+    rect(x, y, sizeX, sizeY);
     
-  }
-  void frames(){
     frame=(frameCount/6)%10; 
-    
     if (velX!=0){
      if(velX>0){
        afterVelX=1;
-       copy(spritehug,frame*64,0,64,64,x,y,size,size);
+       copy(spritehug,frame*64,0,64,64,x - sizeX/2,y,2*sizeX,sizeY);
        
      }if(velX<0){
        afterVelX=2;
       
-       copy(spritehug,frame*64,64,64,64,x,y,size,size);
+       copy(spritehug,frame*64,64,64,64,x - sizeX/2,y,2*sizeX,sizeY);
      }  
    }else{
-     if(afterVelX==1)copy(spritehug,0,0,64,64,x,y,size,size);
-     if(afterVelX==2 )copy(spritehug,0,64,64,64,x,y,size,size); 
+     if(afterVelX==1)copy(spritehug,0,0,64,64,x - sizeX/2, y, 2*sizeX,sizeY);
+     if(afterVelX==2 )copy(spritehug,0,64,64,64,x - sizeX/2, y, 2*sizeX,sizeY); 
     }
+    
   }
   
 }

@@ -1,14 +1,24 @@
 /*****************************************************
 
-Este es el editor de niveles
+Este es el editor de mapas para el videojuego It's Just a Hug
 
-Es necesario tener un archivo de imagen diferente para cada tipo de objeto, es decir uno para los tiles de tierra, agua, letrero, etc.
-Cada tile debe de tener un tamaño de 32x32 (tamaño de la variable sizeTiles) píxeles y dependiendo del tamaño de la imágen el código detecta el comportamiento de ese tile.
+Es necesario tener un archivo de imagen diferente para cada tipo de objeto, es decir uno para tierra, agua, letreros, etc.
+Cada tile debe de tener un tamaño de 32x32 píxeles (tamaño de la variable sizeTiles) y dependiendo del tamaño de la imágen el código detecta el comportamiento de ese tile.
 Ejemplo:
-  Para un el tile de ground, si el tamaño de la imágen es 96x96 el programa interpreta que hay 9 diferentes tiles para el suelo.
+  Para un el tile de ground, si el tamaño de la imágen es 96x96 el programa interpreta que hay 9 diferentes tiles para la tierra.
   Cuando se diseñe el nivel, Solo se selecciona el tipo de bloque que se quiere, luego al hacer click sobre el bloque ese bloque queda con ese tipo
   Y el programa automáticamente coloca el tile correspondiente.
 
+Al exportar el mapa se generan los archivos "mapX.png" y "mapX.txt" (X es el número del mapa). Donde esos archivos deben ser copiados en la carpeta "data/" del videojuego.
+Cada vez que se reinicia el editor de mapas X se establece en cero. Por tanto cada vez que se inicie el editor es recomendable los mapas hechos anteriormente los guarde en
+otra carpeta. de lo contrario se sobreescriben los archivos.
+
+Para insertar nuevos tipos de bloques debe de añadirse la imagen en la ruta "data/tiles/" (es recomendado imágenes en formato .png)
+Y se debe de añadir un nuevo objeto de la clase tile. Se debe de actualizar el tamaño del array Tiles y declarar ese tipo de bloque en la función setupTiles()
+  * Se debe especificar el nombre del archivo, el caráter que se almacena en el archivo mapX.txt y si ese bloque bloque es un objeto estático o no.
+  
+Para insertar nuevos backgrounds debe de añadirse la imagen en la ruta "data/backgrounds/" (la imagen debe de tener un tamaño de 1120x576 pixeles)
+Y se debe añadir el nombre del archivo en el array backgroundsFilesNames. 
 *****************************************************/
 
 //Tamaño de los Tiles
@@ -18,53 +28,50 @@ int sizeTiles = 32;
 int numTilesX = 35;
 int numTilesY = 18;
 
-//Tiles
-/*
-  1 - nombre del archivo con la extensión
-  2 - Carácter que se almacena en el archivo de texto (no puede estar repetido)
-  4 - Si es un tipo de bloque con animación = "Y", Si no, entonces es un bloque estático = "N"
+block [][] Blocks = new block[numTilesY][numTilesX];
+tile [] Tiles = new tile[5];
+button [] TButtons = new button[Tiles.length];  //Botones para los tiles
+button [] EButtons = new button[3];
 
-*/
-String [][] typeTiles = {{"Tierra Minimalista.png","S","N"}};  //
-PImage [] tilesImages = new PImage [typeTiles.length];  //Imágenes
-int [][] configImages = new int [typeTiles.length][3];  //Almacena las cordenadas del la imagen que se pone en el boton
+
 //Background
-String [] backgroundsFilesNames = {"Tierra Minimalista.png"};
+String [] backgroundsFilesNames = {"sky01.png"};
 PImage [] backgroundsImages = new PImage [backgroundsFilesNames.length];
 
 //Bloques del Nivel
 
 //Mostrar Cuadrícula
-boolean showGrid = true;
-
-
+boolean showGrid = false;
 //Número del Nivel que guarda
-int numLevel = 0;
+int numMap = 0;
 
 void setup(){
   setupScreen();
-  importTiles();
+  setupTiles();
   setupButtons();
   setupBlocks();
+  
+  for(int i = 0; i < backgroundsFilesNames.length; i++){
+    if(!fileExists(backgroundsFilesNames[i], "backgrounds")){
+      println("¡ERROR!");
+      println("El archivo",backgroundsFilesNames[i],"NO existe");
+      exit();
+    }else{
+      backgroundsImages[i] = loadImage("data/backgrounds/"+backgroundsFilesNames[i]);
+    }
+  }
 }
 
 void draw(){
-  background(150);
-  //Tiles
-  displayTiles();
-  
+  image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);
+  //Bloques
+  displayBlocks();
   //Botones
-  fill(255);
-  noStroke();
-  rect((numTilesX+0.5)*sizeTiles, sizeTiles/2, sizeTiles*4, (numTilesY-1)*sizeTiles);
   displayButtons();
   actionButtons();
-  
   //Cuadrícula
   if(showGrid)  showGrid();
 }
-
-
 
 void setupScreen(){
   int sizeScreenX = numTilesX+5;
@@ -75,39 +82,15 @@ void setupScreen(){
   
 }
 
-void importTiles(){
-  for(int i = 0; i < typeTiles.length; i++){
-    if(fileExists(typeTiles[i][0])){  //Si el archivo existe
-      tilesImages[i] = loadImage("data/"+typeTiles[i][0]);
-      
-      if(tilesImages[i].width%sizeTiles != 0 || tilesImages[i].height%sizeTiles != 0){  //Si el tamaño de la imagen no es correcta  (multiplo de 32)
-        println("ERROR! \nLa imagen",typeTiles[i][0],"NO tiene el tamaño correcto \nCada tile de la imagen debe de ser de",sizeTiles,"x",sizeTiles,"píxeles");
-        exit();  //Acaba el programa
-        
-      }else{  //Si es del tamaño correcto
-        
-        //Tipos de Tiles
-          if(tilesImages[i].width == sizeTiles && tilesImages[i].height == sizeTiles){  //1x1
-            configImages[i][0] = 1;
-            configImages[i][1] = 0;
-            configImages[i][2] = 0;
-            
-          }else if(tilesImages[i].width == 3*sizeTiles && tilesImages[i].height == 3*sizeTiles){  //3x3
-            configImages[i][0] = 3;
-            configImages[i][1] = sizeTiles;
-            configImages[i][2] = 0;
-            
-          }
-      }
-      
-    }else{
-      println("¡ERROR!");
-      println("El archivo",typeTiles[i][0],"NO existe o no se ecuentra en la carpeta \"data\"");
-      println("Revisa el nombre del archivo y la carpeta \"data\" \nO elimina el tipo de bloque de la variable \"typeTiles\"");
-      exit();  //Acaba el programa
+boolean fileExists(String fileName, String folder){
+  File dataFolder = new File(dataPath(folder));
+  
+  for (File file : dataFolder.listFiles()) {    //Escanea todos los archivos en la carpeta data  (*Otra sintaxis de for)
+    if (file.getName().equals(fileName)){    //Si el nombre del archivo es el mismo del que se necesita
+      return true;
     }
   }
-  
+  return false;
 }
 
 boolean fileExists(String fileName){

@@ -10,11 +10,19 @@ int sizeBlocks = 32;
 int numBlocksX = 35;
 int numBlocksY = 18;
 
+//Escena
+int numScenes = 3;
+int scene = 0;  // 0 = Inicio  / 1 = Pantalla Principal  / 2 = Juego
+
+
+
 void setup(){
   setupScreen();
   
-  setupBlocks();
   setupPlayers();
+  setupBlocks();
+  setupButtons();
+  
   importMap(1);
 }
 
@@ -30,11 +38,16 @@ void draw(){
   //Muestra el fondo
   image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);
   
+  colPlayers();
   for(int p = 0; p < Players.length; p++){
     Players[p].update();
     Players[p].display();
+    //PlayersCol[p].display();
   }
-  
+  /*
+  for(int i = 0; i < numButtonsScene[scene]; i++){
+    Buttons[scene][i].display();
+  }*/
 }
 
 
@@ -69,6 +82,28 @@ int sign(int num){
   else  return +1;
 }
 
-void mousePressed(){
+void mouseMoved(){
+  for(int i = 0; i < numButtonsScene[scene]; i++){
+    if(Buttons[scene][i].checkMouse()){
+      cursor(HAND);
+      break;
+    }else{
+      cursor(ARROW);
+    }
+  }
   
+}
+
+void mousePressed(){
+  for(int i = 0; i < numButtonsScene[scene]; i++){
+    if(Buttons[scene][i].checkMouse()){
+      Buttons[scene][i].changeStatus();
+      break;
+    }
+  }
+}
+
+void keyTyped(){
+  scene++;
+  if(scene == numScenes)  scene = 0;
 }

@@ -87,11 +87,25 @@ void importMap(int numMap){
         
       }else if(map[i][j] == '1'){
         Players[0].setXY(j*sizeBlocks, i*sizeBlocks);
+        PlayersCol[0].setXY(j*sizeBlocks, i*sizeBlocks);  //"Máscara" de colisión del jugador1 para con los otros jugadores
       }else if(map[i][j] == '2'){
         Players[1].setXY(j*sizeBlocks, i*sizeBlocks);
+        PlayersCol[1].setXY(j*sizeBlocks, i*sizeBlocks);
       }
       
     }  //end for (j)
   }  //end for (i)
+  
+  //Establecer jugador aleatorio con la bomba
+  
+  playerBomb = round(random(0,Players.length-1));
+  for(int i = 0; i < Players.length; i++){
+    if(i == playerBomb){
+      Players[i].bomb = true;
+    }else{
+      Players[i].bomb = false;
+    }
+    Players[i].setSprite();
+  }
   
 } //end importMap

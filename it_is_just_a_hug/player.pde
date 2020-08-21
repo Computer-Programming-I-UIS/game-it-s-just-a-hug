@@ -6,12 +6,38 @@
 *****************************************************/
 
 player [] Players = new player[2];
+block PlayersCol [] = new block [Players.length];
+int playerBomb = 0;  //Jugador que tiene la bomba
+boolean passBomb = false;  //true si el jugador sí puede pasar la bomba
 
 //Generación de los jugadores
 void setupPlayers(){
   for(int i = 0; i < Players.length; i++){
     Players[i] = new player(0,0,i);
+    Players[i].setSkin(1);
   }
+}
+
+void colPlayers(){
+  
+  for(int i = 0; i < Players.length; i++){
+    if(playerBomb != i){
+      if(PlayersCol[playerBomb].checkCol(Players[i].x, Players[i].y, Players[i].sizeX, Players[i].sizeY) && passBomb){
+        Players[playerBomb].setSprite();  //El jugador que tenía la bomba ahora no la tiene
+        playerBomb = i;
+        Players[i].setSprite();  //Ahora el otro jugador la tiene
+        passBomb = false;
+        break;
+        
+      }else{
+        if(dist(Players[playerBomb].x, Players[playerBomb].y, Players[i].x, Players[i].y) > 1.5*sizeBlocks){  //Si se aleja un poco y luego se acerca de nuevo le puede pegar la bomba
+          passBomb = true;
+        }
+        
+      }
+      
+    }  //end playerBomb != i
+  }  //end for(i)
   
 }
 
@@ -41,26 +67,37 @@ class player{
   
   //Sprite
   int spriteColor = 1;
-  PImage sprite;
+  PImage sprite;  //El sprite que se muestra
+  PImage spriteWalk;
   PImage spriteBomb;
   int frame;
   int pastVelX = 1;
   
+  //Bomba
+  boolean lejos = true;
+  boolean bomb = false; 
   
   player(int _x, int _y, int _num){
     x = _x;
     y = _y;
     num = _num;
     
-    String fileName = "player0"+spriteColor+"_walking.png";
-    if(!fileExists(fileName, "sprites")){  //Si no existe
-      println("¡ERROR!");
-      println("El archivo player0"+spriteColor+"_walking.png NO existe o no se ecuentra en la carpeta \"data\\sprites\\\"");
-      println("Revisa el nombre del archivo y la carpeta \"data\\sprites\\\"");
-      exit();
-    }else{
-      sprite = loadImage("data/sprites/player0"+spriteColor+"_walking.png");
+    /*
+    for(int c = 1; c < 1; c++){  //Comprueba que existan los sprites para cada color
+      String fileNameW = "player0"+c+"_walking.png";
+      String fileNameB = "player0"+c+"_bomb.png";
+      if(!fileExists(fileNameW, "sprites") || !fileExists(fileNameB, "sprites")){  //Si no existe alguno de los sprites
+        println("¡ERROR!");
+        println("Los archivos", fileNameW, "o", fileNameB, "NO existen o no se ecuentra en la carpeta \"data\\sprites\\\"");
+        println("Revisa los nombres de los archivos y la carpeta \"data\\sprites\\\"");
+        exit();
+        break;
+      }
     }
+    */
+    spriteWalk = loadImage("data/sprites/player01_walking.png");
+    spriteBomb = loadImage("data/sprites/player01_bomb.png");
+    sprite = spriteWalk;
   } 
   
   void setXY(int _x, int _y){
@@ -68,8 +105,24 @@ class player{
     y = _y;
   }
   
+  void setSkin(int _spriteColor){
+    spriteColor = _spriteColor;
+    spriteWalk = loadImage("data/sprites/player0"+_spriteColor+"_walking.png");
+    spriteBomb = loadImage("data/sprites/player0"+_spriteColor+"_bomb.png");
+    
+    sprite = spriteWalk;
+    
+  }
+  
+  void setSprite(){
+    bomb = !bomb;
+    if(!bomb)  sprite = spriteWalk;
+    else  sprite = spriteBomb;
+  }
+  
   void update(){
     control();
+    PlayersCol[num].setXY(x,y);  //Actualiza la colisión
     
     //Colisiones
     wallLeft = checkCol(x-1, y, sizeX, sizeY);
@@ -117,6 +170,7 @@ class player{
     noStroke();
     rect(x, y, sizeX, sizeY);
     */
+    
     
     //frame = (frameCount/6)%10; 
     frame = (frameCount/(abs(2*velX/3)+1))%10;  //Dependiendo de la velocidad cambia de frames más rápido o no

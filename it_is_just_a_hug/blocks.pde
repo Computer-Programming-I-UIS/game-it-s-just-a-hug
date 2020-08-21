@@ -16,13 +16,20 @@ void setupBlocks(){
   for(int i = 0; i < Ground.length; i++){
     Ground[i] = new block(i*sizeBlocks, i*sizeBlocks);  //Como cada vez que se configura un map se establece unas nuevas cordenadas entonces se pueden iniciar todos en (0,0)
   }
+  for(int i = 0; i < PlayersCol.length; i++){
+    PlayersCol[i] = new block(Players[i].x, Players[i].y);
+    PlayersCol[i].sizeX = Players[i].sizeX;
+    PlayersCol[i].sizeY = Players[i].sizeY;
+  }
   
 }
 
 boolean checkCol(int _x, int _y, int _sizeX, int _sizeY){
+  //Bloques
   for(int i = 0; i < numBGroundMap; i++){
-    if(Ground[i].checkCol(_x, _y, _sizeX, _sizeY))
+    if(Ground[i].checkCol(_x, _y, _sizeX, _sizeY)){
       return true;
+    }
   }
   return false;
 }

@@ -90,15 +90,19 @@ void keyControl(int k, boolean state){
       spaceKey = state;
       break;
     default:
-      println("OTRA");
+      //println("OTRA");
       break;
   }
 }
 
 void control(){
+  
   if(wKey){
-    Players[0].jump();
+    Players[0].jump = true;
+  }else{
+    Players[0].jump = false;
   }
+  
   if(aKey){
     Players[0].velX = -3;
   }

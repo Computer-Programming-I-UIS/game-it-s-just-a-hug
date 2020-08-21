@@ -8,19 +8,26 @@ Se formaría un tablero de ajedrez y la cantidad de bloques sería la mitad de l
 *****************************************************/
 
 block Ground [] = new block [(numBlocksX*numBlocksY)/2];
-int numBGroundMap;  //Número de rectángulos de bloque tierra que tiene el mapa
+int numBGroundMap = (numBlocksX*numBlocksY)/2;  //Número de rectángulos de bloque tierra que tiene el mapa
 
 //Generar Bloques
 void setupBlocks(){
   
   for(int i = 0; i < Ground.length; i++){
-    Ground[i] = new block(0, 0);  //Como cada vez que se configura un map se establece unas nuevas cordenadas entonces se pueden iniciar todos en (0,0)
+    Ground[i] = new block(i*sizeBlocks, i*sizeBlocks);  //Como cada vez que se configura un map se establece unas nuevas cordenadas entonces se pueden iniciar todos en (0,0)
   }
   
 }
 
-//Clase
+boolean checkCol(int _x, int _y, int _sizeX, int _sizeY){
+  for(int i = 0; i < numBGroundMap; i++){
+    if(Ground[i].checkCol(_x, _y, _sizeX, _sizeY))
+      return true;
+  }
+  return false;
+}
 
+//Clase
 class block{
   int x, y;
   int sizeX = sizeBlocks;
@@ -50,7 +57,7 @@ class block{
   void display(){
     noStroke();
     stroke(0);
-    fill(color1);
+    fill(0);
     rect(x, y, sizeX, sizeY);
   }
   

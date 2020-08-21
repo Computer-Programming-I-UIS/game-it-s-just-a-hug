@@ -25,195 +25,105 @@ void setupPlayers(){
 
 //Clase
 class player{
+  //Número del Jugador
+  int num;
+  
+  //Posición
   int x,y;
   int sizeX = sizeBlocks;
   int sizeY = 2*sizeBlocks;
   
+  //Movimiento
   int velX = 0, velX0 = 0;
   int velY = 0, velY0 = 0;
+  boolean jump = false;
   int g = 10;
   float t;
   
-  boolean jump = false;
+  //Colisiones
+  boolean wallLeft = false;
+  boolean roof = false;
+  boolean wallRight = false;
+  boolean ground = false;
   
-  PImage spritehug;
+  //Sprite
+  int spriteColor = 0;
+  PImage sprite;
   int frame;
-  int afterVelX=1;
+  int pastVelX = 1;
+  
   
   player(int _x, int _y, int _num){
     x = _x;
     y = _y;
+    num = _num;
     
-    spritehug = loadImage("HugCaminante.png");
+    sprite = loadImage("HugCaminante.png");
   } 
   
-  //--------------------------------COLISIONES--------------------------------//
-  
-  boolean checkRoof(){
-    if(velY <= 0){
-      for(int _y = 0; _y < map.length; _y++){
-        for(int _x = 0; _x < map[_y].length; _x++){
-          if(map[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
-            continue;
-          }else if(suelos[_y][_x].checkDownCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'S'){
-            t = 0;
-            velY0 = 0;
-            velY = 0;
-            return true;
-            
-          }else if(lavas[_y][_x].checkDownCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'L'){
-            x = width/2;
-            y = height/2;
-            return true;
-          }
-        }
-      }  //end fors
-      return false;
-    }else  return false;
-  }
-  
-  boolean checkGround(){
-    if(velY >= 0){
-      for(int _y = 0; _y < map.length; _y++){
-        for(int _x = 0; _x < map[_y].length; _x++){
-          if(map[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
-            continue;
-          }else if(suelos[_y][_x].checkUpCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'S'){
-            t = 0;
-            velY0 = 0;
-            velY = 0;
-            return true;
-            
-          }else if(lavas[_y][_x].checkUpCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'L'){
-            x = width/2;
-            y = height/2;
-            return true;
-          }
-        }
-      }  //end fors
-      return false;
-    }else  return false;
-  }
-  
-  boolean checkLeftWall(){
-    if(velX <= 0){
-      for(int _y = 0; _y < map.length; _y++){
-        for(int _x = 0; _x < map[_y].length; _x++){
-          if(map[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
-            continue;
-          }else if(suelos[_y][_x].checkLeftCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'S'){
-            velX = 0;
-            return true;
-            
-          }else if(lavas[_y][_x].checkLeftCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'L'){
-            x = width/2;
-            y = height/2;
-            return true;
-          }
-        }
-      }  //end fors
-      return false;
-    }else  return false;
-  }
-  
-  boolean checkRightWall(){
-    if(velX >= 0){
-      for(int _y = 0; _y < map.length; _y++){
-        for(int _x = 0; _x < map[_y].length; _x++){
-          if(map[_y][_x] == ' '){  //Si el bloque no existe pasa al siguiente ciclo
-            continue;
-          }else if(suelos[_y][_x].checkRightCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'S'){
-            velX = 0;
-            return true;
-            
-          }else if(lavas[_y][_x].checkRightCollision(x, y, sizeX, sizeY) && map[_y][_x] == 'L'){
-            x = width/2;
-            y = height/2;
-            return true;
-          }
-        }
-      }  //end fors
-      return false;
-    }else  return false;
-  }
-  
-  //--------------------------------CONTROLES--------------------------------//
-  
-  void jump(){
-    if(checkGround()){
-      velY0 = -6;
-      t = 0;
-      jump = true;
-      //y--;
-    }
-  }
-  void move(){
+  void update(){
     control();
     
-    //Eje X
-    if(velX < 0){
-      for(int a = velX; a < 0; a++){
-        if(!checkLeftWall()){
-          x--;
-          
-        }else{
-          velX = 0;
-          break;
-        }
-      }
-    }else{
-      for(int a = 0; a < velX; a++){
-        if(!checkRightWall()){
-          x++;
-        }else{
-          velX = 0;
-          break;
-        }
+    //Colisiones
+    wallLeft = checkCol(x-1, y, sizeX, sizeY);
+    roof = checkCol(x, y-1, sizeX, sizeY);
+    wallRight = checkCol(x+1, y, sizeX, sizeY);
+    ground = checkCol(x, y+1, sizeX, sizeY);
+    
+    //Salto
+    if(jump && ground){  //Si se presiona la tecla de salto y está tocando suelo
+      velY0 = -6;
+      t = 0;
+    }
+    
+    //Movimiento X
+    for(int i = 0; i < abs(velX); i++){
+      if(!checkCol(x + sign(velX), y, sizeX, sizeY)){  //Revisa en cada pixel que avanza si hay un bloque o no
+        x += sign(velX);  //Si no hay bloque disminuye o aumenta (dependiendo la dirección) una unidad la posición en x
+      }else{
+        velX = 0;
+        break;
       }
     }
       
-    //Eje Y
-    velY = round(velY0 + g*t); 
+    //Movimiento Y
+    velY = round(velY0 + g*t);
     t += 0.04;
-    if(velY < 0){
-      for(int a = velY; a < 0; a++){
-        if(!checkRoof()){
-          y--;
-        }else{
-          break;
-        }
-      }
-    }else{
-      //Comprobación en cada pixel que aumenta
-      for(int a = 0; a < velY; a++){
-        if(!checkGround()){
-          y++;  //Aumenta en 1
-        }else{
-          break;  //Tocó suelo entonces deja de caer;
-        }
+    
+    for(int i = 0; i < abs(velY); i++){
+      if(!checkCol(x, y + sign(velY), sizeX, sizeY)){
+        y += sign(velY);
+      }else{
+        velY = 0;
+        t = 0;
+        velY0 = 0;
+        break;
       }
     }
   }
   
   void display(){
+    
+    //Máscara de colisión
     fill(255);
     noStroke();
     rect(x, y, sizeX, sizeY);
     
-    frame=(frameCount/6)%10; 
-    if (velX!=0){
-     if(velX>0){
-       afterVelX=1;
-       copy(spritehug,frame*64,0,64,64,x - sizeX/2,y,2*sizeX,sizeY);
-       
-     }if(velX<0){
-       afterVelX=2;
+    
+    frame = (frameCount/6)%10; 
+    
+    if(velX > 0){
+      pastVelX = 1;
+      copy(sprite, frame*64, 0, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la derecha (+1 porque no se ajusta muy bien la imagen)
       
-       copy(spritehug,frame*64,64,64,64,x - sizeX/2,y,2*sizeX,sizeY);
-     }  
-   }else{
-     if(afterVelX==1)copy(spritehug,0,0,64,64,x - sizeX/2, y, 2*sizeX,sizeY);
-     if(afterVelX==2 )copy(spritehug,0,64,64,64,x - sizeX/2, y, 2*sizeX,sizeY); 
+    }else if(velX < 0){
+      pastVelX = -1;
+      copy(sprite, frame*64, 64, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la izquierda
+      
+    }else{  //Si no se mueve, mira en la dirección en la que se estába moviendo
+      if(pastVelX == 1)  copy(sprite,0,0,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
+      if(pastVelX == -1)  copy(sprite,0,64,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
+      
     }
     
   }

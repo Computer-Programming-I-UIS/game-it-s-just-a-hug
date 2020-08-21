@@ -23,15 +23,22 @@ void setup(){
 }
 void draw(){
   //println(frameRate);
-  background(0);
+  
   image(wallpaper,0,0,wallpaper.width,wallpaper.height);
   
-  for(int i = 0; y < numBGroundMap; i++){
+  for(int i = 0; i < numBGroundMap; i++){
     Ground[i].display();
   }
+  Players[0].update();
   Players[0].display();
-  Players[0].move();
   
+  
+}
+
+int sign(int num){  //Obtener el signo de un número
+  if(num == 0)  return 0;
+  else if(num < 0) return -1;
+  else  return +1;
 }
 
 void mousePressed(){

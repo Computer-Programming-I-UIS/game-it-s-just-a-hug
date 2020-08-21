@@ -31,8 +31,10 @@ void draw(){
     Ground[i].display();
   }
   */
-  Players[0].update();
-  Players[0].display();
+  for(int p = 0; p < Players.length; p++){
+    Players[p].update();
+    Players[p].display();
+  }
   
 }
 

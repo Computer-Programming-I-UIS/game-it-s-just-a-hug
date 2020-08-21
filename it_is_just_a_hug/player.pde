@@ -36,8 +36,8 @@ class player{
   
   //Colisiones
   boolean wallLeft = false;
-  boolean roof = false;
   boolean wallRight = false;
+  boolean roof = false;
   boolean ground = false;
   
   //Sprite
@@ -104,10 +104,11 @@ class player{
   void display(){
     
     //Máscara de colisión
+    /*
     fill(255);
     noStroke();
     rect(x, y, sizeX, sizeY);
-    
+    */
     
     frame = (frameCount/6)%10; 
     

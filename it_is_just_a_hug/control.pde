@@ -96,23 +96,22 @@ void keyControl(int k, boolean state){
 }
 
 void control(){
+  //Player 1
+  if(wKey)  Players[0].jump = true;
+  else  Players[0].jump = false;
   
-  if(wKey){
-    Players[0].jump = true;
-  }else{
-    Players[0].jump = false;
-  }
+  if(aKey)  Players[0].velX = -3;
+  if(dKey)  Players[0].velX = 3;
+  if(!aKey && !dKey)  Players[0].velX = 0;
+  if(aKey && dKey)  Players[0].velX = 0;
   
-  if(aKey){
-    Players[0].velX = -3;
-  }
-  if(dKey){
-    Players[0].velX = 3;
-  }
-  if(!aKey && !dKey){
-    Players[0].velX = 0;
-  }
-  if(aKey && dKey){
-    Players[0].velX = 0;
-  }
+  //Player 2
+  if(upKey)  Players[1].jump = true;
+  else  Players[1].jump = false;
+  
+  if(leftKey)  Players[1].velX = -3;
+  if(rightKey)  Players[1].velX = 3;
+  if(!leftKey && !rightKey)  Players[1].velX = 0;
+  if(leftKey && rightKey)  Players[1].velX = 0;
+  
 }

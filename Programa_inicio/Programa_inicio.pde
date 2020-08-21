@@ -6,10 +6,12 @@ int numAlto = 18;
 PImage inicio;
 PFont pixel;
 void setup(){
-surface.setSize(numAncho*sizeBlock, numAlto*sizeBlock);
-inicio = loadImage("Pantalla de inicio.png");
-pixel = loadFont("8-bitOperatorPlus-Regular-48.vlw");
-textFont(pixel);
+  
+  surface.setSize(numAncho*sizeBlock, numAlto*sizeBlock);
+  surface.setLocation((displayWidth/2) - numAncho*sizeBlock/2, (displayHeight/2) - numAlto*sizeBlock/2 - sizeBlock);  //Aparezca centrada la ventana
+  inicio = loadImage("Pantalla de inicio.png");
+  pixel = loadFont("8-bitOperatorPlus-Regular-48.vlw");
+  textFont(pixel);
 }
 
 void draw(){

@@ -45,24 +45,26 @@ void displayBlocks(){
 //----------------------ACTUALIZAR BLOQUES----------------------//
 
 void updateBlocks(){
+  boolean leftB = false;
+  boolean upB = false;
+  boolean rightB = false;
+  boolean downB = false;
+  
   for(int i = 0; i < Blocks.length; i++){
     for(int j = 0; j < Blocks[i].length; j++){
-      if(i > 0 && i < Blocks.length-1 && j > 0 && j < Blocks[i].length -1){  //Si ese bloque no es de los de borde o esquina
-        
-        boolean leftB = false;
-        if(Blocks[i][j].type == Blocks[i][j-1].type)  leftB = true;  //Si el bloque de la izquierda es del mismo tipo de bloque entonces leftB = true
-        boolean upB = false;
-        if(Blocks[i][j].type == Blocks[i-1][j].type)  upB = true;
-        boolean rightB = false;
-        if(Blocks[i][j].type == Blocks[i][j+1].type)  rightB = true;
-        boolean downB = false;
-        if(Blocks[i][j].type == Blocks[i+1][j].type)  downB = true;
-        
-        Blocks[i][j].updateTile(leftB, upB, rightB, downB); 
-      }
-      else{  //Es un bloque de borde o esquina
-        Blocks[i][j].updateTile(true);
-      }
+      leftB = false;
+      upB = false;
+      rightB = false;
+      downB = false;
+      
+      //if(i > 0 && i < Blocks.length-1 && j > 0 && j < Blocks[i].length -1){  //Si ese bloque no es de los de borde o esquina
+      
+      if(j == 0 || Blocks[i][j].type == Blocks[i][j-1].type)  leftB = true;  //Si el bloque de la izquierda es del mismo tipo de bloque entonces leftB = true
+      if(i == 0 || Blocks[i][j].type == Blocks[i-1][j].type)  upB = true;
+      if(j == Blocks[i].length-1 || Blocks[i][j].type == Blocks[i][j+1].type)  rightB = true;
+      if(i == Blocks.length-1 || Blocks[i][j].type == Blocks[i+1][j].type)  downB = true;
+      
+      Blocks[i][j].updateTile(leftB, upB, rightB, downB); 
     }
   }
   
@@ -116,13 +118,6 @@ class block{
     
     xTile = xy[0];
     yTile = xy[1];
-  }
-  
-  void updateTile(boolean _border){
-    if(_border && Tiles[type].sizeTile[0] == 3 && Tiles[type].sizeTile[1] == 3){  //Si es un bloque de borde o esquina y el tile es de 3x3
-      xTile = sizeTiles;  //El tile por defecto es el de la mitad
-      yTile = sizeTiles;
-    }
   }
   
   boolean checkMouse(){

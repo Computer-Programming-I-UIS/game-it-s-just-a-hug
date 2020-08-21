@@ -50,7 +50,7 @@ class block{
   }
   
   boolean checkCol(int _x, int _y, int _sizeX, int _sizeY){
-    if(_x + _sizeX >= x && _x <= x + sizeX && _y + _sizeY >= y && _y <= y + sizeY){
+    if(_x + _sizeX > x && _x < x + sizeX && _y + _sizeY > y && _y < y + sizeY){
       return true;
     }
     return false;

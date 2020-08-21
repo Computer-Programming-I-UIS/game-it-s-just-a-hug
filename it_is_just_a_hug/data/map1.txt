@@ -1,0 +1,18 @@
+SSSSSSSSSSSSSSSSSSSS  SSSSSSSSSSSSS
+SSS        SSSSSS              SSSS
+SS          SSS                 SSS
+SS                               SS
+SS  SSSSS          SSSS     SS    S
+SS  SSSSSS       SSSSS     SSSS   S
+S     SSSSSSSS    SSS     SSSSS   S
+S         SSSSS         SSSSSSS   S
+S  1                       SSSS  SS
+SS              SSSSSS      SS   SS
+SS       SSSSSSSSSSSSSSS         SS
+SSSS    SSSSSSSSSSSSSSSSS        SS
+SSSSS  SSSSSSSSSSSSSSSSSSSS      SS
+SSSSS      SSSSSSSSSSSSSSSSS    SSS
+SSSSSS                        SSSSS
+SSSSSS                        SSSSS
+SSSSSSSSS                  SSSSSSSS
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS

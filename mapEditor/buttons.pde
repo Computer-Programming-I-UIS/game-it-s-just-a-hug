@@ -141,7 +141,7 @@ void actionButtons(){
         }
       }
     }
-    mapImage = get(0, 0, numTilesX*sizeTiles+1, numTilesY*sizeTiles+1);  //Solo exporta la parte de la pantalla que tiene el mapa
+    mapImage = get(0, 0, numTilesX*sizeTiles, numTilesY*sizeTiles);  //Solo exporta la parte de la pantalla que tiene el mapa
     mapImage.save("maps/map"+numMap+".png");  //La almacena en la carpeta "maps"
     
     //Archivo texto

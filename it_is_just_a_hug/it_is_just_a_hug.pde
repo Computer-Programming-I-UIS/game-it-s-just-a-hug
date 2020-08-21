@@ -19,8 +19,8 @@ void setup(){
   setupBlocks();
   setupPlayers();
   
-  importMap(0);
-  wallpaper = loadImage("data/map0.png");
+  importMap(1);
+  wallpaper = loadImage("data/map1.png");
 }
 void draw(){
   //println(frameRate);

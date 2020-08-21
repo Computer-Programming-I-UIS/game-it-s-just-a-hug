@@ -71,7 +71,7 @@ class player{
     
     //Salto
     if(jump && ground){  //Si se presiona la tecla de salto y está tocando suelo
-      velY0 = -6;
+      velY0 = -8;
       t = 0;
     }
     

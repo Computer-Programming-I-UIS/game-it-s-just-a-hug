@@ -1,65 +1,51 @@
-
 /*****************************************************
 
 S = Suelo
-L = Lava
 1 = Posición del Jugador 1
 2 = Posición del Jugador 2
 
 *****************************************************/
 
-char [][] defaultMap = {{'S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S'},
-                        {'S',' ',' ',' ',' ',' ',' ','C',' ',' ',' ',' ',' ',' ','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S'},
-                        {'S',' ',' ',' ',' ',' ',' ','C',' ',' ',' ',' ',' ',' ','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S'},
-                        {'S',' ',' ',' ',' ',' ',' ','C',' ',' ','S',' ',' ',' ','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S'},
-                        {'S',' ',' ',' ',' ',' ',' ','C',' ',' ','S',' ',' ',' ','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S'},
-                        {'S',' ',' ',' ',' ',' ','S','S','S','S','S','S','S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S'},
-                        {'S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S'},
-                        {'S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S'},
-                        {'S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S'},
-                        {'S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S',' ',' ',' ',' ','S','S','S',' ','S','S','S','S'},
-                        {'S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S',' ',' ',' ',' ','S','S','S',' ','S','S','S','S'},
-                        {'S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ','1',' ',' ',' ',' ',' ',' ',' ',' ','S',' ',' ',' ',' ','S','S','S',' ','S','S','S','S'},
-                        {'S','S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S',' ',' ',' ','S','S','S','S','S','S','S','S','S'},
-                        {'S','S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S','S','S','S','S','S'},
-                        {'S','S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S','S','S','S','S','S'},
-                        {'S','S','S','S','S',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','S','S','S','S','S','S','S','S','S'},
-                        {'S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S'},
-                        {'S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S','S'}};
-
-char [][] map = new char [numBlocksY][numBlocksX];
+char [][] map = new char [numBlocksY][numBlocksX];  //Configuración de los bloques
+PImage backgroundMap;  //Imagen de fonde del nivel
 
 
 //Importar el mapa y configurarlo
-
 void importMap(int numMap){
-  String fileNameMap = "map"+numMap+".txt";  //Nombre del Archivo
+  String fileNameMapTXT = "map"+numMap+".txt";  //Nombre del archivo .txt
+  String fileNameMapPNG = "map"+numMap+".png";  //Nombre del archivo .png
   String mapFile [] = new String[numBlocksY];  //Almacena todo lo que tenga el archivo
   
   //Comprueba que el archivo exista antes de intentar importarlo
-  if(!fileExists(fileNameMap)){  //Si no existe
-    map = defaultMap;  //El nivel es el que está por defecto
+  if(!fileExists(fileNameMapTXT, "maps")){  //Si no existe
+    println("¡ERROR!");
+    println("El archivo", fileNameMapTXT, "NO existe o no se ecuentra en la carpeta \"data\\maps\"");
+    println("Revisa el nombre del archivo y la carpeta \"data\\maps\"");
+    exit();  //Acaba el programa
     
   }else{  //El archivo sí existe entonces lo importa
-    mapFile = loadStrings(fileNameMap);  //Carga el archivo
+    mapFile = loadStrings("data/maps/"+fileNameMapTXT);  //Carga el archivo
     
     if(mapFile.length != numBlocksY){  //El archivo tiene menos o más filas de la cantidad de bloques de alto
-      println("Level Corrupto");
-      map = defaultMap;
+      println("¡ERROR!");
+      println("El archivo", fileNameMapTXT, "NO es válido, por favor vuelva a generar el mapa");
+      exit();
+      
     }else{  //El archivo tiene la cantidad de filas correctas
       
       boolean valido = true;
       for(int r = 0; r < mapFile.length; r++){  //Recorre cada string del array
         if(mapFile[r].length() != numBlocksX){  //Si tiene una cantidad de carácteres diferente a la del ancho
-          println("Tamaño incorrecto");
           valido = false;  //No es valido
           break;
         }
       }
       if(!valido){
-        map = defaultMap;
-      }else{
-        println("Mapa Válido");
+        println("¡ERROR!");
+        println("El archivo", fileNameMapTXT, "NO es válido, por favor vuelva a generar el mapa");
+        exit();
+        
+      }else{  //Mapa válido
         for(int r = 0; r < mapFile.length; r++){
           for(int c = 0; c < mapFile[r].length(); c++){
             map[r][c] = mapFile[r].charAt(c);  //Asigna a la matriz de char 
@@ -70,6 +56,15 @@ void importMap(int numMap){
     }  //end tiene la cantidad de filas correctas
   }  //end el archivo existe
   
+  //Importar la imagen
+  if(!fileExists(fileNameMapPNG, "maps")){
+    println("¡ERROR!");
+    println("El archivo", fileNameMapPNG, "NO existe o no se ecuentra en la carpeta \"data\\maps\"");
+    println("Revisa el nombre del archivo y la carpeta \"data\\maps\"");
+    exit();  //Acaba el programa
+  }else{
+    backgroundMap = loadImage("data/maps/"+fileNameMapPNG);
+  }
   
   //Configuración
   numBGroundMap = 0;  //Resetea la variable

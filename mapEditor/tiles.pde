@@ -9,7 +9,6 @@ void setupTiles() {
 
   Tiles[3] = new tile("Tierra", "tileground01.png", 'S', true, true);
   Tiles[4] = new tile("Tierra", "tileground02.png", 'S', true, true);
-  Tiles[5] = new tile("Letrero", "signboard.png", 'L', true, true);
 }
 
 class tile {
@@ -27,8 +26,8 @@ class tile {
 
     if (!fileExists(_fileName, "tiles")) {  //Si no existe el archivo
       println("¡ERROR!");
-      println("El archivo", _fileName, "NO existe o no se ecuentra en la carpeta \"data\"");
-      println("Revisa el nombre del archivo y la carpeta \"data\" \nO elimina el tipo de tile");
+      println("El archivo", _fileName, "NO existe o no se ecuentra en la carpeta \"data\\\"");
+      println("Revisa el nombre del archivo y la carpeta \"data\\\" \nO elimina el tipo de tile");
       exit();  //Acaba el programa
     } else {
       tileImage = loadImage("data/tiles/"+_fileName);

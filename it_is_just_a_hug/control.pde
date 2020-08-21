@@ -15,9 +15,10 @@ boolean lKey, lKey1;  //Atacar
 boolean spaceKey;
 
 void keyPressed(){
-  /*
-  if(key == 27){  //Si se presiona escape se pausa
+  
+  if(key == 27){  //Si se presiona escape
     key = 0;  //Al convertirla a cero, evita que processing cierre la aplicación, como lo hace por defecto
+    /*
     if(pauseIsPosible){
       if(!pause){  //Si no estaba pausado, guarda en que escena estaba
         lastScene = scene;
@@ -26,7 +27,9 @@ void keyPressed(){
       }
       pause = !pause;
     }
-  }*/
+    */
+  }
+  
   keyControl(keyCode, true);
 }
 

@@ -1,4 +1,3 @@
-
 /*****************************************************
 
 
@@ -41,8 +40,9 @@ class player{
   boolean ground = false;
   
   //Sprite
-  int spriteColor = 0;
+  int spriteColor = 1;
   PImage sprite;
+  PImage spriteBomb;
   int frame;
   int pastVelX = 1;
   
@@ -52,7 +52,15 @@ class player{
     y = _y;
     num = _num;
     
-    sprite = loadImage("HugCaminante.png");
+    String fileName = "player0"+spriteColor+"_walking.png";
+    if(!fileExists(fileName, "sprites")){  //Si no existe
+      println("¡ERROR!");
+      println("El archivo player0"+spriteColor+"_walking.png NO existe o no se ecuentra en la carpeta \"data\\sprites\\\"");
+      println("Revisa el nombre del archivo y la carpeta \"data\\sprites\\\"");
+      exit();
+    }else{
+      sprite = loadImage("data/sprites/player0"+spriteColor+"_walking.png");
+    }
   } 
   
   void setXY(int _x, int _y){
@@ -113,18 +121,23 @@ class player{
     //frame = (frameCount/6)%10; 
     frame = (frameCount/(abs(2*velX/3)+1))%10;  //Dependiendo de la velocidad cambia de frames más rápido o no
     
-    if(velX > 0){
-      pastVelX = 1;
-      copy(sprite, frame*64, 0, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la derecha (+1 porque no se ajusta muy bien la imagen)
-      
-    }else if(velX < 0){
-      pastVelX = -1;
-      copy(sprite, frame*64, 64, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la izquierda
-      
-    }else{  //Si no se mueve, mira en la dirección en la que se estába moviendo
-      if(pastVelX == 1)  copy(sprite,0,0,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
-      if(pastVelX == -1)  copy(sprite,0,64,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
-      
+    if(velY <= 0){  //No está cayendo
+      if(velX > 0){
+        pastVelX = 1;
+        copy(sprite, frame*64, 0, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la derecha (+1 porque no se ajusta muy bien la imagen)
+        
+      }else if(velX < 0){
+        pastVelX = -1;
+        copy(sprite, frame*64, 64, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la izquierda
+        
+      }else{  //Si no se mueve, mira en la dirección en la que se estába moviendo
+        if(pastVelX == 1)  copy(sprite,0,0,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
+        if(pastVelX == -1)  copy(sprite,0,64,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
+        
+      }
+    }else{ //Está cayendo
+      if(pastVelX == 1)  copy(sprite, 192,0, 64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
+      if(pastVelX == -1)  copy(sprite, 192,64, 64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
     }
     
   }

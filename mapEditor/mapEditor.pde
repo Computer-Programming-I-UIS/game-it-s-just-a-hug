@@ -29,7 +29,7 @@ int numTilesX = 35;
 int numTilesY = 18;
 
 block [][] Blocks = new block[numTilesY][numTilesX];
-tile [] Tiles = new tile[6];
+tile [] Tiles = new tile[5];
 button [] TButtons = new button[Tiles.length];  //Botones para los tiles
 button [] EButtons = new button[3];
 
@@ -37,8 +37,6 @@ button [] EButtons = new button[3];
 //Background
 String [] backgroundsFilesNames = {"sky01.png"};
 PImage [] backgroundsImages = new PImage [backgroundsFilesNames.length];
-
-//Bloques del Nivel
 
 //Mostrar Cuadrícula
 boolean showGrid = false;
@@ -82,19 +80,11 @@ void setupScreen(){
   
 }
 
+//Verificar si existe un archivo dentro de la carpeta "data\"
+  //Creditos al usuario "Schred"  https://discourse.processing.org/t/checking-if-a-file-exists-strange-runtime-error/20276/5
 boolean fileExists(String fileName, String folder){
+  //Para un archivo que está directamente en la carpeta data (folder = "")
   File dataFolder = new File(dataPath(folder));
-  
-  for (File file : dataFolder.listFiles()) {    //Escanea todos los archivos en la carpeta data  (*Otra sintaxis de for)
-    if (file.getName().equals(fileName)){    //Si el nombre del archivo es el mismo del que se necesita
-      return true;
-    }
-  }
-  return false;
-}
-
-boolean fileExists(String fileName){
-  File dataFolder = new File(dataPath(""));
   
   for (File file : dataFolder.listFiles()) {    //Escanea todos los archivos en la carpeta data  (*Otra sintaxis de for)
     if (file.getName().equals(fileName)){    //Si el nombre del archivo es el mismo del que se necesita

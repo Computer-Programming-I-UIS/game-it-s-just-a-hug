@@ -110,7 +110,8 @@ class player{
     rect(x, y, sizeX, sizeY);
     */
     
-    frame = (frameCount/6)%10; 
+    //frame = (frameCount/6)%10; 
+    frame = (frameCount/(abs(2*velX/3)+1))%10;  //Dependiendo de la velocidad cambia de frames más rápido o no
     
     if(velX > 0){
       pastVelX = 1;

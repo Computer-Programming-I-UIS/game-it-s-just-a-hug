@@ -100,8 +100,8 @@ void control(){
   if(wKey)  Players[0].jump = true;
   else  Players[0].jump = false;
   
-  if(aKey)  Players[0].velX = -3;
-  if(dKey)  Players[0].velX = 3;
+  if(aKey)  Players[0].velX = -5;
+  if(dKey)  Players[0].velX = 5;
   if(!aKey && !dKey)  Players[0].velX = 0;
   if(aKey && dKey)  Players[0].velX = 0;
   
@@ -109,8 +109,8 @@ void control(){
   if(upKey)  Players[1].jump = true;
   else  Players[1].jump = false;
   
-  if(leftKey)  Players[1].velX = -3;
-  if(rightKey)  Players[1].velX = 3;
+  if(leftKey)  Players[1].velX = -5;
+  if(rightKey)  Players[1].velX = 5;
   if(!leftKey && !rightKey)  Players[1].velX = 0;
   if(leftKey && rightKey)  Players[1].velX = 0;
   

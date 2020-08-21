@@ -9,6 +9,7 @@ void setupTiles() {
 
   Tiles[3] = new tile("Tierra", "tileground01.png", 'S', true, true);
   Tiles[4] = new tile("Tierra", "tileground02.png", 'S', true, true);
+  Tiles[5] = new tile("Letrero", "signboard.png", 'L', true, true);
 }
 
 class tile {

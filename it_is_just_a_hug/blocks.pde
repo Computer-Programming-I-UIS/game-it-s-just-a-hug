@@ -40,11 +40,13 @@ class block{
     y = _y;
   }
   
-  void updateBlock(int _x, int _y, int _sX, int _sY){
+  void setXY(int _x, int _y){
     x = _x;
     y = _y;
-    sizeX = _sX;
-    sizeY = _sY;
+  }
+  
+  void setSize(int _sizeX){
+    sizeX = _sizeX;
   }
   
   boolean checkCol(int _x, int _y, int _sizeX, int _sizeY){
@@ -57,7 +59,7 @@ class block{
   void display(){
     noStroke();
     stroke(0);
-    fill(0);
+    fill(255);
     rect(x, y, sizeX, sizeY);
   }
   

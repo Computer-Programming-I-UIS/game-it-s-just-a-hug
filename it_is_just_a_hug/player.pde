@@ -10,14 +10,8 @@ player [] Players = new player[2];
 
 //Generación de los jugadores
 void setupPlayers(){
-  for(int i = 0; i < map.length; i++){
-    for(int j = 0; j < map[i].length; j++){
-      if(map[i][j] == '1'){
-        Players[0] = new player(j*sizeBlocks, i*sizeBlocks, 1);
-      }else if(map[i][j] == '2'){
-        Players[1] = new player(j*sizeBlocks, i*sizeBlocks, 2);
-      }
-    }
+  for(int i = 0; i < Players.length; i++){
+    Players[i] = new player(0,0,i);
   }
   
 }
@@ -60,6 +54,11 @@ class player{
     
     sprite = loadImage("HugCaminante.png");
   } 
+  
+  void setXY(int _x, int _y){
+    x = _x;
+    y = _y;
+  }
   
   void update(){
     control();

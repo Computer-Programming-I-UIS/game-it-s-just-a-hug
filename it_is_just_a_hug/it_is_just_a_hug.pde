@@ -15,31 +15,34 @@ PImage wallpaper;
 
 void setup(){
   setupScreen();
-  importMap(0);
   
   setupBlocks();
   setupPlayers();
+  
+  importMap(0);
   wallpaper = loadImage("data/map0.png");
 }
 void draw(){
   //println(frameRate);
   
   image(wallpaper,0,0,wallpaper.width,wallpaper.height);
-  
+  /*
   for(int i = 0; i < numBGroundMap; i++){
     Ground[i].display();
   }
+  */
   Players[0].update();
   Players[0].display();
   
-  
 }
 
-int sign(int num){  //Obtener el signo de un número
+//Obtener el signo de un número
+int sign(int num){
   if(num == 0)  return 0;
   else if(num < 0) return -1;
   else  return +1;
 }
+
 
 void mousePressed(){
   Players[0].x = mouseX;

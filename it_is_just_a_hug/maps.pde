@@ -30,7 +30,8 @@ char [][] defaultMap = {{'S','S','S','S','S','S','S','S','S','S','S','S','S','S'
 char [][] map = new char [numBlocksY][numBlocksX];
 
 
-//Configuración del nivel
+//Importar el mapa y configurarlo
+
 void importMap(int numMap){
   String fileNameMap = "map"+numMap+".txt";  //Nombre del Archivo
   String mapFile [] = new String[numBlocksY];  //Almacena todo lo que tenga el archivo
@@ -58,7 +59,6 @@ void importMap(int numMap){
       if(!valido){
         map = defaultMap;
       }else{
-        printArray(mapFile);  //Muestra el mapa
         println("Mapa Válido");
         for(int r = 0; r < mapFile.length; r++){
           for(int c = 0; c < mapFile[r].length(); c++){
@@ -69,18 +69,34 @@ void importMap(int numMap){
       }
     }  //end tiene la cantidad de filas correctas
   }  //end el archivo existe
-}  //end importMap
-
-//Configurar Bloques
-void configMap(){
+  
+  
+  //Configuración
+  numBGroundMap = 0;  //Resetea la variable
+  
   for(int i = 0; i < map.length; i++){
     for(int j = 0; j < map[i].length; j++){
-      if(map[i][j] == 'S'){
+      
+      if(map[i][j] == 'S'){  //Recorre todo la matriz hasta que encuentra una S por primera vez
+        Ground[numBGroundMap].setXY(j*sizeBlocks, i*sizeBlocks);  //Se establece esa la posición del bloque
         
+        for(int sX = 1; sX < map[i].length -j; sX++){
+          if(map[i][j+sX] == 'S'){  //Si a la derecha hay más bloques S
+            Ground[numBGroundMap].setSize((sX+1)*sizeBlocks);  //Aumenta el ancho del bloque
+          }else{  //Si no hay otra S seguida se detiene y continua para contruir un nuevo bloque
+            j += sX;
+            break;
+          }
+        }
+        numBGroundMap++;  //Aumenta el número de bloques Ground que hay
         
+      }else if(map[i][j] == '1'){
+        Players[0].setXY(j*sizeBlocks, i*sizeBlocks);
+      }else if(map[i][j] == '2'){
+        Players[1].setXY(j*sizeBlocks, i*sizeBlocks);
       }
-    }
-  }
+      
+    }  //end for (j)
+  }  //end for (i)
   
-  
-}
+} //end importMap

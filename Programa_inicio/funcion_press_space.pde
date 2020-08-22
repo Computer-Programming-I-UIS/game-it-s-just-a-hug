@@ -1,4 +1,4 @@
-//int frame;
+
 
 boolean showStart = true;
 
@@ -6,9 +6,10 @@ void pressSpace(){
   //frame=(frameCount/10)%10;
   //println(frame);
   
-  if(frameCount%25 == 0)  showStart = !showStart;  //Cada 25 frames cambia de estado
+  if(!showMenu)if(frameCount%25 == 0)  showStart = !showStart;  //Cada 25 frames cambia de estado     //si no se esta mostrando el menu entonces cambiar intermitemente cada 25 frames
   
   if(showStart){
+    textFont(pixel);
     fill(0);
     textSize(30);
     textAlign(CENTER,CENTER);

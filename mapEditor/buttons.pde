@@ -102,14 +102,14 @@ class button{
     else  strokeWeight(3);
     
     //Dibujar botón
-    fill(0);
+    fill(255);
     square(x, y, size);
     if(info == null && Tiles[type].tileImage != null){  //Si es un botón de tile y ese tile SÍ tiene imagen
       copy(Tiles[type].tileImage, Tiles[type].defaultTile[0], Tiles[type].defaultTile[1], sizeTiles,sizeTiles, x,y, size,size);  //Pone la imagen del tile que corresponde
     }
     //Texto
     if(info != null){
-      fill(255);
+      fill(0);
       textAlign(CENTER, CENTER);
       textSize(15);
       text(info,x + size/2, y + size/2 -2);

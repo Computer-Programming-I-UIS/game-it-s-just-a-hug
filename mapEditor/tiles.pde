@@ -9,6 +9,7 @@ void setupTiles() {
 
   Tiles[3] = new tile("Tierra", "tileground01.png", 'S', true, true);
   Tiles[4] = new tile("Tierra", "tileground02.png", 'S', true, true);
+  Tiles[5] = new tile("Teleport", "teleport01.png", 'P', true, true);
 }
 
 class tile {
@@ -92,8 +93,46 @@ class tile {
       } else {
         return Integer.toString(sizeTiles)+","+Integer.toString(0);
       }
+    }
+    //Tipo de tiles 4x4
+    if (sizeTile[0] == 4 && sizeTile[1] == 4) {
+      if (!_left && !_up && _right && _down) {  //Bloque arriba izquierda
+        return "0,0";
+      } else if (_left && !_up && _right && _down) {  //Bloque arriba centro
+        return Integer.toString(sizeTiles)+","+Integer.toString(0);
+      } else if (_left && !_up && !_right && _down) {  //Bloque arriba derecha
+        return Integer.toString(2*sizeTiles)+","+Integer.toString(0);
+      } else if (!_left && _up && _right && _down) {  //Bloque centro izquierda
+        return Integer.toString(0)+","+Integer.toString(sizeTiles);
+      } else if (_left && _up && _right && _down) {  //Bloque centro
+        return Integer.toString(sizeTiles)+","+Integer.toString(sizeTiles);
+      } else if (_left && _up && !_right && _down) {  //Bloque centro derecha
+        return Integer.toString(2*sizeTiles)+","+Integer.toString(sizeTiles);
+      } else if (!_left && _up && _right && !_down) {  //Bloque abajo izquierda
+        return Integer.toString(0)+","+Integer.toString(2*sizeTiles);
+      } else if (_left && _up && _right && !_down) {  //Bloque abajo centro
+        return Integer.toString(sizeTiles)+","+Integer.toString(2*sizeTiles);
+      } else if (_left && _up && !_right && !_down) {  //Bloque abajo derecha
+        return Integer.toString(2*sizeTiles)+","+Integer.toString(2*sizeTiles);
+      } else if (!_left && !_up && !_right && _down) {  //Bloque vertica arriba
+        return Integer.toString(3*sizeTiles)+","+Integer.toString(0);
+      } else if (!_left && _up && !_right && _down) {  //Bloque vertical centro
+        return Integer.toString(3*sizeTiles)+","+Integer.toString(sizeTiles);
+      } else if (!_left && _up && !_right && !_down) {  //Bloque vertical abajo
+        return Integer.toString(3*sizeTiles)+","+Integer.toString(2*sizeTiles);
+      } else if (!_left && !_up && _right && !_down) {  //Bloque horizontal izquierda
+        return Integer.toString(0)+","+Integer.toString(3*sizeTiles);
+      } else if (_left && !_up && _right && !_down) {  //Bloque horizontal centro
+        return Integer.toString(sizeTiles)+","+Integer.toString(3*sizeTiles);
+      } else if (_left && !_up && !_right && !_down) {  //Bloque horizontal derecha
+        return Integer.toString(2*sizeTiles)+","+Integer.toString(3*sizeTiles);
+      } else if (!_left && !_up && !_right && !_down) {  //Bloque solo
+        return Integer.toString(3*sizeTiles)+","+Integer.toString(3*sizeTiles);
+      } else {
+        return Integer.toString(sizeTiles)+","+Integer.toString(0);
+      }
     }else {
-      return Integer.toString(9)+","+Integer.toString(0);
+      return Integer.toString(0)+","+Integer.toString(0);
     }
   }
   

@@ -65,9 +65,9 @@ void importMap(int numMap){
   }else{
     backgroundMap = loadImage("data/maps/"+fileNameMapPNG);
   }
-  
   //Configuración
   numBGroundMap = 0;  //Resetea la variable
+  numBTeleportMap = 0;  //Resetea la variable
   
   for(int i = 0; i < map.length; i++){
     for(int j = 0; j < map[i].length; j++){
@@ -79,7 +79,7 @@ void importMap(int numMap){
           if(map[i][j+sX] == 'S'){  //Si a la derecha hay más bloques S
             Ground[numBGroundMap].setSize((sX+1)*sizeBlocks);  //Aumenta el ancho del bloque
           }else{  //Si no hay otra S seguida se detiene y continua para contruir un nuevo bloque
-            j += sX;
+            j += sX-1;
             break;
           }
         }
@@ -91,6 +91,10 @@ void importMap(int numMap){
       }else if(map[i][j] == '2'){
         Players[1].setXY(j*sizeBlocks, i*sizeBlocks);
         PlayersCol[1].setXY(j*sizeBlocks, i*sizeBlocks);
+      }else if(map[i][j] == 'P'){
+        Teleport[numBTeleportMap].setXY(j*sizeBlocks, i*sizeBlocks);
+        numBTeleportMap++;
+        numBTeleportMap = constrain(numBTeleportMap, 0, Teleport.length);
       }
       
     }  //end for (j)

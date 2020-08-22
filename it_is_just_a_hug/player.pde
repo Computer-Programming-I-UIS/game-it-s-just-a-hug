@@ -25,7 +25,8 @@ void colPlayers(){
       if(PlayersCol[playerBomb].checkCol(Players[i].x, Players[i].y, Players[i].sizeX, Players[i].sizeY) && passBomb){
         Players[playerBomb].setSprite();  //El jugador que tenía la bomba ahora no la tiene
         playerBomb = i;
-        Players[i].setSprite();  //Ahora el otro jugador la tiene
+        Players[playerBomb].setSprite();  //Ahora el otro jugador la tiene
+        
         passBomb = false;
         break;
         
@@ -49,21 +50,20 @@ class player{
   
   //Posición
   int x,y;
-  int sizeX = sizeBlocks;
-  int sizeY = 2*sizeBlocks;
+  int sizeX = 25*sizeBlocks/32;
+  int sizeY = 50*sizeBlocks/32;
   
   //Movimiento
   int velX = 0, velX0 = 0;
   int velY = 0, velY0 = 0;
   boolean jump = false;
+  boolean move = true;
   int g = 10;
   float t;
   
   //Colisiones
-  boolean wallLeft = false;
-  boolean wallRight = false;
-  boolean roof = false;
   boolean ground = false;
+  boolean port = false;
   
   //Sprite
   int spriteColor = 1;
@@ -75,7 +75,7 @@ class player{
   
   //Bomba
   boolean lejos = true;
-  boolean bomb = false; 
+  boolean bomb = false;
   
   player(int _x, int _y, int _num){
     x = _x;
@@ -125,10 +125,18 @@ class player{
     PlayersCol[num].setXY(x,y);  //Actualiza la colisión
     
     //Colisiones
-    wallLeft = checkCol(x-1, y, sizeX, sizeY);
-    roof = checkCol(x, y-1, sizeX, sizeY);
-    wallRight = checkCol(x+1, y, sizeX, sizeY);
     ground = checkCol(x, y+1, sizeX, sizeY);
+    checkPort(x, y, sizeX, sizeY, num);  //Checa los portales
+    if(port){
+      for(int p = 0; p < numBTeleportMap; p++){
+        if(dist(x, y, Teleport[p].x, Teleport[p].y) < 2*sizeBlocks){
+          port = true;
+          break;
+        }else{
+          port = false;
+        }
+      }
+    }
     
     //Salto
     if(jump && ground){  //Si se presiona la tecla de salto y está tocando suelo
@@ -137,6 +145,9 @@ class player{
     }
     
     //Movimiento X
+    if(!move){
+      velX = 0;
+    }
     for(int i = 0; i < abs(velX); i++){
       if(!checkCol(x + sign(velX), y, sizeX, sizeY)){  //Revisa en cada pixel que avanza si hay un bloque o no
         x += sign(velX);  //Si no hay bloque disminuye o aumenta (dependiendo la dirección) una unidad la posición en x
@@ -149,7 +160,11 @@ class player{
     //Movimiento Y
     velY = round(velY0 + g*t);
     t += 0.04;
-    
+    if(!move){
+      velY = 0;
+      t = 0;
+      jump = false;
+    }
     for(int i = 0; i < abs(velY); i++){
       if(!checkCol(x, y + sign(velY), sizeX, sizeY)){
         y += sign(velY);

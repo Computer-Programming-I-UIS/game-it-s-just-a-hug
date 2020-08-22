@@ -23,11 +23,17 @@ void setup(){
   setupBlocks();
   setupButtons();
   
-  importMap(1);
+  importMap(0);
 }
 
 
 void draw(){
+  //Tiempo bomba
+  println(millis());
+  if(millis() > 99990){
+    Players[0].move = false;
+    Players[1].move = false;
+  }
   
   /*
   for(int i = 0; i < numBGroundMap; i++){
@@ -48,6 +54,9 @@ void draw(){
   for(int i = 0; i < numButtonsScene[scene]; i++){
     Buttons[scene][i].display();
   }*/
+  for(int i = 0; i < numBTeleportMap; i++){
+    //Teleport[i].display();
+  }
 }
 
 

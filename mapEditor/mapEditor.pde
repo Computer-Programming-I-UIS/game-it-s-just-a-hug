@@ -29,7 +29,7 @@ int numTilesX = 35;
 int numTilesY = 18;
 
 block [][] Blocks = new block[numTilesY][numTilesX];
-tile [] Tiles = new tile[5];
+tile [] Tiles = new tile[6];
 button [] TButtons = new button[Tiles.length];  //Botones para los tiles
 button [] EButtons = new button[3];
 

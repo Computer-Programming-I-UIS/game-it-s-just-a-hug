@@ -19,7 +19,7 @@ class menu{
  int ySize;
  boolean msb=false;// mouse sobre el boton
  boolean checkButton= false; 
- 
+ boolean sonidoCheck=false;
   
   menu(String _palabra, int _x,int _y, float _sizeX){
     x=_x;
@@ -34,8 +34,19 @@ class menu{
 void display(){
   //  textFont(comicFont);
     fill(255);
-    if(msb)textSize(60);
-    else textSize(50);
+    if(msb){
+      textSize(60);
+      if(!sonidoCheck){
+        sound1.trigger();
+        sonidoCheck=true; 
+      }
+    }
+    else {
+      sonidoCheck=false;
+      textSize(50);
+   //  sound1.pause();
+      
+    }
     textAlign(CENTER,CENTER);
     text(word, x, y);
     rectMode(CENTER);

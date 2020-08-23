@@ -1,3 +1,10 @@
+
+import ddf.minim.*;
+
+import ddf.minim.*;
+Minim minim;
+AudioSample sound1;
+
 int screenControl=0;
 int sizeBlock = 32;
 
@@ -15,7 +22,8 @@ PFont comicFont;
 
 
 void inicioSet(){
-  
+  minim = new Minim(this);
+  sound1 = minim.loadSample("sound/pcmouseclick2.mp3");
  // surface.setSize(numBlocksX*sizeBlock, numBlocksY*sizeBlock);
   //surface.setLocation((displayWidth/2) - numBlocksX*sizeBlock/2, (displayHeight/2) - numBlocksY*sizeBlock/2 - sizeBlock);  //Aparezca centrada la ventana
   inicioFondo = loadImage("HomeSreen/Pantallad de inicio fondo principal.png");

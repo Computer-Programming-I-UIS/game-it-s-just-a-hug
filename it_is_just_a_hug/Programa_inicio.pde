@@ -4,8 +4,7 @@ int sizeBlock = 32;
 boolean showMenu=false;
 
 //Cantidad de Bloques
-int numBlocksX = 35;
-int numBlocksY = 18;
+
 //Imagenes
 PImage inicio;
 //Fuentes
@@ -17,10 +16,10 @@ boolean playCheck = false; //verifica si el usario ya dio a play
 boolean creditsCheck = false;
 boolean mapsCheck = false;
 boolean exitCheck = false;
-void setup(){
+void inicioSet(){
   
-  surface.setSize(numBlocksX*sizeBlock, numBlocksY*sizeBlock);
-  surface.setLocation((displayWidth/2) - numBlocksX*sizeBlock/2, (displayHeight/2) - numBlocksY*sizeBlock/2 - sizeBlock);  //Aparezca centrada la ventana
+ // surface.setSize(numBlocksX*sizeBlock, numBlocksY*sizeBlock);
+  //surface.setLocation((displayWidth/2) - numBlocksX*sizeBlock/2, (displayHeight/2) - numBlocksY*sizeBlock/2 - sizeBlock);  //Aparezca centrada la ventana
   inicio = loadImage("Pantalla de inicio.png");
   pixel = loadFont("8-bitOperatorPlus-Regular-48.vlw");
   comicFont = loadFont("ComicSansMS-Bold-48.vlw");
@@ -33,13 +32,13 @@ void setup(){
   
 }
 
-void draw(){
+void inicioDraw(){
   println("play",playCheck);
   println("maps",mapsCheck);
   println("credits",creditsCheck);
   println("exit",exitCheck);
   background(0);
-  if(!playCheck){
+  
   
   image(inicio,0,0, inicio.width, inicio.height); //fondo de pantalla
   pressSpace();
@@ -73,11 +72,12 @@ void draw(){
         
         if(exit.checkMouse()){
           exitCheck=true;
+          exit();
           
         }
       
     }
     
  }
-  }
+  
 }

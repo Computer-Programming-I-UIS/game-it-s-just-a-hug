@@ -24,10 +24,17 @@ void setup(){
   setupButtons();
   
   importMap(0);
+  inicioSet();
+}
+void draw(){
+  if(!playCheck){
+  inicioDraw();
+  }
+  if(playCheck)
+  juegoDraw();
 }
 
-
-void draw(){
+void juegoDraw(){
   //Tiempo bomba
   println(millis());
   if(millis() > 99990){

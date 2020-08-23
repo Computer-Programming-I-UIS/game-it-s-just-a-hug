@@ -14,7 +14,7 @@ boolean passBomb = false;  //true si el jugador sí puede pasar la bomba
 void setupPlayers(){
   for(int i = 0; i < Players.length; i++){
     Players[i] = new player(0,0,i);
-    Players[i].setSkin(1);
+    Players[i].setSkin(i+1);
   }
 }
 

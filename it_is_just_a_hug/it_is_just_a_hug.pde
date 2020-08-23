@@ -31,8 +31,10 @@ void draw(){
   if(!play.checkButton){
   inicioDraw();
   }
-  else
+  else{
+  music.pause();
   juegoDraw();
+  }
 }
 
 void juegoDraw(){

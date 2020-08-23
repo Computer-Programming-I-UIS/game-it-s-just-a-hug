@@ -4,6 +4,7 @@ import ddf.minim.*;
 import ddf.minim.*;
 Minim minim;
 AudioSample sound1;
+AudioPlayer music;
 
 int screenControl=0;
 int sizeBlock = 32;
@@ -24,6 +25,7 @@ PFont comicFont;
 void inicioSet(){
   minim = new Minim(this);
   sound1 = minim.loadSample("sound/pcmouseclick2.mp3");
+  music =minim.loadFile("sound/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
  // surface.setSize(numBlocksX*sizeBlock, numBlocksY*sizeBlock);
   //surface.setLocation((displayWidth/2) - numBlocksX*sizeBlock/2, (displayHeight/2) - numBlocksY*sizeBlock/2 - sizeBlock);  //Aparezca centrada la ventana
   inicioFondo = loadImage("HomeSreen/Pantallad de inicio fondo principal.png");
@@ -41,7 +43,9 @@ void inicioSet(){
 }
 int frameBomba=0;
 void inicioDraw(){
-  
+  //////////////////////Musica
+  music.play();
+  /////////////////////////
   image(inicioFondo,0,0, inicioFondo.width, inicioFondo.height); //fondo 
   
   //bomba aniamcion
@@ -52,8 +56,9 @@ void inicioDraw(){
   //fin bomba animacion 
   
   image(inicioTitulo,0,0,inicioTitulo.width, inicioTitulo.height);
+  //
   pressSpace();
-  
+  //
   if(keyPressed && key == 32){
     showMenu=true;
     showStart= false;

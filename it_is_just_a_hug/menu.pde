@@ -1,7 +1,7 @@
 
 String texto1="JUGAR";
 String texto2="CREDITOS";
-String texto3="MAPEAR";
+String texto3="MAPAS";
 String texto4="SALIR";
 
 
@@ -17,6 +17,8 @@ class menu{
  int y;  //posicion en y
  float sizeX;
  int ySize;
+ boolean msb=false;// mouse sobre el boton
+ boolean checkButton= false; 
  
   
   menu(String _palabra, int _x,int _y, float _sizeX){
@@ -30,27 +32,34 @@ class menu{
   }
   
 void display(){
-    textFont(comicFont);
+  //  textFont(comicFont);
     fill(255);
-    textSize(50);
+    if(msb)textSize(60);
+    else textSize(50);
     textAlign(CENTER,CENTER);
     text(word, x, y);
     rectMode(CENTER);
     //rect(x,y,sizeX,50);
     rectMode(CORNER);
    // println(sizeX);
+   checkMouse();
+   if(mousePressed && checkMouse())checkButton=true;
   }
   
   boolean checkMouse(){
     if(mouseX > x - sizeX/2 && mouseX < x + sizeX/2 && mouseY > y - 25 && mouseY < y + 25){  //como los dibuja desde el centro, esos son sloslimites
+      msb = true;
+      cursor(HAND);
       return true;
     }
-    else return false;
+    else {
+     msb=false;       
+     return false;
     
   }
   
+  }
   
-
 
 
 

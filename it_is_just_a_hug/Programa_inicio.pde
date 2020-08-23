@@ -13,11 +13,7 @@ PImage inicioBomba;
 PFont pixel;
 PFont comicFont;
 
-//Estados de los botones
-boolean playCheck = false; //verifica si el usario ya dio a play
-boolean creditsCheck = false;
-boolean mapsCheck = false;
-boolean exitCheck = false;
+
 void inicioSet(){
   
  // surface.setSize(numBlocksX*sizeBlock, numBlocksY*sizeBlock);
@@ -37,12 +33,6 @@ void inicioSet(){
 }
 int frameBomba=0;
 void inicioDraw(){
-  println("play",playCheck);
-  println("maps",mapsCheck);
-  println("credits",creditsCheck);
-  println("exit",exitCheck);
-  background(0);
-  
   
   image(inicioFondo,0,0, inicioFondo.width, inicioFondo.height); //fondo 
   
@@ -61,36 +51,16 @@ void inicioDraw(){
     showStart= false;
   }
      
-   
+  
+  
   if (showMenu){
     play.display();
     credits.display();
     maps.display();
     exit.display();
-    
-      if (mousePressed){
-        if(play.checkMouse()){
-          playCheck=true;
-          
-          
-        }
-        if(credits.checkMouse()){
-          creditsCheck=true;
-          
-        }
-        if(maps.checkMouse()){
-          mapsCheck=true;
-          
-        }
+   
+  if(exit.checkButton)exit();
         
-        if(exit.checkMouse()){
-          exitCheck=true;
-          exit();
-          
-        }
-      
-    }
-    
  }
   
 }

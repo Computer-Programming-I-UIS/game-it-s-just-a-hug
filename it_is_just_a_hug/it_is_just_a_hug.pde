@@ -27,10 +27,10 @@ void setup(){
   inicioSet();
 }
 void draw(){
-  if(!playCheck){
+  if(!play.checkButton){
   inicioDraw();
   }
-  if(playCheck)
+  else
   juegoDraw();
 }
 

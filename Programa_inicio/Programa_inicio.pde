@@ -6,11 +6,17 @@ boolean showMenu=false;
 //Cantidad de Bloques
 int numBlocksX = 35;
 int numBlocksY = 18;
+//Imagenes
 PImage inicio;
+//Fuentes
 PFont pixel;
 PFont comicFont;
 
-
+//Estados de los botones
+boolean playCheck = false; //verifica si el usario ya dio a play
+boolean creditsCheck = false;
+boolean mapsCheck = false;
+boolean exitCheck = false;
 void setup(){
   
   surface.setSize(numBlocksX*sizeBlock, numBlocksY*sizeBlock);
@@ -20,14 +26,20 @@ void setup(){
   comicFont = loadFont("ComicSansMS-Bold-48.vlw");
   
   
-  play = new menu(texto1, width/2, height*5/9);
-  credits = new menu(texto2, width/2, height*6/9);
-  maps = new menu(texto3,width/2, height*7/9);
-  exit = new menu(texto4,width/2, height*8/9);
+  play = new menu(texto1, width/2, height*5/9,/* textWidth(texto1)*/ 200);
+  credits = new menu(texto2, width/2, height*6/9, /* textWidth(texto2)*/250);
+  maps = new menu(texto3,width/2, height*7/9, /* textWidth(texto3)*/200);
+  exit = new menu(texto4,width/2, height*8/9, /* textWidth(texto4)*/200);
   
 }
 
 void draw(){
+  println("play",playCheck);
+  println("maps",mapsCheck);
+  println("credits",creditsCheck);
+  println("exit",exitCheck);
+  background(0);
+  if(!playCheck){
   
   image(inicio,0,0, inicio.width, inicio.height); //fondo de pantalla
   pressSpace();
@@ -36,21 +48,36 @@ void draw(){
     showMenu=true;
     showStart= false;
   }
-   
-    
+     
    
   if (showMenu){
-  play.display();
-  credits.display();
-  maps.display();
-  exit.display();
-  
+    play.display();
+    credits.display();
+    maps.display();
+    exit.display();
+    
+      if (mousePressed){
+        if(play.checkMouse()){
+          playCheck=true;
+          
+          
+        }
+        if(credits.checkMouse()){
+          creditsCheck=true;
+          
+        }
+        if(maps.checkMouse()){
+          mapsCheck=true;
+          
+        }
+        
+        if(exit.checkMouse()){
+          exitCheck=true;
+          
+        }
+      
+    }
+    
+ }
   }
-  
-}
-
-void mousePressed(){
- 
-  
-  
 }

@@ -32,7 +32,10 @@ void draw(){
   image(inicio,0,0, inicio.width, inicio.height); //fondo de pantalla
   pressSpace();
   
-  if(keyPressed)if(key == ENTER)showMenu=true;
+  if(keyPressed && key == 32){
+    showMenu=true;
+    showStart= false;
+  }
    
     
    

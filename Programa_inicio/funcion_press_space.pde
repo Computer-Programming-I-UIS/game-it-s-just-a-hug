@@ -13,7 +13,7 @@ void pressSpace(){
     fill(0);
     textSize(30);
     textAlign(CENTER,CENTER);
-    text("Presione espacio para Jugar", width/2, height -height/4);
+    text("Presione espacio para continuar", width/2, height -height/4);
   }
   
 }

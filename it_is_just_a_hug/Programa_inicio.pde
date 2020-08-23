@@ -6,7 +6,9 @@ boolean showMenu=false;
 //Cantidad de Bloques
 
 //Imagenes
-PImage inicio;
+PImage inicioFondo;
+PImage inicioTitulo;
+PImage inicioBomba;
 //Fuentes
 PFont pixel;
 PFont comicFont;
@@ -20,7 +22,9 @@ void inicioSet(){
   
  // surface.setSize(numBlocksX*sizeBlock, numBlocksY*sizeBlock);
   //surface.setLocation((displayWidth/2) - numBlocksX*sizeBlock/2, (displayHeight/2) - numBlocksY*sizeBlock/2 - sizeBlock);  //Aparezca centrada la ventana
-  inicio = loadImage("Pantalla de inicio.png");
+  inicioFondo = loadImage("HomeSreen/Pantallad de inicio fondo principal.png");
+  inicioTitulo=  loadImage("HomeSreen/Pantalla de inicio Titulo.png");
+  inicioBomba= loadImage("HomeSreen/Bomba animada Sprite.png");
   pixel = loadFont("8-bitOperatorPlus-Regular-48.vlw");
   comicFont = loadFont("ComicSansMS-Bold-48.vlw");
   
@@ -31,7 +35,7 @@ void inicioSet(){
   exit = new menu(texto4,width/2, height*8/9, /* textWidth(texto4)*/200);
   
 }
-
+int frameBomba=0;
 void inicioDraw(){
   println("play",playCheck);
   println("maps",mapsCheck);
@@ -40,7 +44,16 @@ void inicioDraw(){
   background(0);
   
   
-  image(inicio,0,0, inicio.width, inicio.height); //fondo de pantalla
+  image(inicioFondo,0,0, inicioFondo.width, inicioFondo.height); //fondo 
+  
+  //bomba aniamcion
+  frameBomba = (frameCount/6)%10;
+  copy(inicioBomba,frameBomba*200,0,200,200,660,20,200,200);
+  
+  
+  //fin bomba animacion 
+  
+  image(inicioTitulo,0,0,inicioTitulo.width, inicioTitulo.height);
   pressSpace();
   
   if(keyPressed && key == 32){

@@ -1,21 +1,15 @@
 
-int numMaxButtons = 10;  //Número máximo de botones por escena
-button [][] Buttons = new button[numScenes][numMaxButtons];
-int [] numButtonsScene = new int [numScenes];
+buttonMenu [] BTitle = new buttonMenu[4];
 
 void setupButtons(){
-  numButtonsScene[0] = 0;
+  //Pantalla Inicio
+  textSize(50);
+  int dyButtons = round(textAscent()) + 5;
+  BTitle[0] = new buttonMenu(width/2 - 2*round(textWidth("Jugar")/4), height/2 + 40, 2*round(textWidth("Jugar")/2), round(textAscent()), "Jugar");
+  BTitle[1] = new buttonMenu(width/2 - 2*round(textWidth("Mapas")/4), height/2 + 40 + dyButtons, 2*round(textWidth("Mapas")/2), round(textAscent()), "Mapas");
+  BTitle[2] = new buttonMenu(width/2 - 2*round(textWidth("Creditos")/4), height/2 + 40 + 2*dyButtons, 2*round(textWidth("Creditos")/2), round(textAscent()), "Creditos");
+  BTitle[3] = new buttonMenu(width/2 - 2*round(textWidth("Salir")/4), height/2 + 40 + 3*dyButtons, 2*round(textWidth("Salir")/2), round(textAscent()), "Salir");
   
-  
-  Buttons[0][0] = new button(5*sizeBlocks, 7*sizeBlocks, 2*sizeBlocks, sizeBlocks, 1, 0, "Hola");
-  Buttons[0][1] = new button(10*sizeBlocks, 5*sizeBlocks, 2*sizeBlocks, sizeBlocks, 2, 0, "Hola");
-  Buttons[0][1].setInfo(1, "Qué más");
-  
-  numButtonsScene[1] = 3;
-  Buttons[1][0] = new button(5*sizeBlocks, 7*sizeBlocks, 2*sizeBlocks, sizeBlocks, 1, 0, "Chau");
-  Buttons[1][1] = new button(10*sizeBlocks, 5*sizeBlocks, 2*sizeBlocks, sizeBlocks, 2, 0, "Siuu");
-  Buttons[1][1].setInfo(1, "Noou");
-  Buttons[1][2] = new button(9*sizeBlocks, 7*sizeBlocks, 2*sizeBlocks, sizeBlocks, 1, 0, "kkkk");
 }
 
 
@@ -117,113 +111,51 @@ class button{
   }
 }
 
-//----------------------ACCIÓN DE LOS BOTONES----------------------//
-/*
-void accionBotones(){
+class buttonMenu extends button{
   
-  //----------------------PUNTOS-BARRAS----------------------//
-  
-  if(Botones[0].prsd){  //Si el botón está activado
-    strokeWeight(2);
-    //Lineas Rectas
-    if(!Botones[3].prsd){  //Si está seleccionado dibujar rectas  (No está activado)
-      stroke(Temas[temaSlct][5]);
-      for(int b = 0; b < numBarras - 1; b++){
-        line(Barras[b].x + Barras[b].ancho/2, Barras[b].y - Barras[b].alto, Barras[b+1].x + Barras[b].ancho/2, Barras[b+1].y - Barras[b+1].alto);  //Linea que une las barras 
-      }
-    }else{  //Curva  (Está activado el botón)
-      noFill();
-      stroke(Temas[temaSlct][5]);
-      beginShape();
-      for(int b = 0; b < numBarras; b++){
-        if(b == 0 || b == numBarras - 1){  //Es necesario usar dos puntos para el inicio y el final, es decir deben de estar repetidos
-          curveVertex(Barras[b].x + Barras[b].ancho/2, Barras[b].y - Barras[b].alto);
-        }
-        curveVertex(Barras[b].x + Barras[b].ancho/2, Barras[b].y - Barras[b].alto);
-      }
-      endShape();
-    }
+  buttonMenu(int _x, int _y, int sx, int sy, String _info1){
+    super(_x, _y, sx, sy, 1, 0, _info1);
+    sizeTxt = 50;
   }
   
-  //----------------------CAMBIO DEL NUMERO DE BARRAS----------------------//
-  
-  if(Botones[1].prsd){
-    if(numBarras != numMaxBarras)  cambiarNumBarras(true);
-    Botones[1].prsd = false;
-  }
-  if(Botones[2].prsd){
-    if(numBarras != 1)  cambiarNumBarras(false);
-    Botones[2].prsd = false;
-  }
-  
-  //----------------------RESET----------------------//
-  
-  if(Botones[4].prsd){
-    for(int b = 0; b < numMaxBarras; b++){
-      Barras[b].reset();
-    }
-    Botones[4].prsd = false;
-  }
-  
-  //----------------------TIPO----------------------//
-  
-  if(Botones[5].prsd){
-    int estadoAnterior;
-    estadoAnterior = Botones[5].estado -1;
-    if(estadoAnterior < 0)  estadoAnterior = Botones[5].numEstados -1;
-    Titulo1 = Botones[5].info[estadoAnterior];
-    Botones[5].prsd = false;
-  }
-  
-  //----------------------EJE Y----------------------//
-  
-  if(Botones[6].prsd){
-    if(yMax == 100)  yMax = 500;
-    else if(yMax == 1000) yMax = 100;
-    else  yMax += 1000;
-    yMax = constrain(yMax, 0, 1000);
+  void display(){
+    if(mslc) fill(255,0,0);
+    else  fill(255);
+    textFont(pixelFont);
+    textSize(sizeTxt);
+    textAlign(CENTER,CENTER);
+    text(info[status], x + sizeX/2, y + sizeY/2);
     
-    Botones[6].prsd = false;
-  }
-  
-  //----------------------AÑOS-MESES----------------------//
-  
-  if(Botones[7].prsd){  //Años
-    textFont(Font1);
-    fill(Temas[temaSlct][5]);
-    for(int b = 0; b < numBarras; b++){
-      text(year() - b, Barras[numBarras - b -1].x + Barras[numBarras - b -1].ancho/2, yGrafica + 10);  //La última barra es la del presente año y las anteriores son las de los años anteriores
-    }
-    Titulo2 = "Anuales";
-  }if(!Botones[7].prsd){  //Meses
-    String [] meses = {"EN", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGTO", "SEPT", "OCT", "NOV", "DIC"};
-    int mes = month();
-    textFont(Font1);
-    fill(Temas[temaSlct][5]);
-    for(int b = 0; b < numBarras; b++){
-      mes--;
-      if(mes < 0)  mes = 11;
-      text(meses[mes], Barras[numBarras - b -1].x + Barras[numBarras - b -1].ancho/2, yGrafica + 10);  //La ultima barra es la del mes actual
-    }
-    Titulo2 = "Mensuales";
-  }
-  
-  //----------------------EXPORTAR GRÁFICA----------------------//
-  
-  if(Botones[8].prsd){
-    PImage Chart = get(xGrafica - 50, 0, xBotones - 30, height);  //Solo exporta la gráfica
-    Chart.save("charts/"+Titulo1+"_"+Titulo2+numImagen+".png");  //La almacena en la carpeta "charts"
-    numImagen++;
-    Botones[8].prsd = false;
-  }
-  
-  //----------------------TEMAS DE COLORES----------------------//
-  
-  if(Botones[9].prsd){
-    temaSlct++;
-    if(temaSlct >= Temas.length)  temaSlct = 0;
-    
-    Botones[9].prsd = false;
   }
 }
-*/
+
+//----------------------ACCIÓN DE LOS BOTONES----------------------//
+
+void actionButtons(){
+  //----------------------Pantalla inicio----------------------//
+  
+  //Jugar
+  if(BTitle[0].prsd){
+    int _map = round(random(1));
+    importMap(_map);
+    scene = 'G';
+    BTitle[0].prsd = false;
+  }
+  //Mapas
+  if(BTitle[1].prsd){
+    //scene = 'L';
+    BTitle[1].prsd = false;
+  }
+  //Créditos
+  if(BTitle[2].prsd){
+    
+    BTitle[2].prsd = false;
+  }
+  //Salir
+  if(BTitle[3].prsd){
+    exit();  //Acaba el Programa
+    BTitle[3].prsd = false;
+  }
+  
+  //----------------------Selector de Mapas----------------------//
+}

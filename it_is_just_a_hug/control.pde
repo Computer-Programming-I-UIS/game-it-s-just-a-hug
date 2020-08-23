@@ -1,16 +1,12 @@
 //Player 1
 boolean wKey, wKey1;
 boolean aKey, aKey1;
-boolean sKey, sKey1;
 boolean dKey, dKey1;
-boolean fKey, fKey1;  //Atacar
 
 //Player 2
 boolean upKey, upKey1;
 boolean leftKey, leftKey1;
-boolean downKey, downKey1;
 boolean rightKey, rightKey1;
-boolean lKey, lKey1;  //Atacar
 
 boolean spaceKey;
 
@@ -49,20 +45,10 @@ void keyControl(int k, boolean state){
       else if(!state)  aKey1 = false;
       aKey = state;
       break;
-    case 83:  //S
-      if(state && !sKey)  sKey1 = true;
-      else if(!state)  sKey1 = false;
-      sKey = state;
-      break;
     case 68:  //D
       if(state && !dKey)  dKey1 = true;
       else if(!state)  dKey1 = false;
       dKey = state;
-      break;
-    case 70:  //F
-      if(state && !fKey)  fKey1 = true;
-      else if(!state)  fKey1 = false;
-      fKey = state;
       break;
     case 38:  //ARRIBA
       if(state && !upKey)  upKey1 = true;
@@ -74,37 +60,27 @@ void keyControl(int k, boolean state){
       else if(!state)  leftKey1 = false;
       leftKey = state;
       break;
-    case 40:  //ABAJO
-      if(state && !downKey)  downKey1 = true;
-      else if(!state)  downKey1 = false;
-      downKey = state;
-      break;
     case 39:  //DERECHA
       if(state && !rightKey)  rightKey1 = true;
       else if(!state)  rightKey1 = false;
       rightKey = state;
       break;
-    case 76:  //L
-      if(state && !lKey)  lKey1 = true;
-      else if(!state)  lKey1 = false;
-      lKey = state;
-      break;
     case 32:  //ESPACIO
       spaceKey = state;
       break;
     default:
-      //println("OTRA");
+      //Otra
       break;
   }
 }
 
-void control(){
+void controlPlayers(){
   //Player 1
   if(wKey)  Players[0].jump = true;
   else  Players[0].jump = false;
   
-  if(aKey)  Players[0].velX = -5;
-  if(dKey)  Players[0].velX = 5;
+  if(aKey)  Players[0].velX = -Players[0].velXMax;
+  if(dKey)  Players[0].velX = Players[0].velXMax;
   if(!aKey && !dKey)  Players[0].velX = 0;
   if(aKey && dKey)  Players[0].velX = 0;
   
@@ -112,8 +88,8 @@ void control(){
   if(upKey)  Players[1].jump = true;
   else  Players[1].jump = false;
   
-  if(leftKey)  Players[1].velX = -5;
-  if(rightKey)  Players[1].velX = 5;
+  if(leftKey)  Players[1].velX = -Players[1].velXMax;
+  if(rightKey)  Players[1].velX = Players[1].velXMax;
   if(!leftKey && !rightKey)  Players[1].velX = 0;
   if(leftKey && rightKey)  Players[1].velX = 0;
   

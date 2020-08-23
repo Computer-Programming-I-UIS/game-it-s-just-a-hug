@@ -11,61 +11,86 @@ int numBlocksX = 35;
 int numBlocksY = 18;
 
 //Escena
-int numScenes = 3;
-int scene = 0;  // 0 = Inicio  / 1 = Pantalla Principal  / 2 = Juego
+char scene = 'T';  //'T' = TitleScreen / 'M' = Menu / 'G' = Juego / 'P' = Pausa / 'C' = Creditos
 
+//TitleScreen
+PImage titleSBackground;
+PImage titleSTitle;
+PImage titleSBomb;
+boolean showPressSpace = true;
 
+//Fuentes
+PFont pixelFont;
 
 void setup(){
+  //Configuraciones generales
   setupScreen();
-  
   setupPlayers();
   setupBlocks();
   setupButtons();
   
-  importMap(0);
-  inicioSet();
+  //TitleScreen
+  titleSBackground = loadImage("HomeSreen/Pantallad de inicio fondo principal.png");
+  titleSTitle = loadImage("HomeSreen/Pantalla de inicio Titulo.png");
+  titleSBomb = loadImage("HomeSreen/Bomba animada Sprite.png");
+  
+  pixelFont = loadFont("8-bitOperatorPlus-Regular-48.vlw");
+  
+  
 }
 void draw(){
-  if(!playCheck){
-  inicioDraw();
+  background(0);
+  actionButtons();
+  //Pantalla Inicio
+  switch(scene){
+    case 'T':  //Pantalla de Título
+      image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
+      int frameBomb = (frameCount/6)%10;
+      copy(titleSBomb, frameBomb*200,0, 200,200, 660,20, 200,200);
+      image(titleSTitle, 0,0, titleSTitle.width, titleSTitle.height);
+      
+      //Texto Presione escacio para continuar
+      if(frameCount%25 == 0)  showPressSpace = !showPressSpace;
+      if(showPressSpace){
+        textFont(pixelFont);
+        fill(0);
+        textSize(25);
+        textAlign(CENTER,CENTER);
+        text("Presione espacio para continuar", width/2, height -height/8);
+      }
+      
+      if(spaceKey)
+        scene = 'M';
+      
+      break;
+    
+    case 'M':  //Menu
+      
+      image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
+      frameBomb = (frameCount/6)%10;
+      copy(titleSBomb, frameBomb*200,0, 200,200, 660,20, 200,200);
+      image(titleSTitle, 0,0, titleSTitle.width, titleSTitle.height);
+      
+      for(int b = 0; b < BTitle.length; b++){
+        BTitle[b].display();
+      }
+      break;
+    
+    case 'G':  //Juego
+      if(millis() > 99990){
+        Players[0].move = false;
+        Players[1].move = false;
+      }
+      
+      image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);  //Imagen del nivel
+      
+      colPlayers();
+      for(int p = 0; p < Players.length; p++){
+        Players[p].update();
+        Players[p].display();
+      }
   }
-  if(playCheck)
-  juegoDraw();
 }
-
-void juegoDraw(){
-  //Tiempo bomba
-  println(millis());
-  if(millis() > 99990){
-    Players[0].move = false;
-    Players[1].move = false;
-  }
-  
-  /*
-  for(int i = 0; i < numBGroundMap; i++){
-    Ground[i].display();
-  }
-  */
-  
-  //Muestra el fondo
-  image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);
-  
-  colPlayers();
-  for(int p = 0; p < Players.length; p++){
-    Players[p].update();
-    Players[p].display();
-    //PlayersCol[p].display();
-  }
-  /*
-  for(int i = 0; i < numButtonsScene[scene]; i++){
-    Buttons[scene][i].display();
-  }*/
-  for(int i = 0; i < numBTeleportMap; i++){
-    //Teleport[i].display();
-  }
-}
-
 
 //Configurar el tamaño de la ventana
 void setupScreen(){
@@ -99,27 +124,39 @@ int sign(int num){
 }
 
 void mouseMoved(){
-  for(int i = 0; i < numButtonsScene[scene]; i++){
-    if(Buttons[scene][i].checkMouse()){
-      cursor(HAND);
+  switch(scene){
+    case 'M':
+      for(int b = 0; b < BTitle.length; b++){
+        if(BTitle[b].checkMouse()){
+          cursor(HAND);
+          break;
+        }else{
+          cursor(ARROW);
+        }
+      }
       break;
-    }else{
-      cursor(ARROW);
-    }
+      
+    default:
+        //Nothing
+      break;
   }
   
 }
 
 void mousePressed(){
-  for(int i = 0; i < numButtonsScene[scene]; i++){
-    if(Buttons[scene][i].checkMouse()){
-      Buttons[scene][i].changeStatus();
+  switch(scene){
+    case 'M':
+      for(int b = 0; b < BTitle.length; b++){
+        if(BTitle[b].checkMouse()){
+          BTitle[b].changeStatus();
+          break;
+        }
+      }
       break;
-    }
+      
+    default:
+        //Nothing
+      break;
   }
-}
-
-void keyTyped(){
-  scene++;
-  if(scene == numScenes)  scene = 0;
+  
 }

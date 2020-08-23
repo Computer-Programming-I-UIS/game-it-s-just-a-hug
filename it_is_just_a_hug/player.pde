@@ -54,8 +54,8 @@ class player{
   int sizeY = 50*sizeBlocks/32;
   
   //Movimiento
-  int velX = 0, velX0 = 0;
-  int velY = 0, velY0 = 0;
+  int velX = 0, velX0 = 0, velXMax = 5;
+  int velY = 0, velY0 = 0, velYMax = 8;
   boolean jump = false;
   boolean move = true;
   int g = 10;
@@ -121,7 +121,7 @@ class player{
   }
   
   void update(){
-    control();
+    controlPlayers();
     PlayersCol[num].setXY(x,y);  //Actualiza la colisión
     
     //Colisiones
@@ -140,7 +140,7 @@ class player{
     
     //Salto
     if(jump && ground){  //Si se presiona la tecla de salto y está tocando suelo
-      velY0 = -8;
+      velY0 = -velYMax;
       t = 0;
     }
     
@@ -158,7 +158,7 @@ class player{
     }
       
     //Movimiento Y
-    velY = round(velY0 + g*t);
+    velY = constrain(round(velY0 + g*t), -velYMax, velYMax);  //La velocidad nunca va a ser muy grande
     t += 0.04;
     if(!move){
       velY = 0;

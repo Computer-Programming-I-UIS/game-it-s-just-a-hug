@@ -19,6 +19,9 @@ char scene = 'T';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'P' =
 
 //TitleScreen
 PImage titleSBackground;
+PImage titleSPlayer1;
+PImage titleSPlayer2;
+int titleSfade = 0;
 PImage titleSTitle;
 PImage titleSBomb;
 boolean showPressSpace = true;
@@ -36,7 +39,9 @@ void setup(){
   setupButtons();
   
   //TitleScreen
-  titleSBackground = loadImage("titleScreen/background.png");
+  titleSBackground = loadImage("titleScreen/only_background.png");
+  titleSPlayer1 = loadImage("titleScreen/player_azul.png");
+  titleSPlayer2 = loadImage("titleScreen/player_rojo.png");
   titleSTitle = loadImage("titleScreen/title.png");
   titleSBomb = loadImage("titleScreen/bombAnimation.png");
   
@@ -52,6 +57,7 @@ void setup(){
   soundButton.setGain(-6);
   
 }
+
 void draw(){
   background(0);
   actionButtons();
@@ -62,23 +68,30 @@ void draw(){
       if(!musicTitleS.isPlaying())  musicTitleS.loop();  //Inicia reproduciendose en loop
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
+      
       int frameBomb = (frameCount/6)%10;
       copy(titleSBomb, frameBomb*200,0, 200,200, 660,20, 200,200);
       image(titleSTitle, 0,0, titleSTitle.width, titleSTitle.height);
       
       //Texto Presione escacio para continuar
-      if(frameCount%25 == 0)  showPressSpace = !showPressSpace;
-      if(showPressSpace){
+      if(frameCount%25 == 0)  showPressSpace = !showPressSpace;  //Parpadea el texto cada 25 frames
+      if(showPressSpace && titleSfade == 0){  //Si no se ha presionado espacio
         textFont(pixelFont);
         fill(0);
         textSize(35);
         textAlign(CENTER,CENTER);
         text("Presione espacio para continuar", width/2, height -height/8);
+        
       }
+      if(spaceKey && titleSfade == 0){
+        titleSfade = 1;
+      }
+      if(titleSfade != 0)  titleSfade++;
+      if(titleSfade >= 40)  scene = 'I';  //Si ya desparecieron los jugadores cambia la escena
       
-      if(spaceKey){
-        scene = 'I';
-      }
+      image(titleSPlayer1, -titleSfade*10, titleSfade*10, titleSPlayer1.width, titleSPlayer1.height); //Player_Azul
+      image(titleSPlayer2, titleSfade*10, titleSfade*10, titleSPlayer2.width, titleSPlayer2.height); //Player_Rojo
+      
       break;
     
     case 'I':  //Menu Inicio
@@ -114,6 +127,8 @@ void draw(){
       break;
       
     case 'M':
+      
+      
       for(int b = 0; b < BMaps.length; b++){
         BMaps[b].display();
       }

@@ -15,8 +15,7 @@ void setupButtons(){
   int dxButtons = 170;
   dyButtons = 3;
   for(int b = 0; b < BMaps.length; b++){
-    //BMaps[b] = new button(5*sizeBlocks + b*dxButtons, height/2, 160,82, "map"+(b+1)+".png", "maps");
-    BMaps[b] = new button((width - 5*dxButtons)/2 + b*dxButtons, height/2, 160,82, "map"+(b+1)+".png", "maps");
+    BMaps[b] = new button((width - 5*dxButtons)/2 + b*dxButtons, height/2 - 41, 160,82, "map"+(b+1)+".png", "maps");
   }
   
 }

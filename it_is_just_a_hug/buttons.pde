@@ -30,7 +30,6 @@ class button{
   int colorS = 0;  //Color seleccionado
   String [] info;  //Almacena el texto que se muestra en cada estado
   int sizeTxt = 13;
-  boolean sonidoCheck=false;
   
   //Cuando el botón NO tiene imagen
   button(int _x, int _y, int _sizeX, int _sizeY, int _numStatus, int _ColorS, String _info1){
@@ -112,36 +111,35 @@ class button{
   }
 }
 
+
 class buttonMenu extends button{
+  boolean soundCheck = false;
   
   buttonMenu(int _x, int _y, int sx, int sy, String _info1){
     super(_x, _y, sx, sy, 1, 0, _info1);
-    sizeTxt = 50;
+    sizeTxt = 60;
   }
   
   void display(){
-     
-    
     textFont(pixelFont);
-    if(mslc) {      
-       if(!sonidoCheck){
-        sound1.trigger();
-        sonidoCheck=true; 
-      }
-            
-      
+    if(mslc){
+      textSize(sizeTxt +5);
       fill(255,0,0);
-      textSize(sizeTxt+10);
-    }
-    else  {
-      sonidoCheck=false;
-      fill(255);
+      
+      //Sonidos
+      if(!soundCheck){
+        soundButton.trigger();
+        soundCheck = true;
+      }
+    }else{
       textSize(sizeTxt);
+      fill(255);
+      soundCheck = false;
     }
-        
+    
+    
     textAlign(CENTER,CENTER);
     text(info[status], x + sizeX/2, y + sizeY/2);
-    
   }
 }
 
@@ -152,8 +150,9 @@ void actionButtons(){
   
   //Jugar
   if(BTitle[0].prsd){
-    int _map = round(random(1));
+    int _map = round(random(1,5));
     importMap(_map);
+    
     scene = 'G';
     BTitle[0].prsd = false;
   }

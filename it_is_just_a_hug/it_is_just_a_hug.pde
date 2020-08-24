@@ -1,15 +1,12 @@
-
-import ddf.minim.*;
-
-import ddf.minim.*;
-Minim minim;
-AudioSample sound1;
-AudioPlayer music;
 /*****************************************************
 
 
 
 *****************************************************/
+
+//Librerías
+import ddf.minim.*;
+Minim minim;
 
 //Tamaño de los Bloques
 int sizeBlocks = 32;
@@ -25,6 +22,8 @@ PImage titleSBackground;
 PImage titleSTitle;
 PImage titleSBomb;
 boolean showPressSpace = true;
+AudioPlayer musicTitleS;
+AudioSample soundButton;
 
 //Fuentes
 PFont pixelFont;
@@ -37,50 +36,46 @@ void setup(){
   setupButtons();
   
   //TitleScreen
-  titleSBackground = loadImage("HomeSreen/Pantallad de inicio fondo principal.png");
-  titleSTitle = loadImage("HomeSreen/Pantalla de inicio Titulo.png");
-  titleSBomb = loadImage("HomeSreen/Bomba animada Sprite.png");
+  titleSBackground = loadImage("titleScreen/background.png");
+  titleSTitle = loadImage("titleScreen/title.png");
+  titleSBomb = loadImage("titleScreen/bombAnimation.png");
   
-  pixelFont = loadFont("8-bitOperatorPlus-Regular-48.vlw");
+  pixelFont = createFont("fonts/monogram_extended.ttf",45);
+  //pixelFont = loadFont("fonts/8-bitOperatorPlus-Regular-48.vlw");
   
   //Musica
-  
   minim = new Minim(this);
-  sound1 = minim.loadSample("sound/pcmouseclick2.mp3");
-  music =minim.loadFile("sound/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
-
+  musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
+  soundButton = minim.loadSample("sounds/pcmouseclick2.mp3");
   
 }
 void draw(){
   background(0);
   actionButtons();
+  
   //Pantalla Inicio
   switch(scene){
-    
-    
-    
     case 'T':  //Pantalla de Título
+      if(!musicTitleS.isPlaying())  musicTitleS.loop();  //Inicia reproduciendose en loop
+      
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       int frameBomb = (frameCount/6)%10;
       copy(titleSBomb, frameBomb*200,0, 200,200, 660,20, 200,200);
       image(titleSTitle, 0,0, titleSTitle.width, titleSTitle.height);
-      
-      //musica
-      music.play();
       
       //Texto Presione escacio para continuar
       if(frameCount%25 == 0)  showPressSpace = !showPressSpace;
       if(showPressSpace){
         textFont(pixelFont);
         fill(0);
-        textSize(25);
+        textSize(35);
         textAlign(CENTER,CENTER);
         text("Presione espacio para continuar", width/2, height -height/8);
       }
       
-      if(spaceKey)
+      if(spaceKey){
         scene = 'M';
-      
+      }
       break;
     
     case 'M':  //Menu
@@ -96,6 +91,8 @@ void draw(){
       break;
     
     case 'G':  //Juego
+      if(musicTitleS.isPlaying())  musicTitleS.pause();
+      
       if(millis() > 99990){
         Players[0].move = false;
         Players[1].move = false;

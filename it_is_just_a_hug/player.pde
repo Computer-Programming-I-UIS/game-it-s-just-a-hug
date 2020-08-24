@@ -26,7 +26,7 @@ void colPlayers(){
         Players[playerBomb].setSprite();  //El jugador que tenía la bomba ahora no la tiene
         playerBomb = i;
         Players[playerBomb].setSprite();  //Ahora el otro jugador la tiene
-        
+        soundButton.trigger();
         passBomb = false;
         break;
         

@@ -1,5 +1,6 @@
 
 buttonMenu [] BTitle = new buttonMenu[4];
+button [] BMaps = new button[5];
 
 void setupButtons(){
   //Pantalla Inicio
@@ -9,6 +10,14 @@ void setupButtons(){
   BTitle[1] = new buttonMenu(width/2 - 2*round(textWidth("Mapas")/4), height/2 + 40 + dyButtons, 2*round(textWidth("Mapas")/2), round(textAscent()), "Mapas");
   BTitle[2] = new buttonMenu(width/2 - 2*round(textWidth("Creditos")/4), height/2 + 40 + 2*dyButtons, 2*round(textWidth("Creditos")/2), round(textAscent()), "Creditos");
   BTitle[3] = new buttonMenu(width/2 - 2*round(textWidth("Salir")/4), height/2 + 40 + 3*dyButtons, 2*round(textWidth("Salir")/2), round(textAscent()), "Salir");
+  
+  //Selector de mapas
+  int dxButtons = 170;
+  dyButtons = 3;
+  for(int b = 0; b < BMaps.length; b++){
+    //BMaps[b] = new button(5*sizeBlocks + b*dxButtons, height/2, 160,82, "map"+(b+1)+".png", "maps");
+    BMaps[b] = new button((width - 5*dxButtons)/2 + b*dxButtons, height/2, 160,82, "map"+(b+1)+".png", "maps");
+  }
   
 }
 
@@ -90,10 +99,14 @@ class button{
   
   void display(){
     
-    if(mslc)  strokeWeight(4);  //Si el mouse está sobre el botón y no esta el valor máximo
-    else  strokeWeight(1);
+    if(mslc){
+      stroke(255);
+      strokeWeight(4);  //Si el mouse está sobre el botón
+    }else{
+      stroke(150);
+      strokeWeight(1);
+    }
     
-    stroke(0);
     fill(colorB[colorS]);
     rect(x, y, sizeX, sizeY);  //Dibuja el botón
     
@@ -105,7 +118,7 @@ class button{
       text(info[status], x + sizeX/2, y + sizeY/2);
       
     }else{
-      image(imageB, x,y, sizeX, sizeY);
+      image(imageB, x+2, y+2, sizeX-4, sizeY-4);
     }
     
   }
@@ -147,31 +160,47 @@ class buttonMenu extends button{
 
 void actionButtons(){
   //----------------------Pantalla inicio----------------------//
-  
-  //Jugar
-  if(BTitle[0].prsd){
-    int _map = round(random(1,5));
-    importMap(_map);
-    musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
+  if(scene == 'I'){
+    //Jugar
+    if(BTitle[0].prsd){
+      int _map = round(random(1,5));
+      importMap(_map);
+      musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
+      
+      scene = 'G';
+      BTitle[0].prsd = false;
+    }
+    //Mapas
+    if(BTitle[1].prsd){
+      
+      scene = 'M';
+      BTitle[1].prsd = false;
+    }
+    //Créditos
+    if(BTitle[2].prsd){
+      
+      BTitle[2].prsd = false;
+    }
+    //Salir
+    if(BTitle[3].prsd){
+      exit();  //Acaba el Programa
+      BTitle[3].prsd = false;
+    }
     
-    scene = 'G';
-    BTitle[0].prsd = false;
-  }
-  //Mapas
-  if(BTitle[1].prsd){
-    //scene = 'L';
-    BTitle[1].prsd = false;
-  }
-  //Créditos
-  if(BTitle[2].prsd){
-    
-    BTitle[2].prsd = false;
-  }
-  //Salir
-  if(BTitle[3].prsd){
-    exit();  //Acaba el Programa
-    BTitle[3].prsd = false;
   }
   
   //----------------------Selector de Mapas----------------------//
+  if(scene == 'M'){
+    for(int b = 0; b < BMaps.length; b++){
+      if(BMaps[b].prsd){
+        importMap(b+1);  //Importa el mapa seleccionado
+        musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
+        
+        scene = 'G';  //Inicia el juego
+        BMaps[b].prsd = false;
+        break;
+      }
+    }
+  }
+  
 }

@@ -15,7 +15,7 @@ int numBlocksX = 35;
 int numBlocksY = 18;
 
 //Escena
-char scene = 'T';  //'T' = TitleScreen / 'M' = Menu / 'G' = Juego / 'P' = Pausa / 'C' = Creditos
+char scene = 'T';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'P' = Pausa / 'C' = Creditos / 'M' = Mapas
 
 //TitleScreen
 PImage titleSBackground;
@@ -46,7 +46,8 @@ void setup(){
   //Musica
   minim = new Minim(this);
   musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
-  musicTitleS.setGain(-5);  //Bajar el volumen
+  //musicTitleS.setGain(-5);  //Bajar el volumen
+  musicTitleS.setGain(-500);  //Bajar el volumen
   soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
   soundButton.setGain(-6);
   
@@ -76,11 +77,11 @@ void draw(){
       }
       
       if(spaceKey){
-        scene = 'M';
+        scene = 'I';
       }
       break;
     
-    case 'M':  //Menu
+    case 'I':  //Menu Inicio
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       frameBomb = (frameCount/6)%10;
@@ -96,12 +97,12 @@ void draw(){
       if(musicTitleS.isPlaying() && musicTitleS.getGain() < -30){  //Si se está reproduciendo y ya el volumen es muy bajo se pausa
         musicTitleS.pause();
       }
-      
+      /*
       if(millis() > 99990){
         Players[0].move = false;
         Players[1].move = false;
       }
-      
+      */
       image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);  //Imagen del nivel
       
       colPlayers();
@@ -109,6 +110,18 @@ void draw(){
         Players[p].update();
         Players[p].display();
       }
+      
+      break;
+      
+    case 'M':
+      for(int b = 0; b < BMaps.length; b++){
+        BMaps[b].display();
+      }
+      
+      
+      
+      
+      break;
   }
 }
 
@@ -145,7 +158,7 @@ int sign(int num){
 
 void mouseMoved(){
   switch(scene){
-    case 'M':
+    case 'I':
       for(int b = 0; b < BTitle.length; b++){
         if(BTitle[b].checkMouse()){
           cursor(HAND);
@@ -155,7 +168,18 @@ void mouseMoved(){
         }
       }
       break;
-      
+    
+    case 'M':
+      for(int b = 0; b < BMaps.length; b++){
+        if(BMaps[b].checkMouse()){
+          cursor(HAND);
+          break;
+        }else{
+          cursor(ARROW);
+        }
+      }
+      break;
+    
     default:
         //Nothing
       break;
@@ -165,7 +189,7 @@ void mouseMoved(){
 
 void mousePressed(){
   switch(scene){
-    case 'M':
+    case 'I':
       for(int b = 0; b < BTitle.length; b++){
         if(BTitle[b].checkMouse()){
           BTitle[b].changeStatus();
@@ -174,6 +198,15 @@ void mousePressed(){
       }
       break;
       
+    case 'M':
+      for(int b = 0; b < BMaps.length; b++){
+        if(BMaps[b].checkMouse()){
+          BMaps[b].changeStatus();
+          break;
+        }
+      }
+      break;
+    
     default:
         //Nothing
       break;

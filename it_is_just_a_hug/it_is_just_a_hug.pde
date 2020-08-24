@@ -1,3 +1,10 @@
+
+import ddf.minim.*;
+
+import ddf.minim.*;
+Minim minim;
+AudioSample sound1;
+AudioPlayer music;
 /*****************************************************
 
 
@@ -36,6 +43,12 @@ void setup(){
   
   pixelFont = loadFont("8-bitOperatorPlus-Regular-48.vlw");
   
+  //Musica
+  
+  minim = new Minim(this);
+  sound1 = minim.loadSample("sound/pcmouseclick2.mp3");
+  music =minim.loadFile("sound/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
+
   
 }
 void draw(){
@@ -43,11 +56,17 @@ void draw(){
   actionButtons();
   //Pantalla Inicio
   switch(scene){
+    
+    
+    
     case 'T':  //Pantalla de Título
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       int frameBomb = (frameCount/6)%10;
       copy(titleSBomb, frameBomb*200,0, 200,200, 660,20, 200,200);
       image(titleSTitle, 0,0, titleSTitle.width, titleSTitle.height);
+      
+      //musica
+      music.play();
       
       //Texto Presione escacio para continuar
       if(frameCount%25 == 0)  showPressSpace = !showPressSpace;

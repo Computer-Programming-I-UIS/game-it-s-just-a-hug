@@ -30,6 +30,7 @@ class button{
   int colorS = 0;  //Color seleccionado
   String [] info;  //Almacena el texto que se muestra en cada estado
   int sizeTxt = 13;
+  boolean sonidoCheck=false;
   
   //Cuando el botón NO tiene imagen
   button(int _x, int _y, int _sizeX, int _sizeY, int _numStatus, int _ColorS, String _info1){
@@ -119,10 +120,25 @@ class buttonMenu extends button{
   }
   
   void display(){
-    if(mslc) fill(255,0,0);
-    else  fill(255);
+     
+    
     textFont(pixelFont);
-    textSize(sizeTxt);
+    if(mslc) {      
+       if(!sonidoCheck){
+        sound1.trigger();
+        sonidoCheck=true; 
+      }
+            
+      
+      fill(255,0,0);
+      textSize(sizeTxt+10);
+    }
+    else  {
+      sonidoCheck=false;
+      fill(255);
+      textSize(sizeTxt);
+    }
+        
     textAlign(CENTER,CENTER);
     text(info[status], x + sizeX/2, y + sizeY/2);
     

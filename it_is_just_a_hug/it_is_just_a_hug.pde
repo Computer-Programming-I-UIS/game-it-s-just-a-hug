@@ -46,7 +46,9 @@ void setup(){
   //Musica
   minim = new Minim(this);
   musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
-  soundButton = minim.loadSample("sounds/pcmouseclick2.mp3");
+  musicTitleS.setGain(-5);  //Bajar el volumen
+  soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
+  soundButton.setGain(-6);
   
 }
 void draw(){
@@ -91,7 +93,9 @@ void draw(){
       break;
     
     case 'G':  //Juego
-      if(musicTitleS.isPlaying())  musicTitleS.pause();
+      if(musicTitleS.isPlaying() && musicTitleS.getGain() < -30){  //Si se está reproduciendo y ya el volumen es muy bajo se pausa
+        musicTitleS.pause();
+      }
       
       if(millis() > 99990){
         Players[0].move = false;

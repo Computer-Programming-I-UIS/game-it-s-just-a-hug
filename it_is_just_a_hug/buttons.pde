@@ -152,6 +152,7 @@ void actionButtons(){
   if(BTitle[0].prsd){
     int _map = round(random(1,5));
     importMap(_map);
+    musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
     
     scene = 'G';
     BTitle[0].prsd = false;

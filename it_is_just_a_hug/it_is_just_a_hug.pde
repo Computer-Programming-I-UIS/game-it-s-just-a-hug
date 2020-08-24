@@ -51,10 +51,10 @@ void setup(){
   //Musica
   minim = new Minim(this);
   musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
-  //musicTitleS.setGain(-5);  //Bajar el volumen
-  musicTitleS.setGain(-500);  //Bajar el volumen
+  musicTitleS.setGain(-15);  //Bajar el volumen
+  //musicTitleS.setGain(-500);  //Bajar el volumen
   soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
-  soundButton.setGain(-6);
+  soundButton.setGain(-20);
   
 }
 
@@ -95,6 +95,7 @@ void draw(){
       break;
     
     case 'I':  //Menu Inicio
+      if(!musicTitleS.isPlaying())  musicTitleS.loop();
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       frameBomb = (frameCount/6)%10;
@@ -127,7 +128,9 @@ void draw(){
       break;
       
     case 'M':
+      if(!musicTitleS.isPlaying())  musicTitleS.loop();
       
+      image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       
       for(int b = 0; b < BMaps.length; b++){
         BMaps[b].display();
@@ -177,6 +180,9 @@ void mouseMoved(){
       for(int b = 0; b < BTitle.length; b++){
         if(BTitle[b].checkMouse()){
           cursor(HAND);
+          for(int i = b; i < BTitle.length; i++){  //Desactiva todos los otros botones para que no aparezcan dos seleccionados
+            if(i != b)  BTitle[i].mslc = false;
+          }
           break;
         }else{
           cursor(ARROW);
@@ -188,6 +194,9 @@ void mouseMoved(){
       for(int b = 0; b < BMaps.length; b++){
         if(BMaps[b].checkMouse()){
           cursor(HAND);
+          for(int i = b; i < BMaps.length; i++){
+            if(i != b)  BMaps[i].mslc = false;
+          }
           break;
         }else{
           cursor(ARROW);

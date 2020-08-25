@@ -178,6 +178,7 @@ void actionButtons(){
     //Créditos
     if(BTitle[2].prsd){
       
+      scene = 'C';
       BTitle[2].prsd = false;
     }
     //Salir

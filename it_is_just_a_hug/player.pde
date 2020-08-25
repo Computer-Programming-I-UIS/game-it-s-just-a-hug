@@ -151,6 +151,7 @@ class player{
   void update(){
     controlPlayers();
     PlayersCol[num].setXY(x,y);  //Actualiza la colisión
+    colPlayers();
     
     //Colisiones
     ground = checkCol(x, y+1, sizeX, sizeY);

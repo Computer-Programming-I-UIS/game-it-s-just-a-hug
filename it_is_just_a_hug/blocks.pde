@@ -8,7 +8,7 @@ Se formaría un tablero de ajedrez y la cantidad de bloques sería la mitad de l
 *****************************************************/
 
 block Ground [] = new block [(numBlocksX*numBlocksY)/2];
-block Teleport [] = new block [6];
+port Teleport [] = new port [6];
 int numBGroundMap = Ground.length;  //Número de rectángulos de bloque tierra que tiene el mapa
 int numBTeleportMap = Teleport.length;
 
@@ -18,14 +18,10 @@ void setupBlocks(){
   for(int i = 0; i < Ground.length; i++){
     Ground[i] = new block(i*sizeBlocks, i*sizeBlocks);  //Como cada vez que se configura un map se establece unas nuevas cordenadas entonces se pueden iniciar todos en (0,0)
   }
-  /*
+  
   for(int i = 0; i < Teleport.length; i++){
-    Teleport[i] = new block(i*5*sizeBlocks + 500, i*3*sizeBlocks);
-  }*/
-  Teleport[0] = new block(5*sizeBlocks, 2*sizeBlocks);
-  Teleport[1] = new block(15*sizeBlocks, sizeBlocks);
-  Teleport[2] = new block(8*sizeBlocks, 14*sizeBlocks);
-  Teleport[3] = new block(22*sizeBlocks, sizeBlocks);
+    Teleport[i] = new port(i*5*sizeBlocks + 500, i*3*sizeBlocks);  //Posición arbitraria
+  }
   
   
   for(int i = 0; i < PlayersCol.length; i++){
@@ -99,4 +95,20 @@ class block{
     rect(x, y, sizeX, sizeY);
   }
   
+}
+
+
+class port extends block{
+  int frame = 0;
+  PImage sprite;
+  
+  port(int _x, int _y){
+    super(_x, _y);
+    sprite = loadImage("sprites/teleport.png");
+  }
+  
+  void display(){
+    frame = (frameCount/6)%8;
+    copy(sprite, frame*64, 0, 64,64, x, y, sizeX, sizeY);  //Sprite del teleport
+  }
 }

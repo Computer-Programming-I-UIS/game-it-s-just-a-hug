@@ -58,10 +58,11 @@ void setup(){
   //Musica
   minim = new Minim(this);
   musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
-  musicTitleS.setGain(-15);  //Bajar el volumen
-  //musicTitleS.setGain(-500);  //Bajar el volumen
+  //musicTitleS.setGain(-15);  //Bajar el volumen
+  musicTitleS.setGain(-500);
   soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
-  soundButton.setGain(-20);
+  //soundButton.setGain(-20);
+  soundButton.setGain(-500);
   
   //Importa un nivel cualquiera
   importMap(2);
@@ -123,7 +124,11 @@ void draw(){
       
       image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);  //Imagen del nivel
       
-      colPlayers();
+      for(int t = 0; t < numBTeleportMap; t++){  //Imagen de los Teleports
+        Teleport[t].display();
+      }
+      
+      //Jugadores
       for(int p = 0; p < Players.length; p++){
         Players[p].update();
         Players[p].display();
@@ -155,7 +160,7 @@ void draw(){
       if(scapeKey)  scene = 'I';
       break;
       
-    case 'M':
+    case 'M':  //Selector de mapas
       if(!musicTitleS.isPlaying())  musicTitleS.loop();
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
@@ -163,7 +168,15 @@ void draw(){
         BMaps[b].display();
       }
       
+      if(scapeKey)  scene = 'I';
       break;
+      
+    case 'C':  //Créditos
+      
+      
+      if(scapeKey)  scene = 'I';
+      break;
+    
   }
 }
 

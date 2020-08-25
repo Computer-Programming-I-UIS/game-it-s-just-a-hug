@@ -125,6 +125,11 @@ void draw(){
         Players[p].display();
       }
       
+      for(int i = 0; i < Ground.length; i++){
+        Ground[i].display();
+      }
+      if(scapeKey)  scene = 'I';
+      
       break;
       
     case 'M':

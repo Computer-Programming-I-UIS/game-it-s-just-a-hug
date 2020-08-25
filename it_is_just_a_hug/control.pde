@@ -9,11 +9,13 @@ boolean leftKey, leftKey1;
 boolean rightKey, rightKey1;
 
 boolean spaceKey;
+boolean scapeKey;
 
 void keyPressed(){
   
   if(key == 27){  //Si se presiona escape
     key = 0;  //Al convertirla a cero, evita que processing cierre la aplicación, como lo hace por defecto
+    scapeKey = true;
     /*
     if(pauseIsPosible){
       if(!pause){  //Si no estaba pausado, guarda en que escena estaba
@@ -31,6 +33,10 @@ void keyPressed(){
 
 void keyReleased(){
   keyControl(keyCode, false);
+  if(key == 27){  //Si se presiona escape
+    key = 0;  //Al convertirla a cero, evita que processing cierre la aplicación, como lo hace por defecto
+    scapeKey = false;
+  }
 }
 
 void keyControl(int k, boolean state){

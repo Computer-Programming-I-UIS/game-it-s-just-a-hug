@@ -16,6 +16,12 @@ void importMap(int numMap){
   String fileNameMapPNG = "map"+numMap+".png";  //Nombre del archivo .png
   String mapFile [] = new String[numBlocksY];  //Almacena todo lo que tenga el archivo
   
+  for(int i = 0; i < map.length; i++){
+    for(int j = 0; j < map[i].length; j++){
+      map[i][j] = ' ';
+    }
+  }
+  
   //Comprueba que el archivo exista antes de intentar importarlo
   if(!fileExists(fileNameMapTXT, "maps")){  //Si no existe
     println("¡ERROR!");
@@ -65,10 +71,18 @@ void importMap(int numMap){
   }else{
     backgroundMap = loadImage("data/maps/"+fileNameMapPNG);
   }
+  
+  
   //Configuración
   numBGroundMap = 0;  //Resetea la variable
   numBTeleportMap = 0;  //Resetea la variable
+  //Reestablecer el tamaño y posición de los bloques a una unidad para que cuando se vuelva a importar pueda cambiarse de tamaño correcto
+  for(int i = 0; i < Ground.length; i++){
+    Ground[i].setXY(0,0);
+    Ground[i].setSize(sizeBlocks);
+  }
   
+  //Establece la nueva configuración
   for(int i = 0; i < map.length; i++){
     for(int j = 0; j < map[i].length; j++){
       

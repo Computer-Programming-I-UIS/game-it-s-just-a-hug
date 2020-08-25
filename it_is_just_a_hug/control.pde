@@ -16,16 +16,6 @@ void keyPressed(){
   if(key == 27){  //Si se presiona escape
     key = 0;  //Al convertirla a cero, evita que processing cierre la aplicación, como lo hace por defecto
     scapeKey = true;
-    /*
-    if(pauseIsPosible){
-      if(!pause){  //Si no estaba pausado, guarda en que escena estaba
-        lastScene = scene;
-      }else{  //Si estba pausado, restaura la escena en la que estaba
-        scene = lastScene;
-      }
-      pause = !pause;
-    }
-    */
   }
   
   keyControl(keyCode, true);

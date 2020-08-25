@@ -128,4 +128,7 @@ void importMap(int numMap){
     Players[i].setSprite();  //Se llama dos veces para que al final quedé la variable bomb en el valor correcto
   }
   
+  //Resetear tiempo
+  timer = timerMax;
+  secondsTimer = second();
 } //end importMap

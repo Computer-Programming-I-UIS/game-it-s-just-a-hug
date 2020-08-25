@@ -15,7 +15,7 @@ int numBlocksX = 35;
 int numBlocksY = 18;
 
 //Escena
-char scene = 'T';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'P' = Pausa / 'C' = Creditos / 'M' = Mapas
+char scene = 'G';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'P' = Pausa / 'C' = Creditos / 'M' = Mapas
 
 //TitleScreen
 PImage titleSBackground;
@@ -30,6 +30,12 @@ AudioSample soundButton;
 
 //Fuentes
 PFont pixelFont;
+
+//Contador
+int frameBomb = 0;
+int timerMax = 40;  //Tiempo que dura la bomba
+int timer = timerMax;
+int secondsTimer = 0;  //Variable para saber si ha transcurrido un segundo
 
 void setup(){
   //Configuraciones generales
@@ -56,6 +62,8 @@ void setup(){
   soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
   soundButton.setGain(-20);
   
+  //Importa un nivel cualquiera
+  importMap(2);
 }
 
 void draw(){
@@ -69,7 +77,7 @@ void draw(){
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       
-      int frameBomb = (frameCount/6)%10;
+      frameBomb = (frameCount/6)%10;
       copy(titleSBomb, frameBomb*200,0, 200,200, 660,20, 200,200);
       image(titleSTitle, 0,0, titleSTitle.width, titleSTitle.height);
       
@@ -112,12 +120,6 @@ void draw(){
         musicTitleS.pause();
       }
       
-      if(millis() >= 9900 && millis() <= 9999){
-        Players[0].move = false;
-        Players[1].move = false;
-        Players[playerBomb].kaboom();
-      }
-      println(playerBomb);
       image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);  //Imagen del nivel
       
       colPlayers();
@@ -126,6 +128,21 @@ void draw(){
         Players[p].display();
       }
       
+      //Tiempo
+      frameBomb = (frameCount/6)%10;
+      copy(titleSBomb, frameBomb*200,0, 200,200, 16,16, 64,64);  //Imagen de la bomba
+      
+      if(secondsTimer != second()){  //Actualizar el tiempo cada segundo
+        secondsTimer = second();
+        timer--;
+        timer = constrain(timer, 0, timerMax);
+      }if(timer == 0 && !Players[playerBomb].kaboom){  //Se acabó el tiempo
+        Players[0].move = false;
+        Players[1].move = false;
+        Players[playerBomb].kaboom();
+      }
+      textFont(pixelFont);
+      text(nf(timer,1),28,61);  //Muestra el tiempo encima de la bomba
       if(scapeKey)  scene = 'I';
       
       break;
@@ -138,9 +155,6 @@ void draw(){
       for(int b = 0; b < BMaps.length; b++){
         BMaps[b].display();
       }
-      
-      
-      
       
       break;
   }

@@ -111,12 +111,13 @@ void draw(){
       if(musicTitleS.isPlaying() && musicTitleS.getGain() < -30){  //Si se está reproduciendo y ya el volumen es muy bajo se pausa
         musicTitleS.pause();
       }
-      /*
-      if(millis() > 99990){
+      
+      if(millis() >= 9900 && millis() <= 9999){
         Players[0].move = false;
         Players[1].move = false;
+        Players[playerBomb].kaboom();
       }
-      */
+      println(playerBomb);
       image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);  //Imagen del nivel
       
       colPlayers();
@@ -125,9 +126,6 @@ void draw(){
         Players[p].display();
       }
       
-      for(int i = 0; i < Ground.length; i++){
-        Ground[i].display();
-      }
       if(scapeKey)  scene = 'I';
       
       break;

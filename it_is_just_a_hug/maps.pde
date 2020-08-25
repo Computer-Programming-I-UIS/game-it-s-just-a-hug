@@ -118,12 +118,14 @@ void importMap(int numMap){
   
   playerBomb = round(random(0,Players.length-1));
   for(int i = 0; i < Players.length; i++){
+    Players[i].reset();  //Resetea las variable del jugador
     if(i == playerBomb){
       Players[i].bomb = true;
     }else{
       Players[i].bomb = false;
     }
     Players[i].setSprite();
+    Players[i].setSprite();  //Se llama dos veces para que al final quedé la variable bomb en el valor correcto
   }
   
 } //end importMap

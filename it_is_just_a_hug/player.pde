@@ -70,8 +70,10 @@ class player{
   PImage sprite;  //El sprite que se muestra
   PImage spriteWalk;
   PImage spriteBomb;
+  PImage spriteBurned;
   int frame;
   int pastVelX = 1;
+  boolean kaboom = false;
   
   //Bomba
   boolean lejos = true;
@@ -97,6 +99,7 @@ class player{
     */
     spriteWalk = loadImage("data/sprites/player01_walking.png");
     spriteBomb = loadImage("data/sprites/player01_bomb.png");
+    spriteBurned = loadImage("data/sprites/player01_bomb_Actived.png");
     sprite = spriteWalk;
   } 
   
@@ -109,6 +112,7 @@ class player{
     spriteColor = _spriteColor;
     spriteWalk = loadImage("data/sprites/player0"+_spriteColor+"_walking.png");
     spriteBomb = loadImage("data/sprites/player0"+_spriteColor+"_bomb.png");
+    spriteBurned = loadImage("data/sprites/player0"+_spriteColor+"_bomb_Actived.png");
     
     sprite = spriteWalk;
     
@@ -118,6 +122,30 @@ class player{
     bomb = !bomb;
     if(!bomb)  sprite = spriteWalk;
     else  sprite = spriteBomb;
+  }
+  
+  void kaboom(){
+    sprite = spriteBurned;
+    kaboom = true;
+    frame = 0;
+  }
+  
+  void reset(){
+    //Movimiento
+    velX = 0;
+    velY = 0;
+    t = 0;
+    jump = false;
+    move = true;
+    ground = false;
+    port = false;
+    
+    //Sprite
+    frame = 0;
+    pastVelX = 1;
+    kaboom = false;
+    bomb = false;
+    lejos  = true;
   }
   
   void update(){
@@ -188,21 +216,36 @@ class player{
     
     
     //frame = (frameCount/6)%10; 
-    frame = (frameCount/(abs(2*velX/3)+1))%10;  //Dependiendo de la velocidad cambia de frames más rápido o no
+    if(!kaboom){
+      frame = (frameCount/(abs(2*velX/3)+1))%10;  //Dependiendo de la velocidad cambia de frames más rápido o no
+    }else{
+      if(frame < 9 && frameCount%5 == 0){
+        frame++;
+      }
+    }
     
     if(velY <= 0){  //No está cayendo
-      if(velX > 0){
-        pastVelX = 1;
-        copy(sprite, frame*64, 0, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la derecha (+1 porque no se ajusta muy bien la imagen)
-        
-      }else if(velX < 0){
-        pastVelX = -1;
-        copy(sprite, frame*64, 64, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la izquierda
-        
-      }else{  //Si no se mueve, mira en la dirección en la que se estába moviendo
-        if(pastVelX == 1)  copy(sprite,0,0,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
-        if(pastVelX == -1)  copy(sprite,0,64,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
-        
+      if(!kaboom){
+        if(velX > 0){
+          pastVelX = 1;
+          copy(sprite, frame*64, 0, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la derecha (+1 porque no se ajusta muy bien la imagen)
+          
+        }else if(velX < 0){
+          pastVelX = -1;
+          copy(sprite, frame*64, 64, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la izquierda
+          
+        }else if(velX == 0){  //Si no se mueve, mira en la dirección en la que se estába moviendo
+          if(pastVelX == 1){
+            copy(sprite,0,0,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
+          }
+          if(pastVelX == -1){
+            copy(sprite,0,64,64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);
+          }
+          
+        }
+      }else{
+        if(pastVelX == 1)  copy(sprite, frame*64, 0, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la derecha (+1 porque no se ajusta muy bien la imagen)
+        if(pastVelX == -1)  copy(sprite, frame*64, 64, 64,64, x - sizeX/2, y, 2*sizeX, sizeY +1);  //Muestra el sprite mirando a la izquierda
       }
     }else{ //Está cayendo
       if(pastVelX == 1)  copy(sprite, 192,0, 64,64,x - sizeX/2, y, 2*sizeX, sizeY +1);

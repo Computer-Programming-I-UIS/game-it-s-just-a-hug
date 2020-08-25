@@ -15,7 +15,7 @@ int numBlocksX = 35;
 int numBlocksY = 18;
 
 //Escena
-char scene = 'G';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'P' = Pausa / 'C' = Creditos / 'M' = Mapas
+char scene = 'T';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'P' = Pausa / 'C' = Creditos / 'M' = Mapas
 
 //TitleScreen
 PImage titleSBackground;
@@ -33,9 +33,10 @@ PFont pixelFont;
 
 //Contador
 int frameBomb = 0;
-int timerMax = 40;  //Tiempo que dura la bomba
+int timerMax = 60;  //Tiempo que dura la bomba
 int timer = timerMax;
 int secondsTimer = 0;  //Variable para saber si ha transcurrido un segundo
+int timeAfterExplosion = 6;
 
 void setup(){
   //Configuraciones generales
@@ -85,7 +86,7 @@ void draw(){
       if(frameCount%25 == 0)  showPressSpace = !showPressSpace;  //Parpadea el texto cada 25 frames
       if(showPressSpace && titleSfade == 0){  //Si no se ha presionado espacio
         textFont(pixelFont);
-        fill(0);
+        fill(80);
         textSize(35);
         textAlign(CENTER,CENTER);
         text("Presione espacio para continuar", width/2, height -height/8);
@@ -136,22 +137,28 @@ void draw(){
         secondsTimer = second();
         timer--;
         timer = constrain(timer, 0, timerMax);
+        if(Players[playerBomb].kaboom){
+          timeAfterExplosion--;
+          if(timeAfterExplosion == 0)  scene = 'I';
+        }
       }if(timer == 0 && !Players[playerBomb].kaboom){  //Se acabó el tiempo
         Players[0].move = false;
         Players[1].move = false;
         Players[playerBomb].kaboom();
       }
       textFont(pixelFont);
-      text(nf(timer,1),28,61);  //Muestra el tiempo encima de la bomba
-      if(scapeKey)  scene = 'I';
+      textSize(40);
+      fill(255);
+      textAlign(CENTER,CENTER);
+      text(nf(timer,2),46,46);  //Muestra el tiempo encima de la bomba
       
+      if(scapeKey)  scene = 'I';
       break;
       
     case 'M':
       if(!musicTitleS.isPlaying())  musicTitleS.loop();
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
-      
       for(int b = 0; b < BMaps.length; b++){
         BMaps[b].display();
       }

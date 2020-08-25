@@ -131,4 +131,5 @@ void importMap(int numMap){
   //Resetear tiempo
   timer = timerMax;
   secondsTimer = second();
+  timeAfterExplosion =  6;
 } //end importMap

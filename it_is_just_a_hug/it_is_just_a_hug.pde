@@ -164,9 +164,10 @@ void draw(){
       if(!musicTitleS.isPlaying())  musicTitleS.loop();
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
-      for(int b = 0; b < BMaps.length; b++){
-        BMaps[b].display();
-      }
+      BMaps[mapMapSelected].display();
+      BMapSelector[0].display();  //Mapa anterior
+      BMapSelector[1].display();  //Mapa siguiente
+      
       
       if(scapeKey)  scene = 'I';
       break;
@@ -178,7 +179,10 @@ void draw(){
       break;
     
   }
+  
 }
+
+
 
 //Configurar el tamaño de la ventana
 void setupScreen(){
@@ -228,16 +232,15 @@ void mouseMoved(){
       break;
     
     case 'M':
-      for(int b = 0; b < BMaps.length; b++){
-        if(BMaps[b].checkMouse()){
-          cursor(HAND);
-          for(int i = b; i < BMaps.length; i++){
-            if(i != b)  BMaps[i].mslc = false;
-          }
-          break;
-        }else{
-          cursor(ARROW);
+      if(BMaps[mapMapSelected].checkMouse()){
+        cursor(HAND);
+        for(int i = 0; i < BMaps.length; i++){
+          if(i != mapMapSelected)  BMaps[i].mslc = false;
         }
+      }else if(BMapSelector[0].checkMouse() || BMapSelector[1].checkMouse()){
+        cursor(HAND);
+      }else{
+        cursor(ARROW);
       }
       break;
     
@@ -260,12 +263,10 @@ void mousePressed(){
       break;
       
     case 'M':
-      for(int b = 0; b < BMaps.length; b++){
-        if(BMaps[b].checkMouse()){
-          BMaps[b].changeStatus();
-          break;
-        }
-      }
+      if(BMaps[mapMapSelected].checkMouse())  BMaps[mapMapSelected].changeStatus();
+      else if(BMapSelector[0].checkMouse())  mapMapSelected--;
+      else if(BMapSelector[1].checkMouse())  mapMapSelected++;
+      mapMapSelected = constrain(mapMapSelected, 0, BMaps.length-1);
       break;
     
     default:

@@ -1,6 +1,8 @@
 
 buttonMenu [] BTitle = new buttonMenu[4];
 button [] BMaps = new button[5];
+button [] BMapSelector = new button[2];
+int mapMapSelected = 0;  //Mapa que se muestra en el selector de mapas
 
 void setupButtons(){
   //Pantalla Inicio
@@ -12,12 +14,11 @@ void setupButtons(){
   BTitle[3] = new buttonMenu(width/2 - 2*round(textWidth("Salir")/4), height/2 + 40 + 3*dyButtons, 2*round(textWidth("Salir")/2), round(textAscent()), "Salir");
   
   //Selector de mapas
-  int dxButtons = 170;
-  dyButtons = 3;
   for(int b = 0; b < BMaps.length; b++){
-    BMaps[b] = new button((width - 5*dxButtons)/2 + b*dxButtons, height/2 - 41, 160,82, "map"+(b+1)+".png", "maps");
+    BMaps[b] = new button(3*sizeBlocks, 3*sizeBlocks/2, (numBlocksX-6)*sizeBlocks, 15*sizeBlocks, "map"+(b+1)+".png", "maps");
   }
-  
+  BMapSelector[0] = new button(sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "-");  //Mapa Anterior
+  BMapSelector[1] = new button(width-5*sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "+");  //Mapa Siguiente
 }
 
 
@@ -34,10 +35,11 @@ class button{
   
   //Apariencia
   PImage imageB;
-  color [] colorB = {color(124,0,0),color(23,43,234)};
+  color [] colorB = {color(#358C42),color(#40280A)};
   int colorS = 0;  //Color seleccionado
   String [] info;  //Almacena el texto que se muestra en cada estado
-  int sizeTxt = 13;
+  //int sizeTxt = 13;
+  int sizeTxt = 30;
   
   //Cuando el botón NO tiene imagen
   button(int _x, int _y, int _sizeX, int _sizeY, int _numStatus, int _ColorS, String _info1){
@@ -110,11 +112,27 @@ class button{
     rect(x, y, sizeX, sizeY);  //Dibuja el botón
     
     if(info != null){
-      fill(255);
-      //textFont(Font1);
-      textSize(sizeTxt);
-      textAlign(CENTER,CENTER);
-      text(info[status], x + sizeX/2, y + sizeY/2);
+      if(numStatus == 1 && info[0] == "+"){
+        stroke(255);
+        strokeWeight(5);
+        strokeJoin(MITER);
+        line(x + sizeX/4, y + sizeY/4, x + 3*sizeX/4, y + sizeY/2);
+        line(x + sizeX/4, y + 3*sizeY/4, x + 3*sizeX/4, y + sizeY/2);
+        
+      }else if(numStatus == 1 && info[0] == "-"){
+        stroke(255);
+        strokeWeight(5);
+        strokeJoin(MITER);
+        line(x + sizeX/4, y + sizeY/2, x + 3*sizeX/4, y + sizeY/4);
+        line(x + sizeX/4, y + sizeY/2, x + 3*sizeX/4, y + 3*sizeY/4);
+        
+      }else{
+        fill(255);
+        textFont(pixelFont);
+        textSize(sizeTxt);
+        textAlign(CENTER,CENTER);
+        text(info[status], x + sizeX/2, y + sizeY/2);
+      }
       
     }else{
       image(imageB, x+2, y+2, sizeX-4, sizeY-4);

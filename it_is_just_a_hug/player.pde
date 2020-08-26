@@ -31,7 +31,7 @@ void colPlayers(){
         break;
         
       }else{
-        if(dist(Players[playerBomb].x, Players[playerBomb].y, Players[i].x, Players[i].y) > 1.5*sizeBlocks){  //Si se aleja un poco y luego se acerca de nuevo le puede pegar la bomba
+        if(dist(Players[playerBomb].x, Players[playerBomb].y, Players[i].x, Players[i].y) > 1.5*sizeBlocks && !PlayersCol[playerBomb].checkCol(Players[i].x, Players[i].y, Players[i].sizeX, Players[i].sizeY)){  //Si se aleja un poco y luego se acerca de nuevo le puede pegar la bomba
           passBomb = true;
         }
         
@@ -133,7 +133,9 @@ class player{
   void reset(){
     //Movimiento
     velX = 0;
+    velX0 = 0;
     velY = 0;
+    velY0 = 0;
     t = 0;
     jump = false;
     move = true;

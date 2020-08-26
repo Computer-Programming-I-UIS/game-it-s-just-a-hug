@@ -195,6 +195,7 @@ void actionButtons(){
       
       importMap(_map);
       musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
+      musicGame.shiftGain(musicGame.getGain(),-20, 2500);  //Fade-in
       
       scene = 'G';
       BTitle[0].prsd = false;
@@ -231,6 +232,7 @@ void actionButtons(){
       if(BMaps[b].prsd){
         importMap(b+1);  //Importa el mapa seleccionado
         musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
+        musicGame.shiftGain(musicGame.getGain(),-20, 2500);  //Fade-in
         
         scene = 'G';  //Inicia el juego
         BMaps[b].prsd = false;

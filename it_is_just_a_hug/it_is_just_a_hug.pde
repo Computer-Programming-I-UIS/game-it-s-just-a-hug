@@ -15,7 +15,7 @@ int numBlocksX = 35;
 int numBlocksY = 18;
 
 //Escena
-char scene = 'C';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas /  / 'C' = Creditos / 'H' = ¿Cómo Jugar?
+char scene = 'T';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas /  / 'C' = Creditos / 'H' = ¿Cómo Jugar?
 
 //TitleScreen
 PImage titleSBackground;
@@ -26,8 +26,6 @@ PImage titleSTitle;
 PImage titleSBomb;
 PImage titleHow;
 boolean showPressSpace = true;
-AudioPlayer musicTitleS;
-AudioSample soundButton;
 
 //Fuentes
 PFont pixelFont;
@@ -37,11 +35,17 @@ int frameBomb = 0;
 int timerMax = 60;  //Tiempo que dura la bomba
 int timer = timerMax;
 int secondsTimer = 0;  //Variable para saber si ha transcurrido un segundo
-int timeMaxAfterExplosion = 5;
+int timeMaxAfterExplosion = 4;
 int timeAfterExplosion = timeMaxAfterExplosion;
 
 //Cantidad máxima de niveles
 int numMaxMaps = 6;
+
+//Sonidos
+AudioPlayer musicTitleS;
+AudioPlayer musicGame;
+AudioSample soundButton;
+AudioSample soundExplosion;
 
 void setup(){
   //Configuraciones generales
@@ -64,24 +68,31 @@ void setup(){
   //Musica
   minim = new Minim(this);
   musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
-  musicTitleS.setGain(-10);  //Bajar el volumen
-  //musicTitleS.setGain(-500);
+  musicTitleS.setGain(-40);  //Bajar el volumen
   soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
-  soundButton.setGain(-15);
-  //soundButton.setGain(-500);
+  soundButton.setGain(-20);
+  soundExplosion = minim.loadSample("sounds/explosion.mp3");
+  soundExplosion.setGain(-5);
+  musicGame = minim.loadFile("sounds/Never_Surrender.mp3");
+  musicGame.setGain(-40);
   
   //Importa un nivel cualquiera
   importMap(2);
 }
 
 void draw(){
+  println("Game",musicGame.getGain());
+  println("Title",musicTitleS.getGain());
   background(0);
   actionButtons();
   
   //Pantalla Inicio
   switch(scene){
     case 'T':  //Pantalla de Título
-      if(!musicTitleS.isPlaying())  musicTitleS.loop();  //Inicia reproduciendose en loop
+      if(!musicTitleS.isPlaying()){
+        musicTitleS.loop();  //Inicia reproduciendose en loop
+        musicTitleS.shiftGain(musicTitleS.getGain(),-15, 2500);  //Fade-In
+      }if(musicGame.isPlaying() && musicGame.getGain() < -30)  musicGame.pause();
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       
@@ -111,7 +122,10 @@ void draw(){
       break;
     
     case 'I':  //Menu Inicio
-      if(!musicTitleS.isPlaying())  musicTitleS.loop();
+      if(!musicTitleS.isPlaying()){
+        musicTitleS.loop();
+        musicTitleS.shiftGain(musicTitleS.getGain(),-15, 2500);  //Fade-In
+      }if(musicGame.isPlaying() && musicGame.getGain() < -30)  musicGame.pause();
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       frameBomb = (frameCount/6)%10;
@@ -126,7 +140,7 @@ void draw(){
     case 'G':  //Juego
       if(musicTitleS.isPlaying() && musicTitleS.getGain() < -30){  //Si se está reproduciendo y ya el volumen es muy bajo se pausa
         musicTitleS.pause();
-      }
+      }if(!musicGame.isPlaying())  musicGame.loop();
       
       image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);  //Imagen del nivel
       
@@ -141,8 +155,6 @@ void draw(){
       }
       
       //Tiempo
-      frameBomb = (frameCount/6)%10;
-      copy(titleSBomb, frameBomb*200,0, 200,200, 16,16, 64,64);  //Imagen de la bomba
       
       if(secondsTimer != second()){  //Actualizar el tiempo cada segundo
         secondsTimer = second();
@@ -158,36 +170,49 @@ void draw(){
             pastMap = _map;
             importMap(_map);
             
-            //scene = 'I';
           }
         }
       }if(timer == 0 && !Players[playerBomb].kaboom){  //Se acabó el tiempo
         Players[0].move = false;
         Players[1].move = false;
         Players[playerBomb].kaboom();
+        soundExplosion.trigger();
       }
+      frameBomb = (frameCount/6)%10;
+      copy(titleSBomb, frameBomb*200,0, 200,200, 16,16, 64,64);  //Imagen de la bomba
+      
       textFont(pixelFont);
       textSize(40);
       fill(255);
       textAlign(CENTER,CENTER);
       text(nf(timer,2),46,46);  //Muestra el tiempo encima de la bomba
       
-      if(scapeKey)  scene = 'I';
+      if(scapeKey){
+        scene = 'I';
+        musicGame.shiftGain(musicGame.getGain(),-40, 2500);  //Fade-Out
+      }
       break;
       
     case 'M':  //Selector de mapas
-      if(!musicTitleS.isPlaying())  musicTitleS.loop();
+      if(!musicTitleS.isPlaying()){
+        musicTitleS.loop();
+        musicTitleS.shiftGain(musicTitleS.getGain(),-15, 2500);  //Fade-In
+      }if(musicGame.isPlaying() && musicGame.getGain() < -30)  musicGame.pause();
       
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       BMaps[mapMapSelected].display();
       BMapSelector[0].display();  //Mapa anterior
       BMapSelector[1].display();  //Mapa siguiente
       
-      
       if(scapeKey)  scene = 'I';
       break;
       
     case 'C':  //Créditos
+      if(!musicTitleS.isPlaying()){
+        musicTitleS.loop();
+        musicTitleS.shiftGain(musicTitleS.getGain(),-15, 2500);  //Fade-In
+      }if(musicGame.isPlaying() && musicGame.getGain() < -30)  musicGame.pause();
+      
       image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       
       textFont(pixelFont);
@@ -209,30 +234,32 @@ void draw(){
       textSize(35);  fill(100);
       text("Música", width/2, 8*sizeBlocks);
       textSize(30);  fill(0);
-      text("8 Bit Presentation por David Fesliyan", width/2, 9*sizeBlocks);
+      text("Fesliyan Studios music www.fesliyanstudios.com\n Patrick de Arteaga patrickdearteaga.com", width/2, 9*sizeBlocks);
       
       textSize(35);  fill(100);
       text("Efectos Sonoros", width/2, 11*sizeBlocks);
       textSize(30);  fill(0);
-      text("Partners in Rhyme", width/2, 12*sizeBlocks);
-      
-      
+      text("Partners in Rhyme www.PartnersInRhyme.com\nFree Sound Effects www.freesoundeffects.com", width/2, 12*sizeBlocks);
       
       textSize(35);  fill(100);
-      text("Agradecimientos", width/2, 13*sizeBlocks);
+      text("Agradecimientos", width/2, 14*sizeBlocks);
       textSize(30);  fill(0);
-      text("Alex Julián Mantilla Ríos - Tutor de la Universidad Industrial de Santander\nCamilo Eduardo Rojas - Profesor de la Universidad Industrial de Santander", width/2, 14*sizeBlocks);
+      text("Alex Julián Mantilla Ríos - Tutor de la Universidad Industrial de Santander\nCamilo Eduardo Rojas - Profesor de la Universidad Industrial de Santander", width/2, 15*sizeBlocks);
       
       if(scapeKey)  scene = 'I';
       break;
       
     case 'H':  //Cómo jugar
+      if(!musicTitleS.isPlaying()){
+        musicTitleS.loop();
+        musicTitleS.shiftGain(musicTitleS.getGain(),-15, 2500);  //Fade-In
+      }if(musicGame.isPlaying() && musicGame.getGain() < -30)  musicGame.pause();
+      
       image(titleHow, 0,0, titleSBackground.width, titleSBackground.height);
       if(scapeKey) scene = 'I';
       break;
     
   }
-  
 }
 
 

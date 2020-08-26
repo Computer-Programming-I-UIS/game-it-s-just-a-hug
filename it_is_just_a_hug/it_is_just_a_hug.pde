@@ -24,6 +24,7 @@ PImage titleSPlayer2;
 int titleSfade = 0;
 PImage titleSTitle;
 PImage titleSBomb;
+PImage titleHow;
 boolean showPressSpace = true;
 AudioPlayer musicTitleS;
 AudioSample soundButton;
@@ -51,6 +52,7 @@ void setup(){
   titleSPlayer2 = loadImage("titleScreen/player_rojo.png");
   titleSTitle = loadImage("titleScreen/title.png");
   titleSBomb = loadImage("titleScreen/bombAnimation.png");
+  titleHow = loadImage("titleScreen/pantalla controles.png");
   
   pixelFont = createFont("fonts/monogram_extended.ttf",45);
   //pixelFont = loadFont("fonts/8-bitOperatorPlus-Regular-48.vlw");
@@ -177,7 +179,11 @@ void draw(){
       
       if(scapeKey)  scene = 'I';
       break;
-    
+    case 'H':
+    if(scapeKey) scene = 'I';
+      image(titleHow, 0,0, titleSBackground.width, titleSBackground.height);
+     
+    break;
   }
   
 }

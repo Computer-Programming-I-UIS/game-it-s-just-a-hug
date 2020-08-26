@@ -6,9 +6,9 @@ It's Just A Hug
 
 ### Autores:
   
-  -Juan Sebastián Guerrero
+  - Juan Sebastián Guerrero
 
-  -Sebastián García Angarita
+  - Sebastián García Angarita
 
 ### Instalacion:
 
@@ -37,15 +37,16 @@ VideoJuego para dos jugadores donde cada uno tiene la mision de desahacerse de l
 
   - Animacion con sprites.
   - Musica de fondo y efectos de sonido.
-  - Movimiento con las flechas y Asdw.
+  - Movimiento con las flechas y WAD.
   - Sistema de colisiones.
   - Sistema de Temporizador
   - Selector de Mapas.
   - Explicacion de Controles.
-  - Controles Simples.
+  - Controles Faciles de jugar.
   - Mecanica de Teletransportadores.
   - 6 Mapas Elegibles
   
+### Creditos
 
 
   

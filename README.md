@@ -1,4 +1,4 @@
-It's Just A Hug
+It's Just a Hug
 ================
 <p align= "center">
 	<img src="https://user-images.githubusercontent.com/68023761/91249232-15db1000-e71c-11ea-910e-5a27f9632ae0.png">
@@ -6,51 +6,45 @@ It's Just A Hug
 
 ### Autores:
   
-  - Juan Sebastián Guerrero
-
+  - Juan Sebastian Guerrero
   - Sebastián García Angarita
 
 ### Instalacion:
 
-Para ejecutar el codigo y editarlo debe descargar [Processing.](https://processing.org/download/) en su dispositivo. 
+Para ejecutar el código y editarlo debe descargar [Processing.](https://processing.org/download/) en su dispositivo. 
   
-  
-  Se hace uso de la libreria de sonido minim, para poder instalarla siga los siguietes pasos:
+  Se hace uso de la librería de sonido minim, para poder instalarla siga los siguietes pasos:
   - Abra el proyecto en Proccesing
   - Sketch/Importar Bibliotecas/Añadir Bibiloteca
   - Digite "Minim" en el buscador
-  - Installar
-  
+  - Install
 
 ### Descripción:
 
-VideoJuego para dos jugadores donde cada uno tiene la mision de desahacerse de la bomba, para hacerlo debera pegarsela a su compañero y salir corriendo para no ser atrapado de nuevo,cuando la partida comienza arriba a la derecha hay un temporizador de 60 segundos, cuando el tiempo acabe la jugador que tenga la bomba en la mano le explotara y su contrincante ganara un punto y pasara otro mapa aleatorio.
- 
+VideoJuego multijugador local para dos jugadores donde cada uno tiene la misión de deshacerse de la bomba, para hacerlo deberá pegársela a su compañero y salir corriendo para no ser atrapado de nuevo. Cuando la partida comienza arriba a la derecha hay un temporizador de 60 segundos, cuando el tiempo acabe el jugador que tenga la bomba en la mano le explotará y su contrincante ganará un punto y pasarán a otro mapa aleatorio.
 
 <p align= "center">
 	<img src="https://user-images.githubusercontent.com/68023761/91249687-f7c1df80-e71c-11ea-8e7c-49a90b31a905.PNG">
 </p>
 
+### Características
 
-
-### Caracteristicas
-
-  - Animacion con sprites.
-  - Musica de fondo y efectos de sonido.
+  - Animación con sprites.
+  - Música de fondo y efectos de sonido.
   - Movimiento con las flechas y WAD.
+  - Multijugador local.
   - Sistema de colisiones.
-  - Sistema de Temporizador
+  - Sistema de Temporizador.
   - Selector de Mapas.
   - Explicacion de Controles.
-  - Controles Faciles de jugar.
+  - Fácil de jugar.
   - Mecanica de Teletransportadores.
   - 6 Mapas Elegibles
   
-### Creditos
+### Créditos
 
-
-  
-  
-  
-  
-  
+#### Música y sonidos
+- Fesliyan Studios music [www.fesliyanstudios.com](www.fesliyanstudios.com)
+- Patrick de Arteaga [patrickdearteaga.com](patrickdearteaga.com)
+- Partners in Rhyme [www.PartnersInRhyme.com\nFree](www.PartnersInRhyme.com\nFree)
+- Sound Effects [www.freesoundeffects.com](www.freesoundeffects.com)

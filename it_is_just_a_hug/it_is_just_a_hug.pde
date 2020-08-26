@@ -58,11 +58,11 @@ void setup(){
   //Musica
   minim = new Minim(this);
   musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
-  //musicTitleS.setGain(-15);  //Bajar el volumen
-  musicTitleS.setGain(-500);
+  musicTitleS.setGain(-15);  //Bajar el volumen
+  //musicTitleS.setGain(-500);
   soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
-  //soundButton.setGain(-20);
-  soundButton.setGain(-500);
+  soundButton.setGain(-20);
+  //soundButton.setGain(-500);
   
   //Importa un nivel cualquiera
   importMap(2);

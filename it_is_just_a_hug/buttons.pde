@@ -10,8 +10,8 @@ void setupButtons(){
   int dyButtons = round(textAscent()) + 5;
   BTitle[0] = new buttonMenu(width/2 - 2*round(textWidth("Jugar")/4), height/2 + 20, 2*round(textWidth("Jugar")/2), round(textAscent()), "Jugar");
   BTitle[1] = new buttonMenu(width/2 - 2*round(textWidth("Mapas")/4), height/2 + 20 + dyButtons, 2*round(textWidth("Mapas")/2), round(textAscent()), "Mapas");
-  BTitle[2] = new buttonMenu(width/2 - 2*round(textWidth("Creditos")/4), height/2 + 20 + 2*dyButtons, 2*round(textWidth("Creditos")/2), round(textAscent()), "Creditos");
-  BTitle[3] = new buttonMenu(width/2 - 2*round(textWidth("Como jugar?")/4), height/2 + 20 + 3*dyButtons, 2*round(textWidth("Como Jugar?")/2), round(textAscent()), "Como jugar?");
+  BTitle[2] = new buttonMenu(width/2 - 2*round(textWidth("Créditos")/4), height/2 + 20 + 2*dyButtons, 2*round(textWidth("Créditos")/2), round(textAscent()), "Créditos");
+  BTitle[3] = new buttonMenu(width/2 - 2*round(textWidth("¿Cómo Jugar?")/4), height/2 + 20 + 3*dyButtons, 2*round(textWidth("¿Cómo Jugar?")/2), round(textAscent()), "¿Cómo Jugar?");
   BTitle[4] = new buttonMenu(width/2 - 2*round(textWidth("Salir")/4), height/2 + 20 + 4*dyButtons, 2*round(textWidth("Salir")/2), round(textAscent()), "Salir");
   
   //Selector de mapas

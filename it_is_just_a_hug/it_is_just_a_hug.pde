@@ -251,7 +251,7 @@ void mouseMoved(){
       break;
     
     default:
-        //Nothing
+        cursor(ARROW);
       break;
   }
   

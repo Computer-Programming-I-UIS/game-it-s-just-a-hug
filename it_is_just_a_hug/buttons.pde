@@ -41,6 +41,7 @@ class button{
   String [] info;  //Almacena el texto que se muestra en cada estado
   //int sizeTxt = 13;
   int sizeTxt = 30;
+  boolean soundCheck = false;  //Para que no se repita el sonido
   
   //Cuando el botón NO tiene imagen
   button(int _x, int _y, int _sizeX, int _sizeY, int _numStatus, int _ColorS, String _info1){
@@ -85,9 +86,14 @@ class button{
   boolean checkMouse(){
     if(mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY){  //Si el puntero está sobre el botón
       mslc = true;
+      if(!soundCheck){
+        soundButton.trigger();
+        soundCheck = true;
+      }
       return true;
     }else{
       mslc = false;
+      soundCheck = false;
       return false;
     }
   }

@@ -8,7 +8,7 @@ S = Suelo
 
 char [][] map = new char [numBlocksY][numBlocksX];  //Configuración de los bloques
 PImage backgroundMap;  //Imagen de fonde del nivel
-
+int pastMap = -1;  //inicia en -1 para que se pueda jugar cualquier nivel en principio
 
 //Importar el mapa y configurarlo
 void importMap(int numMap){
@@ -131,5 +131,5 @@ void importMap(int numMap){
   //Resetear tiempo
   timer = timerMax;
   secondsTimer = second();
-  timeAfterExplosion =  6;
+  timeAfterExplosion = timeMaxAfterExplosion;
 } //end importMap

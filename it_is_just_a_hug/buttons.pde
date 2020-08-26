@@ -1,6 +1,6 @@
 
 buttonMenu [] BTitle = new buttonMenu[5];
-button [] BMaps = new button[5];
+button [] BMaps = new button[numMaxMaps];
 button [] BMapSelector = new button[2];
 int mapMapSelected = 0;  //Mapa que se muestra en el selector de mapas
 
@@ -8,11 +8,11 @@ void setupButtons(){
   //Pantalla Inicio
   textSize(50);
   int dyButtons = round(textAscent()) + 5;
-  BTitle[0] = new buttonMenu(width/2 - 2*round(textWidth("Jugar")/4), height/2 + 20, 2*round(textWidth("Jugar")/2), round(textAscent()), "Jugar");
-  BTitle[1] = new buttonMenu(width/2 - 2*round(textWidth("Mapas")/4), height/2 + 20 + dyButtons, 2*round(textWidth("Mapas")/2), round(textAscent()), "Mapas");
-  BTitle[2] = new buttonMenu(width/2 - 2*round(textWidth("Créditos")/4), height/2 + 20 + 2*dyButtons, 2*round(textWidth("Créditos")/2), round(textAscent()), "Créditos");
-  BTitle[3] = new buttonMenu(width/2 - 2*round(textWidth("¿Cómo Jugar?")/4), height/2 + 20 + 3*dyButtons, 2*round(textWidth("¿Cómo Jugar?")/2), round(textAscent()), "¿Cómo Jugar?");
-  BTitle[4] = new buttonMenu(width/2 - 2*round(textWidth("Salir")/4), height/2 + 20 + 4*dyButtons, 2*round(textWidth("Salir")/2), round(textAscent()), "Salir");
+  BTitle[0] = new buttonMenu(width/2 - 2*round(textWidth("Jugar")/4), height/2, 2*round(textWidth("Jugar")/2), round(textAscent()), "Jugar");
+  BTitle[1] = new buttonMenu(width/2 - 2*round(textWidth("Mapas")/4), height/2 + dyButtons, 2*round(textWidth("Mapas")/2), round(textAscent()), "Mapas");
+  BTitle[2] = new buttonMenu(width/2 - 2*round(textWidth("Créditos")/4), height/2 + 2*dyButtons, 2*round(textWidth("Créditos")/2), round(textAscent()), "Créditos");
+  BTitle[3] = new buttonMenu(width/2 - 2*round(textWidth("¿Cómo Jugar?")/4), height/2 + 3*dyButtons, 2*round(textWidth("¿Cómo Jugar?")/2), round(textAscent()), "¿Cómo Jugar?");
+  BTitle[4] = new buttonMenu(width/2 - 2*round(textWidth("Salir")/4), height/2 + 4*dyButtons, 2*round(textWidth("Salir")/2), round(textAscent()), "Salir");
   
   //Selector de mapas
   for(int b = 0; b < BMaps.length; b++){
@@ -187,7 +187,12 @@ void actionButtons(){
   if(scene == 'I'){
     //Jugar
     if(BTitle[0].prsd){
-      int _map = round(random(1,5));
+      int _map;
+      do{
+        _map = round(random(1,numMaxMaps));
+      }while(_map == pastMap);  //Para que el mapa no sea el mismo que se jugó antes
+      pastMap = _map;
+      
       importMap(_map);
       musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
       

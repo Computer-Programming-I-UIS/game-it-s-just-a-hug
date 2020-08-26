@@ -15,7 +15,7 @@ int numBlocksX = 35;
 int numBlocksY = 18;
 
 //Escena
-char scene = 'T';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'P' = Pausa / 'C' = Creditos / 'M' = Mapas
+char scene = 'C';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas /  / 'C' = Creditos / 'H' = ¿Cómo Jugar?
 
 //TitleScreen
 PImage titleSBackground;
@@ -37,7 +37,11 @@ int frameBomb = 0;
 int timerMax = 60;  //Tiempo que dura la bomba
 int timer = timerMax;
 int secondsTimer = 0;  //Variable para saber si ha transcurrido un segundo
-int timeAfterExplosion = 6;
+int timeMaxAfterExplosion = 5;
+int timeAfterExplosion = timeMaxAfterExplosion;
+
+//Cantidad máxima de niveles
+int numMaxMaps = 6;
 
 void setup(){
   //Configuraciones generales
@@ -60,10 +64,10 @@ void setup(){
   //Musica
   minim = new Minim(this);
   musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
-  musicTitleS.setGain(-15);  //Bajar el volumen
+  musicTitleS.setGain(-10);  //Bajar el volumen
   //musicTitleS.setGain(-500);
   soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
-  soundButton.setGain(-20);
+  soundButton.setGain(-15);
   //soundButton.setGain(-500);
   
   //Importa un nivel cualquiera
@@ -146,7 +150,16 @@ void draw(){
         timer = constrain(timer, 0, timerMax);
         if(Players[playerBomb].kaboom){
           timeAfterExplosion--;
-          if(timeAfterExplosion == 0)  scene = 'I';
+          if(timeAfterExplosion == 0){
+            int _map;
+            do{
+              _map = round(random(1,numMaxMaps));
+            }while(_map == pastMap);  //Para que el mapa no sea el mismo que se jugó antes
+            pastMap = _map;
+            importMap(_map);
+            
+            //scene = 'I';
+          }
         }
       }if(timer == 0 && !Players[playerBomb].kaboom){  //Se acabó el tiempo
         Players[0].move = false;
@@ -175,15 +188,49 @@ void draw(){
       break;
       
     case 'C':  //Créditos
+      image(titleSBackground, 0,0, titleSBackground.width, titleSBackground.height); //Fondo
       
+      textFont(pixelFont);
+      textSize(40);
+      fill(0);
+      textAlign(CENTER, TOP);
+      text("CRÉDITOS",width/2, sizeBlocks);
+      
+      textSize(35);  fill(100);
+      text("Programación", width/2, 3*sizeBlocks);
+      textSize(30);  fill(0);
+      text("Sebastián García Angarita\nJuan Sebastian Guerrero Peña (Konat)", width/2, 4*sizeBlocks);
+      
+      textSize(35);  fill(100);
+      text("Gráficos", width/2, 6*sizeBlocks);
+      textSize(30);  fill(0);
+      text("Juan Sebastian Guerrero Peña (Konat)", width/2, 7*sizeBlocks);
+      
+      textSize(35);  fill(100);
+      text("Música", width/2, 8*sizeBlocks);
+      textSize(30);  fill(0);
+      text("8 Bit Presentation por David Fesliyan", width/2, 9*sizeBlocks);
+      
+      textSize(35);  fill(100);
+      text("Efectos Sonoros", width/2, 11*sizeBlocks);
+      textSize(30);  fill(0);
+      text("Partners in Rhyme", width/2, 12*sizeBlocks);
+      
+      
+      
+      textSize(35);  fill(100);
+      text("Agradecimientos", width/2, 13*sizeBlocks);
+      textSize(30);  fill(0);
+      text("Alex Julián Mantilla Ríos - Tutor de la Universidad Industrial de Santander\nCamilo Eduardo Rojas - Profesor de la Universidad Industrial de Santander", width/2, 14*sizeBlocks);
       
       if(scapeKey)  scene = 'I';
       break;
-    case 'H':
-    if(scapeKey) scene = 'I';
+      
+    case 'H':  //Cómo jugar
       image(titleHow, 0,0, titleSBackground.width, titleSBackground.height);
-     
-    break;
+      if(scapeKey) scene = 'I';
+      break;
+    
   }
   
 }
@@ -272,7 +319,7 @@ void mousePressed(){
       if(BMaps[mapMapSelected].checkMouse())  BMaps[mapMapSelected].changeStatus();
       else if(BMapSelector[0].checkMouse())  mapMapSelected--;
       else if(BMapSelector[1].checkMouse())  mapMapSelected++;
-      mapMapSelected = constrain(mapMapSelected, 0, BMaps.length-1);
+      mapMapSelected = constrain(mapMapSelected, 0, numMaxMaps -1);
       break;
     
     default:

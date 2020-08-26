@@ -44,7 +44,7 @@ VideoJuego multijugador local para dos jugadores donde cada uno tiene la misión
 ### Créditos
 
 #### Música y sonidos
-- Fesliyan Studios music [www.fesliyanstudios.com](www.fesliyanstudios.com)
-- Patrick de Arteaga [patrickdearteaga.com](patrickdearteaga.com)
-- Partners in Rhyme [www.PartnersInRhyme.com\nFree](www.PartnersInRhyme.com\nFree)
-- Sound Effects [www.freesoundeffects.com](www.freesoundeffects.com)
+- [Fesliyan Studios music](https://www.fesliyanstudios.com/)
+- [Patrick de Arteaga](https://patrickdearteaga.com/)
+- [Partners in Rhyme](https://www.partnersinrhyme.com/nFree)
+- [Sound Effects](https://www.freesoundeffects.com/)

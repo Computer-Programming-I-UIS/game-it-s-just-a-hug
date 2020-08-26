@@ -1,7 +1,20 @@
 /*****************************************************
 
+------------------------It's Just a Hug------------------------
 
+Autores: Sebastián García Angarita
+         Juan Sebastian Guerrero Peña
+Fecha: 26/Agosto/2020
 
+Descripción: Este proyecto fue realizado como Proyecto Final de la materia Programación de Computadores I.
+             
+             VideoJuego para dos jugadores donde cada uno tiene la misión de deshacerse de la bomba,
+             para hacerlo deberá pegársela a su compañero y salir corriendo para no ser atrapado de nuevo.
+             Cuando la partida comienza arriba a la derecha hay un temporizador de 60 segundos, cuando el
+             tiempo acabe el jugador que tenga la bomba en la mano le explotará y su contrincante ganara
+             un punto y pasará otro mapa aleatorio.
+
+*Requiere libreria Minim
 *****************************************************/
 
 //Librerías

@@ -1,6 +1,7 @@
 /*****************************************************
 
 S = Suelo
+P = Teleports
 1 = Posición del Jugador 1
 2 = Posición del Jugador 2
 

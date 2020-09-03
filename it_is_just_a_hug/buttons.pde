@@ -1,6 +1,6 @@
 
 buttonMenu [] BTitle = new buttonMenu[5];
-button [] BMaps = new button[numMaxMaps];
+button [] BMaps = new button[10];
 button [] BMapSelector = new button[3];
 int mapMapSelected = 0;  //Mapa que se muestra en el selector de mapas
 
@@ -26,7 +26,8 @@ void setupButtons(){
   BMapSelector[0] = new button(sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "-");  //Mapa Anterior
   BMapSelector[1] = new button(width-5*sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "+");  //Mapa Siguiente
   
-  BMapSelector[2] = new button(width-5*sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "+");  //Editar Mapa
+  BMapSelector[2] = new button(width-5*sizeBlocks/2, (height/2)+2*sizeBlocks, 2*sizeBlocks, sizeBlocks, 1, 1, "EDITAR");  //Nuevo Mapa
+  BMapSelector[2].sizeTxt = 20;
   
   
   //Editor de mapas
@@ -80,6 +81,9 @@ class button{
   int sizeTxt = 30;
   boolean soundCheck = false;  //Para que no se repita el sonido
   
+  String folder;
+  String imageName;
+  
   //Cuando el botón NO tiene imagen
   button(int _x, int _y, int _sizeX, int _sizeY, int _numStatus, int _ColorS, String _info1){
     x = _x;
@@ -96,7 +100,7 @@ class button{
   }
   
   //Cuando el botón tiene imagen y solo una opción 
-  button(int _x, int _y, int _sizeX, int _sizeY, String imageName, String folder){
+  button(int _x, int _y, int _sizeX, int _sizeY, String _imageName, String _folder){
     x = _x;
     y = _y;
     sizeX = _sizeX;
@@ -104,6 +108,9 @@ class button{
     
     numStatus = 1;
     info = null;
+    
+    imageName = _imageName;
+    folder = _folder;
     
     if(!fileExists(imageName, folder)){  //Si no existe
       println("¡ERROR!");
@@ -343,10 +350,14 @@ void actionButtons(){
     //Jugar
     if(BTitle[0].prsd){
       int _map;
+      boolean _mapEmpty = false;
+      int _pastMap = pastMap;
       do{
+        _mapEmpty = false;
         _map = round(random(1,numMaxMaps));
-      }while(_map == pastMap);  //Para que el mapa no sea el mismo que se jugó antes
-      pastMap = _map;
+        importMap(_map);
+        if(numBGroundMap < 1)  _mapEmpty = true;  
+      }while(_map == _pastMap || _mapEmpty);  //Para que el mapa no sea el mismo que se jugó antes
       
       importMap(_map);
       musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
@@ -357,7 +368,10 @@ void actionButtons(){
     }
     //Mapas
     if(BTitle[1].prsd){
-      
+      //Vuelve a cargar las imágenes de los mapas
+      for(int b = 0; b < BMaps.length; b++){
+        BMaps[b].imageB = loadImage("data/"+BMaps[b].folder+"/"+BMaps[b].imageName);
+      }
       scene = 'M';
       BTitle[1].prsd = false;
     }
@@ -394,83 +408,92 @@ void actionButtons(){
         break;
       }
     }
+    
+    if(BMapSelector[2].prsd){
+      musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
+      numMap = mapMapSelected;
+      setupScreen(true);
+      scene = 'E';
+      
+      BMapSelector[2].prsd = false;
+    }
   }
   
   //----------------------Editor de mapas----------------------//
   
-  //Cuadrícula
-  if(EButtons[0].prsd){
-      showGrid = !showGrid;
-      EButtons[0].prsd = false;
-  }
-  
-  //Exportar mapa
-  if(EButtons[1].prsd){
-    
-    //Errores al exportar el mapa
-    int _numPlayers = 0;
-    int _numTeleports = 0;
-    errorEditor = false;
-    errorPlayers = false;
-    errorTeleports = false;
-    
-    for(int i = 0; i < BlocksE.length; i++){
-      for(int j = 0; j < BlocksE[i].length; j++){
-        if(BlocksE[i][j].type == 1 || BlocksE[i][j].type == 2)  _numPlayers++;
-        if(Tiles[BlocksE[i][j].type].letter == 'P')  _numTeleports++;
-      }
+  if(scene == 'E'){
+    //Cuadrícula
+    if(EButtons[0].prsd){
+        showGrid = !showGrid;
+        EButtons[0].prsd = false;
     }
-    if(_numPlayers != 2 || _numTeleports == 1){  //No estan los jugadores ubicados en el mapa o hay un error
-      errorEditor = true;
-      if(_numPlayers != 2)  errorPlayers = true;
-      if(_numTeleports == 1)  errorTeleports = true;
+    
+    //Exportar mapa
+    if(EButtons[1].prsd){
       
-    }else{
-      //Imagen
-      PImage mapImage;
-      image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Limpia el nivel para ahora solo mostrar los bloques que sí se deben mostrar
-      for(int i = 0; i < BlocksE.length; i++){
-        for(int j = 0; j < BlocksE[i].length; j++){
-          if(Tiles[BlocksE[i][j].type].showInImage == true){  //Si ese tile se muestra en la imagen
-            BlocksE[i][j].display();  //Muestra ese bloque
-          }
-        }
-      }
-      mapImage = get(0, 0, numBlocksX*sizeBlocks, numBlocksY*sizeBlocks);  //Solo exporta la parte de la pantalla que tiene el mapa
-      mapImage.save("data/maps/map"+numMap+".png");  //La almacena en la carpeta "maps"
-      
-      //Archivo texto
-      String [] mapTxt = new String[BlocksE.length];
-      //Inicial el string vacio  (no es lo mismo que nulo)
-      for(int i = 0; i < mapTxt.length; i++){
-        mapTxt[i] = "";
-      }
+      //Errores al exportar el mapa
+      int _numPlayers = 0;
+      int _numTeleports = 0;
+      errorEditor = false;
+      errorPlayers = false;
+      errorTeleports = false;
       
       for(int i = 0; i < BlocksE.length; i++){
         for(int j = 0; j < BlocksE[i].length; j++){
-          if(Tiles[BlocksE[i][j].type].showInFile == true){
-            mapTxt[i] += Tiles[BlocksE[i][j].type].letter;
-          }else{
-            mapTxt[i] += ' ';
-          }
+          if(BlocksE[i][j].type == 1 || BlocksE[i][j].type == 2)  _numPlayers++;
+          if(Tiles[BlocksE[i][j].type].letter == 'P')  _numTeleports++;
         }
       }
-      saveStrings("data/maps/map"+numMap+".txt", mapTxt);    //Guarda el archivo de texto
+      if(_numPlayers != 2 || _numTeleports == 1){  //No estan los jugadores ubicados en el mapa o hay un error
+        errorEditor = true;
+        if(_numPlayers != 2)  errorPlayers = true;
+        if(_numTeleports == 1)  errorTeleports = true;
+        
+      }else{
+        //Imagen
+        PImage mapImage;
+        image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Limpia el nivel para ahora solo mostrar los bloques que sí se deben mostrar
+        for(int i = 0; i < BlocksE.length; i++){
+          for(int j = 0; j < BlocksE[i].length; j++){
+            if(Tiles[BlocksE[i][j].type].showInImage == true){  //Si ese tile se muestra en la imagen
+              BlocksE[i][j].display();  //Muestra ese bloque
+            }
+          }
+        }
+        mapImage = get(0, 0, numBlocksX*sizeBlocks, numBlocksY*sizeBlocks);  //Solo exporta la parte de la pantalla que tiene el mapa
+        mapImage.save("data/maps/map"+numMap+".png");  //La almacena en la carpeta "maps"
+        
+        //Archivo texto
+        String [] mapTxt = new String[BlocksE.length];
+        //Inicial el string vacio  (no es lo mismo que nulo)
+        for(int i = 0; i < mapTxt.length; i++){
+          mapTxt[i] = "";
+        }
+        
+        for(int i = 0; i < BlocksE.length; i++){
+          for(int j = 0; j < BlocksE[i].length; j++){
+            if(Tiles[BlocksE[i][j].type].showInFile == true){
+              mapTxt[i] += Tiles[BlocksE[i][j].type].letter;
+            }else{
+              mapTxt[i] += ' ';
+            }
+          }
+        }
+        saveStrings("data/maps/map"+numMap+".txt", mapTxt);    //Guarda el archivo de texto
+      }  //Hay dos jugadores
       
-      numMap++;
-    }  //Hay dos jugadores
-    
-    EButtons[1].prsd = false;
-  }
-  
-  //Tile Seleccionado
-  for(int b = 0; b < TButtons.length; b++){  //Tiles
-    if(TButtons[b].prsd){
-      tileSelected = TButtons[b].type;
-      TButtons[b].prsd = false;
-      break;
+      EButtons[1].prsd = false;
     }
+    
+    //Tile Seleccionado
+    for(int b = 0; b < TButtons.length; b++){  //Tiles
+      if(TButtons[b].prsd){
+        tileSelected = TButtons[b].type;
+        TButtons[b].prsd = false;
+        break;
+      }
+    }
+    
   }
-  
   
 }

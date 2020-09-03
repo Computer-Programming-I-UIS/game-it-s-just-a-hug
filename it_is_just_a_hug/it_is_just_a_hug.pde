@@ -28,7 +28,7 @@ int numBlocksX = 35;
 int numBlocksY = 18;
 
 //Escena
-char scene = 'E';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas / 'E' = Editor de Mapas / 'C' = Creditos / 'H' = ¿Cómo Jugar?
+char scene = 'T';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas / 'E' = Editor de Mapas / 'C' = Creditos / 'H' = ¿Cómo Jugar?
 
 //TitleScreen
 PImage titleSBackground;
@@ -155,7 +155,6 @@ void draw(){
       break;
     
     case 'I':  //Menu Inicio
-      setupScreen(false);
       if(!musicTitleS.isPlaying()){
         musicTitleS.loop();
         musicTitleS.shiftGain(musicTitleS.getGain(),-15, 2500);  //Fade-In
@@ -198,11 +197,15 @@ void draw(){
           timeAfterExplosion--;
           if(timeAfterExplosion == 0){
             int _map;
+            boolean _mapEmpty = false;
+            int _pastMap = pastMap;
             do{
+              _mapEmpty = false;
               _map = round(random(1,numMaxMaps));
-            }while(_map == pastMap);  //Para que el mapa no sea el mismo que se jugó antes
+              importMap(_map);
+              if(numBGroundMap < 1)  _mapEmpty = true;  
+            }while(_map == _pastMap || _mapEmpty);  //Para que el mapa no sea el mismo que se jugó antes o esté vacío
             importMap(_map);
-            
           }
         }
       }if(timer == 0 && !Players[playerBomb].kaboom){  //Se acabó el tiempo
@@ -237,11 +240,16 @@ void draw(){
       BMapSelector[0].display();  //Mapa anterior
       BMapSelector[1].display();  //Mapa siguiente
       
+      BMapSelector[2].display();  //Nuevo mapa
+      
       if(scapeKey)  scene = 'I';
       break;
       
     case 'E':
-      setupScreen(true);
+      if(musicTitleS.isPlaying() && musicTitleS.getGain() < -30){  //Si se está reproduciendo y ya el volumen es muy bajo se pausa
+        musicTitleS.pause();
+      }
+      
       image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Fondo del nivel
       
       //Mostrar los Bloques
@@ -296,8 +304,10 @@ void draw(){
         
       }
       
-      
-      if(scapeKey)  scene = 'I';
+      if(scapeKey){
+        scene = 'I';
+        setupScreen(false);
+      }
       break;
     
     case 'C':  //Créditos
@@ -412,7 +422,7 @@ void mouseMoved(){
         for(int i = 0; i < BMaps.length; i++){
           if(i != mapMapSelected)  BMaps[i].mslc = false;
         }
-      }else if(BMapSelector[0].checkMouse() || BMapSelector[1].checkMouse()){
+      }else if(BMapSelector[0].checkMouse() || BMapSelector[1].checkMouse() || BMapSelector[2].checkMouse()){
         cursor(HAND);
       }else{
         cursor(ARROW);
@@ -464,6 +474,7 @@ void mousePressed(){
       if(BMaps[mapMapSelected].checkMouse())  BMaps[mapMapSelected].changeStatus();
       else if(BMapSelector[0].checkMouse())  mapMapSelected--;
       else if(BMapSelector[1].checkMouse())  mapMapSelected++;
+      else if(BMapSelector[2].checkMouse())  BMapSelector[2].changeStatus();
       mapMapSelected = constrain(mapMapSelected, 0, numMaxMaps -1);
       break;
     

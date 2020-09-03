@@ -35,7 +35,7 @@ void setupTiles() {
 
 
   Tiles[3] = new tile("Tierra", "tileground01.png", 'S', true, true);
-  Tiles[4] = new tile("Teleport", "teleport01.png", 'P', true, false);
+  Tiles[4] = new tile("Teleport", "teleport01.png", 'P', true, true);
 }
 
 

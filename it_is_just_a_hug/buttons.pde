@@ -277,7 +277,23 @@ class buttonEditor{
       textSize(15);
       text(info,x + sizeX/2, y + sizeY/2 -2);
     }
+    if(Tiles[type].letter == 'P'){  //Si es un teleport
+      int numTeleports = 0;
+      
+      for(int i = 0; i < BlocksE.length; i++){
+        for(int j = 0; j < BlocksE[i].length; j++){
+          if(Tiles[BlocksE[i][j].type].letter == 'P')  numTeleports++;
+        }
+      }
+      
+      fill(255);
+      textAlign(CENTER, CENTER);
+      textSize(25);
+      text(Teleport.length-numTeleports,x + sizeX/2, y + sizeY/2 -2);
+    }
+    
   }
+  
 }
 
 //----------------------ACCIÓN DE LOS BOTONES----------------------//

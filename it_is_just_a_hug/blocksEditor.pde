@@ -1,3 +1,4 @@
+
 blockE [][] BlocksE = new blockE[numBlocksY][numBlocksX];
 
 //----------------------GENERACIÖN DE LOS TILES----------------------//
@@ -48,14 +49,13 @@ void updateBlocksE(){
       rightB = false;
       downB = false;
       
-      //if(i > 0 && i < Blocks.length-1 && j > 0 && j < Blocks[i].length -1){  //Si ese bloque no es de los de borde o esquina
-      
       if(j == 0 || BlocksE[i][j].type == BlocksE[i][j-1].type)  leftB = true;  //Si el bloque de la izquierda es del mismo tipo de bloque entonces leftB = true
       if(i == 0 || BlocksE[i][j].type == BlocksE[i-1][j].type)  upB = true;
       if(j == BlocksE[i].length-1 || BlocksE[i][j].type == BlocksE[i][j+1].type)  rightB = true;
       if(i == BlocksE.length-1 || BlocksE[i][j].type == BlocksE[i+1][j].type)  downB = true;
       
-      BlocksE[i][j].updateTile(leftB, upB, rightB, downB); 
+      BlocksE[i][j].updateTile(leftB, upB, rightB, downB);
+      
     }
   }
   
@@ -81,11 +81,10 @@ void adjustPlayer(){
   for(int i = 0; i < BlocksE.length; i++){
     for(int j = 0; j < BlocksE[i].length; j++){
       if(BlocksE[i][j].type == 1 || BlocksE[i][j].type == 2){  //Si hay un bloque con un jugador
-        int player = BlocksE[i][j].type;
         if(i != BlocksE.length -1)  BlocksE[i+1][j].type = 0;  //Establece el bloque de abajo como vacio
         else{
-          deletePlayer(player);
-          BlocksE[i-1][j].type = player; 
+          deletePlayer(BlocksE[i][j].type);  //Elimina al jugador
+          BlocksE[i-1][j].type = BlocksE[i][j].type;   //Y lo ubica un bloque arriba
         }
         
       }
@@ -94,6 +93,20 @@ void adjustPlayer(){
   }
 }
 
+void adjustTeleports(){
+  for(int i = 0; i < BlocksE.length; i++){
+    for(int j = 0; j < BlocksE[i].length; j++){
+      if(Tiles[BlocksE[i][j].type].letter == 'P'){
+        if(i != BlocksE.length -1)  BlocksE[i+1][j].type = 0;  //Establece el bloque de abajo como vacio para que cuando se teletransporte no se sobreponga un bloque
+        else{
+          BlocksE[i-1][j].type = BlocksE[i][j].type;   //Y lo ubica un bloque arriba
+          BlocksE[i][j].type = 0;
+        }
+      }
+    }
+  }
+  
+}
 
 //----------------------CLASE----------------------//
 
@@ -117,7 +130,18 @@ class blockE{
     }
     type = _type;
     
+    if(Tiles[_type].letter == 'P'){  //Si es un teleport
+      int numTeleports = 0;
+      for(int i = 0; i < BlocksE.length; i++){
+        for(int j = 0; j < BlocksE[i].length; j++){
+          if(Tiles[BlocksE[i][j].type].letter == 'P')  numTeleports++;
+        }
+      }
+      if(numTeleports > Teleport.length)  type = 0;
+    }
+    
     adjustPlayer();
+    adjustTeleports();
     updateBlocksE();
   }
   

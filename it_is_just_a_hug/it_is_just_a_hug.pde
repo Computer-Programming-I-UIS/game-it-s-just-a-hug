@@ -63,7 +63,9 @@ AudioSample soundExplosion;
 //Editor de mapas
 boolean showGrid = false;
 int numMap = 0;
-
+boolean errorEditor = false;
+boolean errorPlayers = false;
+boolean errorTeleports = false;
 
 void setup(){
   //Configuraciones generales
@@ -199,7 +201,6 @@ void draw(){
             do{
               _map = round(random(1,numMaxMaps));
             }while(_map == pastMap);  //Para que el mapa no sea el mismo que se jugó antes
-            pastMap = _map;
             importMap(_map);
             
           }
@@ -272,6 +273,29 @@ void draw(){
       
       //Cuadrícula
       if(showGrid)  showGrid();
+      
+      //Errores al guardar el mapa
+      if(errorEditor){
+        fill(255);
+        stroke(159);
+        rect((numBlocksX/2)*sizeBlocks - 8*sizeBlocks, height/2 - 1.5*sizeBlocks, 16*sizeBlocks, 2*sizeBlocks);
+        
+        textAlign(CENTER,CENTER);
+        textFont(pixelFont);
+        textSize(25);
+        fill(0);
+        int _dyText = 0;
+        if(errorPlayers){
+          text("Es necesario ubicar a los jugadores antes de guardar", (numBlocksX/2)*sizeBlocks, height/2 - sizeBlocks + _dyText*2*sizeBlocks/3);
+          _dyText++;
+        }if(errorTeleports){
+          text("No es posible guardar el mapa con 1 solo teleport", (numBlocksX/2)*sizeBlocks, height/2 - sizeBlocks + _dyText*2*sizeBlocks/3);
+          _dyText++;
+        }
+        xErrorE.display();
+        
+      }
+      
       
       if(scapeKey)  scene = 'I';
       break;
@@ -414,7 +438,8 @@ void mouseMoved(){
           break;
         }else  cursor(ARROW);
       }
-      
+      if(xErrorE.checkMouse())  cursor(HAND);
+      else  cursor(ARROW);
       break;
     
     default:
@@ -456,6 +481,7 @@ void mousePressed(){
           break;
         }
       }
+      if(xErrorE.checkMouse())  errorEditor = false;
       break;
     
     default:

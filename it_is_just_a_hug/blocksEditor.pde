@@ -169,7 +169,7 @@ class blockE{
       if(type != 1 && type != 2){  //Si no es un bloque de jugador
         copy(Tiles[type].tileImage, xTile, yTile, sizeBlocks,sizeBlocks, x,y, size,size);  //Pone la imagen del tile que corresponde
       }else{
-        copy(Tiles[type].tileImage, xTile, yTile, sizeBlocks,sizeBlocks, x-size/2,y, 2*size,2*size);  //Los bloques de jugador ocupan dos bloques de alto
+        copy(Tiles[type].tileImage, xTile, yTile, sizeBlocks,sizeBlocks, x- (25*size/32)/2, y + (2*sizeBlocks -50*size/32), 50*size/32, 50*size/32);  //Los bloques de jugador ocupan dos bloques de alto
       }
     }
     

@@ -1,11 +1,12 @@
 
 buttonMenu [] BTitle = new buttonMenu[5];
 button [] BMaps = new button[numMaxMaps];
-button [] BMapSelector = new button[2];
+button [] BMapSelector = new button[3];
 int mapMapSelected = 0;  //Mapa que se muestra en el selector de mapas
 
 
 buttonEditor [] EButtons = new buttonEditor[3];
+buttonC xErrorE;  //X para cerrar los errores del editor
 int tileSelected = 0;  //Almacena el tipo de tipo de tile seleccionado en el editor de mapas
 
 void setupButtons(){
@@ -25,6 +26,9 @@ void setupButtons(){
   BMapSelector[0] = new button(sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "-");  //Mapa Anterior
   BMapSelector[1] = new button(width-5*sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "+");  //Mapa Siguiente
   
+  BMapSelector[2] = new button(width-5*sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "+");  //Editar Mapa
+  
+  
   //Editor de mapas
   int xButtons = (numBlocksX + 1) * sizeBlocks + 2;
   int yButtons = 3*sizeBlocks;
@@ -33,11 +37,13 @@ void setupButtons(){
   int xButton = 0;
   int yButton = +2;
   
-  EButtons[0] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks -4, sizeBlocks -4, "Cuadrícula");  //Cuadrícula
+  EButtons[0] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks -4, sizeBlocks -4, "CUADRÍCULA");  //Cuadrícula
   yButton += dxButtons;
-  EButtons[1] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "Guardar");  //Export
+  EButtons[1] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "GUARDAR");  //Export
   yButton += dxButtons;
-  EButtons[2] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "Fondo");  //Background
+  EButtons[2] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "FONDO");  //Background
+  
+  xErrorE = new buttonC((numBlocksX/2)*sizeBlocks + 8*sizeBlocks, (numBlocksY/2)*sizeBlocks - 3*sizeBlocks/2, 2*sizeBlocks/3, "X");  //Cerrar del mensaje de error
   
   //Tiles
   xButton = 0;
@@ -274,7 +280,8 @@ class buttonEditor{
     if(info != null){
       fill(0);
       textAlign(CENTER, CENTER);
-      textSize(15);
+      textFont(pixelFont);
+      textSize(20);
       text(info,x + sizeX/2, y + sizeY/2 -2);
     }
     if(Tiles[type].letter == 'P'){  //Si es un teleport
@@ -288,10 +295,42 @@ class buttonEditor{
       
       fill(255);
       textAlign(CENTER, CENTER);
-      textSize(25);
-      text(Teleport.length-numTeleports,x + sizeX/2, y + sizeY/2 -2);
+      textFont(pixelFont);
+      textSize(35);
+      text(Teleport.length-numTeleports,x + sizeX/2 +2, y + sizeY/2 -5);
     }
     
+  }
+  
+}
+
+class buttonC extends buttonEditor{
+  
+  buttonC(int _x, int _y, int _size, String _info){
+    super(_x, _y, _size, _size, _info);
+  }
+  
+  boolean checkMouse(){
+    if(dist(mouseX, mouseY, x, y) <= sizeX/2){  //Si el puntero está sobre el botón circular
+      mslc = true;
+      return true;
+    }else{
+      mslc = false;
+      return false;
+    }
+  }
+  void display(){
+    fill(255,0,0);
+    strokeWeight(0.5);
+    stroke(255);
+    circle(x,y,sizeX);
+    
+    if(info == "X"){
+      stroke(255);
+      strokeWeight(1);
+      line(x-3, y-3, x+3, y+3);
+      line(x-3, y+3, x+3, y-3);
+    }
   }
   
 }
@@ -368,38 +407,59 @@ void actionButtons(){
   //Exportar mapa
   if(EButtons[1].prsd){
     
-    //Imagen
-    PImage mapImage;
-    image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Limpia el nivel para ahora solo mostrar los bloques que sí se deben mostrar
-    for(int i = 0; i < BlocksE.length; i++){
-      for(int j = 0; j < BlocksE[i].length; j++){
-        if(Tiles[BlocksE[i][j].type].showInImage == true){  //Si ese tile se muestra en la imagen
-          BlocksE[i][j].display();  //Muestra ese bloque
-        }
-      }
-    }
-    mapImage = get(0, 0, numBlocksX*sizeBlocks, numBlocksY*sizeBlocks);  //Solo exporta la parte de la pantalla que tiene el mapa
-    mapImage.save("data/maps/map"+numMap+".png");  //La almacena en la carpeta "maps"
-    
-    //Archivo texto
-    String [] mapTxt = new String[BlocksE.length];
-    //Inicial el string vacio  (no es lo mismo que nulo)
-    for(int i = 0; i < mapTxt.length; i++){
-      mapTxt[i] = "";
-    }
+    //Errores al exportar el mapa
+    int _numPlayers = 0;
+    int _numTeleports = 0;
+    errorEditor = false;
+    errorPlayers = false;
+    errorTeleports = false;
     
     for(int i = 0; i < BlocksE.length; i++){
       for(int j = 0; j < BlocksE[i].length; j++){
-        if(Tiles[BlocksE[i][j].type].showInFile == true){
-          mapTxt[i] += Tiles[BlocksE[i][j].type].letter;
-        }else{
-          mapTxt[i] += ' ';
-        }
+        if(BlocksE[i][j].type == 1 || BlocksE[i][j].type == 2)  _numPlayers++;
+        if(Tiles[BlocksE[i][j].type].letter == 'P')  _numTeleports++;
       }
     }
-    saveStrings("data/maps/map"+numMap+".txt", mapTxt);    //Guarda el archivo de texto
+    if(_numPlayers != 2 || _numTeleports == 1){  //No estan los jugadores ubicados en el mapa o hay un error
+      errorEditor = true;
+      if(_numPlayers != 2)  errorPlayers = true;
+      if(_numTeleports == 1)  errorTeleports = true;
+      
+    }else{
+      //Imagen
+      PImage mapImage;
+      image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Limpia el nivel para ahora solo mostrar los bloques que sí se deben mostrar
+      for(int i = 0; i < BlocksE.length; i++){
+        for(int j = 0; j < BlocksE[i].length; j++){
+          if(Tiles[BlocksE[i][j].type].showInImage == true){  //Si ese tile se muestra en la imagen
+            BlocksE[i][j].display();  //Muestra ese bloque
+          }
+        }
+      }
+      mapImage = get(0, 0, numBlocksX*sizeBlocks, numBlocksY*sizeBlocks);  //Solo exporta la parte de la pantalla que tiene el mapa
+      mapImage.save("data/maps/map"+numMap+".png");  //La almacena en la carpeta "maps"
+      
+      //Archivo texto
+      String [] mapTxt = new String[BlocksE.length];
+      //Inicial el string vacio  (no es lo mismo que nulo)
+      for(int i = 0; i < mapTxt.length; i++){
+        mapTxt[i] = "";
+      }
+      
+      for(int i = 0; i < BlocksE.length; i++){
+        for(int j = 0; j < BlocksE[i].length; j++){
+          if(Tiles[BlocksE[i][j].type].showInFile == true){
+            mapTxt[i] += Tiles[BlocksE[i][j].type].letter;
+          }else{
+            mapTxt[i] += ' ';
+          }
+        }
+      }
+      saveStrings("data/maps/map"+numMap+".txt", mapTxt);    //Guarda el archivo de texto
+      
+      numMap++;
+    }  //Hay dos jugadores
     
-    numMap++;
     EButtons[1].prsd = false;
   }
   

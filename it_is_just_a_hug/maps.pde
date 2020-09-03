@@ -75,8 +75,8 @@ void importMap(int numMap){
   
   
   //Configuración
-  numBGroundMap = 0;  //Resetea la variable
-  numBTeleportMap = 0;  //Resetea la variable
+  numBGroundMap = -1;  //Resetea la variable
+  numBTeleportMap = -1;  //Resetea la variable
   //Reestablecer el tamaño y posición de los bloques a una unidad para que cuando se vuelva a importar pueda cambiarse de tamaño correcto
   for(int i = 0; i < Ground.length; i++){
     Ground[i].setXY(0,0);
@@ -88,6 +88,8 @@ void importMap(int numMap){
     for(int j = 0; j < map[i].length; j++){
       
       if(map[i][j] == 'S'){  //Recorre todo la matriz hasta que encuentra una S por primera vez
+        
+        numBGroundMap++;  //Aumenta el número de bloques Ground que hay
         Ground[numBGroundMap].setXY(j*sizeBlocks, i*sizeBlocks);  //Se establece esa la posición del bloque
         
         for(int sX = 1; sX < map[i].length -j; sX++){
@@ -98,7 +100,6 @@ void importMap(int numMap){
             break;
           }
         }
-        numBGroundMap++;  //Aumenta el número de bloques Ground que hay
         
       }else if(map[i][j] == '1'){
         Players[0].setXY(j*sizeBlocks, i*sizeBlocks);
@@ -107,9 +108,9 @@ void importMap(int numMap){
         Players[1].setXY(j*sizeBlocks, i*sizeBlocks);
         PlayersCol[1].setXY(j*sizeBlocks, i*sizeBlocks);
       }else if(map[i][j] == 'P'){
-        Teleport[numBTeleportMap].setXY(j*sizeBlocks, i*sizeBlocks);
         numBTeleportMap++;
         numBTeleportMap = constrain(numBTeleportMap, 0, Teleport.length-1);
+        Teleport[numBTeleportMap].setXY(j*sizeBlocks, i*sizeBlocks);
       }
       
     }  //end for (j)
@@ -133,4 +134,6 @@ void importMap(int numMap){
   timer = timerMax;
   secondsTimer = second();
   timeAfterExplosion = timeMaxAfterExplosion;
+  
+  pastMap = numMap;
 } //end importMap

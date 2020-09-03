@@ -372,6 +372,7 @@ void actionButtons(){
       for(int b = 0; b < BMaps.length; b++){
         BMaps[b].imageB = loadImage("data/"+BMaps[b].folder+"/"+BMaps[b].imageName);
       }
+      mapMapSelected = 0;  //Reaparece en el mapa 1
       scene = 'M';
       BTitle[1].prsd = false;
     }

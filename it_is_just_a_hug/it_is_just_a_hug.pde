@@ -52,7 +52,7 @@ int timeMaxAfterExplosion = 4;
 int timeAfterExplosion = timeMaxAfterExplosion;
 
 //Cantidad máxima de niveles
-int numMaxMaps = 6;
+int numMaxMaps = 10;
 
 //Sonidos
 AudioPlayer musicTitleS;
@@ -240,7 +240,7 @@ void draw(){
       BMapSelector[0].display();  //Mapa anterior
       BMapSelector[1].display();  //Mapa siguiente
       
-      BMapSelector[2].display();  //Nuevo mapa
+      BMapSelector[2].display();  //Editar mapa
       
       if(scapeKey)  scene = 'I';
       break;

@@ -170,7 +170,10 @@ class player{
     }
     
     //Salto
-    if(jump && ground){  //Si se presiona la tecla de salto y está tocando suelo
+    if(jump && (ground || y + sizeY == height)){  //Si se presiona la tecla de salto y está tocando suelo
+      if(y + sizeY == height){
+        y--;
+      }
       velY0 = -velYMax;
       t = 0;
     }
@@ -180,9 +183,11 @@ class player{
       velX = 0;
     }
     for(int i = 0; i < abs(velX); i++){
-      if(!checkCol(x + sign(velX), y, sizeX, sizeY)){  //Revisa en cada pixel que avanza si hay un bloque o no
+      if(!checkCol(x + sign(velX), y, sizeX, sizeY) && (x > 0 && x + sizeX < width) ){  //Revisa en cada pixel que avanza si hay un bloque o está al borde de la pantalla
         x += sign(velX);  //Si no hay bloque disminuye o aumenta (dependiendo la dirección) una unidad la posición en x
       }else{
+        if(x == 0) x++;
+        else if(x + sizeX == width)  x--;
         velX = 0;
         break;
       }
@@ -197,9 +202,10 @@ class player{
       jump = false;
     }
     for(int i = 0; i < abs(velY); i++){
-      if(!checkCol(x, y + sign(velY), sizeX, sizeY)){
+      if(!checkCol(x, y + sign(velY), sizeX, sizeY) && y + sizeY < height){
         y += sign(velY);
       }else{
+        //if(y + sizeY == height)  y--;
         velY = 0;
         t = 0;
         velY0 = 0;

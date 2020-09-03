@@ -4,6 +4,10 @@ button [] BMaps = new button[numMaxMaps];
 button [] BMapSelector = new button[2];
 int mapMapSelected = 0;  //Mapa que se muestra en el selector de mapas
 
+
+buttonEditor [] EButtons = new buttonEditor[3];
+int tileSelected = 0;  //Almacena el tipo de tipo de tile seleccionado en el editor de mapas
+
 void setupButtons(){
   //Pantalla Inicio
   textSize(50);
@@ -20,6 +24,33 @@ void setupButtons(){
   }
   BMapSelector[0] = new button(sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "-");  //Mapa Anterior
   BMapSelector[1] = new button(width-5*sizeBlocks/2, (height/2)-3*sizeBlocks/2, 2*sizeBlocks, 3*sizeBlocks, 1, 1, "+");  //Mapa Siguiente
+  
+  //Editor de mapas
+  int xButtons = (numBlocksX + 1) * sizeBlocks + 2;
+  int yButtons = 3*sizeBlocks;
+  int dxButtons = sizeBlocks;  //Separacion de los botones
+  
+  int xButton = 0;
+  int yButton = +2;
+  
+  EButtons[0] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks -4, sizeBlocks -4, "Cuadrícula");  //Cuadrícula
+  yButton += dxButtons;
+  EButtons[1] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "Guardar");  //Export
+  yButton += dxButtons;
+  EButtons[2] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "Fondo");  //Background
+  
+  //Tiles
+  xButton = 0;
+  yButton += dxButtons;
+  for(int b = 0; b < TButtons.length; b++){
+    TButtons[b] = new buttonEditor(xButtons + xButton, yButtons + yButton, sizeBlocks - 4, b);
+    xButton += dxButtons;
+    if(xButton == 3*dxButtons){
+      xButton = 0;
+      yButton += dxButtons;
+    }
+    
+  }
 }
 
 
@@ -180,6 +211,75 @@ class buttonMenu extends button{
   }
 }
 
+
+class buttonEditor{
+  int x, y;
+  int sizeX, sizeY;
+  int type;
+  
+  color Color1 = color(255,255,0);  //Color del borde cuando no está selecionado
+  color Color2 = color(255,0,0);  //Cuando el tile selecionado es el mismo del del boton
+  
+  boolean prsd = false;  //Presionado o no
+  boolean mslc = false;  //Mouse sobre el botón o no
+  
+  String info;
+  
+  //Para los tiles
+  buttonEditor(int _x, int _y, int _size, int _type){
+    x = _x;
+    y = _y;
+    sizeX = _size;
+    sizeY = _size;
+    type = _type;
+    info = null;
+  }
+  //Para el cuadrícula, guardar, etc
+  buttonEditor(int _x, int _y, int _sizeX, int _sizeY, String _info){
+    x = _x;
+    y = _y;
+    sizeX = _sizeX;
+    sizeY = _sizeY;
+    info = _info;
+  }
+  
+  boolean checkMouse(){
+    if(mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY){  //Si el puntero está sobre el botón
+      mslc = true;
+      return true;
+    }else{
+      mslc = false;
+      return false;
+    }
+  }
+  
+  void changeState(){
+    prsd = !prsd;
+  }
+  
+  void display(){
+    //Borde del botón
+    if(info == null && type == tileSelected)  stroke(Color2);  //Si el tile seleccionado es el mismo del boton lo colorea de otro color
+    else  stroke(Color1);
+    if(mslc)  strokeWeight(3);  //Si el mouse está sobre el botón, el borde es más grueso
+    else  strokeWeight(1.5);
+    
+    //Dibujar botón
+    fill(250);
+    rect(x, y, sizeX, sizeY);
+    if(info == null && Tiles[type].tileImage != null){  //Si es un botón de tile y ese tile SÍ tiene imagen
+      copy(Tiles[type].tileImage, Tiles[type].defaultTile[0], Tiles[type].defaultTile[1], sizeBlocks,sizeBlocks, x,y, sizeX,sizeY);  //Pone la imagen del tile que corresponde
+    }
+    //Texto
+    if(info != null){
+      fill(0);
+      textAlign(CENTER, CENTER);
+      textSize(15);
+      text(info,x + sizeX/2, y + sizeY/2 -2);
+    }
+  }
+}
+
 //----------------------ACCIÓN DE LOS BOTONES----------------------//
 
 void actionButtons(){
@@ -240,5 +340,61 @@ void actionButtons(){
       }
     }
   }
+  
+  //----------------------Editor de mapas----------------------//
+  
+  //Cuadrícula
+  if(EButtons[0].prsd){
+      showGrid = !showGrid;
+      EButtons[0].prsd = false;
+  }
+  
+  //Exportar mapa
+  if(EButtons[1].prsd){
+    
+    //Imagen
+    PImage mapImage;
+    image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Limpia el nivel para ahora solo mostrar los bloques que sí se deben mostrar
+    for(int i = 0; i < BlocksE.length; i++){
+      for(int j = 0; j < BlocksE[i].length; j++){
+        if(Tiles[BlocksE[i][j].type].showInImage == true){  //Si ese tile se muestra en la imagen
+          BlocksE[i][j].display();  //Muestra ese bloque
+        }
+      }
+    }
+    mapImage = get(0, 0, numBlocksX*sizeBlocks, numBlocksY*sizeBlocks);  //Solo exporta la parte de la pantalla que tiene el mapa
+    mapImage.save("data/maps/map"+numMap+".png");  //La almacena en la carpeta "maps"
+    
+    //Archivo texto
+    String [] mapTxt = new String[BlocksE.length];
+    //Inicial el string vacio  (no es lo mismo que nulo)
+    for(int i = 0; i < mapTxt.length; i++){
+      mapTxt[i] = "";
+    }
+    
+    for(int i = 0; i < BlocksE.length; i++){
+      for(int j = 0; j < BlocksE[i].length; j++){
+        if(Tiles[BlocksE[i][j].type].showInFile == true){
+          mapTxt[i] += Tiles[BlocksE[i][j].type].letter;
+        }else{
+          mapTxt[i] += ' ';
+        }
+      }
+    }
+    saveStrings("data/maps/map"+numMap+".txt", mapTxt);    //Guarda el archivo de texto
+    
+    numMap++;
+    EButtons[1].prsd = false;
+  }
+  
+  //Tile Seleccionado
+  for(int b = 0; b < TButtons.length; b++){  //Tiles
+    if(TButtons[b].prsd){
+      tileSelected = TButtons[b].type;
+      TButtons[b].prsd = false;
+      break;
+    }
+  }
+  
   
 }

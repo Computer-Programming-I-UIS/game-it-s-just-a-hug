@@ -1,0 +1,154 @@
+blockE [][] BlocksE = new blockE[numBlocksY][numBlocksX];
+
+//----------------------GENERACIÖN DE LOS TILES----------------------//
+
+void setupBlocksEditor(){
+  for(int i = 0; i < BlocksE.length; i++){
+    for(int j = 0; j < BlocksE[i].length; j++){
+      BlocksE[i][j] = new blockE(j*sizeBlocks, i*sizeBlocks, sizeBlocks);
+      BlocksE[i][j].type = 0;
+    }
+  }
+  
+}
+
+//----------------------DIBUJAR CUADRÍCULA----------------------//
+
+void showGrid(){
+  stroke(255);
+  strokeWeight(1);
+  
+  //Lineas horizontales
+  for(int i = 0; i < BlocksE.length; i++){
+    line(0, i*sizeBlocks, BlocksE[0].length*sizeBlocks, i*sizeBlocks);
+    if(i == BlocksE.length - 1)
+      line(0, i*sizeBlocks + sizeBlocks, BlocksE[0].length*sizeBlocks , i*sizeBlocks + sizeBlocks);
+  }
+  //Lineas verticales
+  for(int j = 0; j < BlocksE[0].length; j++){
+    line(j*sizeBlocks, 0, j*sizeBlocks, BlocksE.length*sizeBlocks);
+    if(j == BlocksE[0].length - 1)
+      line(j*sizeBlocks + sizeBlocks, 0, j*sizeBlocks + sizeBlocks, BlocksE.length*sizeBlocks);
+  }
+  
+}
+
+//----------------------ACTUALIZAR BLOQUES----------------------//
+
+void updateBlocksE(){
+  boolean leftB = false;
+  boolean upB = false;
+  boolean rightB = false;
+  boolean downB = false;
+  
+  for(int i = 0; i < BlocksE.length; i++){
+    for(int j = 0; j < BlocksE[i].length; j++){
+      leftB = false;
+      upB = false;
+      rightB = false;
+      downB = false;
+      
+      //if(i > 0 && i < Blocks.length-1 && j > 0 && j < Blocks[i].length -1){  //Si ese bloque no es de los de borde o esquina
+      
+      if(j == 0 || BlocksE[i][j].type == BlocksE[i][j-1].type)  leftB = true;  //Si el bloque de la izquierda es del mismo tipo de bloque entonces leftB = true
+      if(i == 0 || BlocksE[i][j].type == BlocksE[i-1][j].type)  upB = true;
+      if(j == BlocksE[i].length-1 || BlocksE[i][j].type == BlocksE[i][j+1].type)  rightB = true;
+      if(i == BlocksE.length-1 || BlocksE[i][j].type == BlocksE[i+1][j].type)  downB = true;
+      
+      BlocksE[i][j].updateTile(leftB, upB, rightB, downB); 
+    }
+  }
+  
+}
+
+
+//----------------------REVISAR SI HAY OTRO BLOQUE CON EL JUGADOR----------------------//
+
+void deletePlayer(int _p){
+  for(int i = 0; i < BlocksE.length; i++){
+    for(int j = 0; j < BlocksE[i].length; j++){
+      if(BlocksE[i][j].type == _p){  //Si ya hay otro bloque con ese jugador
+        BlocksE[i][j].type = 0;  //Establece ese bloque como vacio
+        break;
+      }
+      
+    }
+  }
+  
+}
+
+void adjustPlayer(){
+  for(int i = 0; i < BlocksE.length; i++){
+    for(int j = 0; j < BlocksE[i].length; j++){
+      if(BlocksE[i][j].type == 1 || BlocksE[i][j].type == 2){  //Si hay un bloque con un jugador
+        int player = BlocksE[i][j].type;
+        if(i != BlocksE.length -1)  BlocksE[i+1][j].type = 0;  //Establece el bloque de abajo como vacio
+        else{
+          deletePlayer(player);
+          BlocksE[i-1][j].type = player; 
+        }
+        
+      }
+      
+    }
+  }
+}
+
+
+//----------------------CLASE----------------------//
+
+class blockE{
+  int x, y;  //Cordenadas superior izquierda del tile
+  int size;  //Tamaño 
+  int type;
+  
+  int xTile = 0;
+  int yTile = 0;
+  
+  blockE(int _x, int _y, int _size){
+    x = _x;
+    y = _y;
+    size = _size;
+  }
+  
+  void changeType(int _type){
+    if(_type == 1 || _type == 2){
+      deletePlayer(_type);
+    }
+    type = _type;
+    
+    adjustPlayer();
+    updateBlocksE();
+  }
+  
+  void updateTile(boolean _left, boolean _up, boolean _right, boolean _down){
+    String xyTile = Tiles[type].updateTile(_left, _up, _right, _down);
+    
+    int [] xy = int(split(xyTile, ','));  //Separa el string en cada ',' y lo convierte a int
+    
+    xTile = xy[0];
+    yTile = xy[1];
+  }
+  
+  boolean checkMouse(){
+    if(mouseX > x && mouseX < x + size && mouseY > y && mouseY < y + size){  //Si el puntero está sobre el botón
+      if(mousePressed && mouseButton == LEFT){
+        return true;
+        }
+      }
+      return false;
+    }
+  void display(){
+    if(checkMouse())  changeType(tileSelected);
+    
+    if(Tiles[type].tileImage != null){  //Si ese tile SÍ tiene imagen
+      if(type != 1 && type != 2){  //Si no es un bloque de jugador
+        copy(Tiles[type].tileImage, xTile, yTile, sizeBlocks,sizeBlocks, x,y, size,size);  //Pone la imagen del tile que corresponde
+      }else{
+        copy(Tiles[type].tileImage, xTile, yTile, sizeBlocks,sizeBlocks, x-size/2,y, 2*size,2*size);  //Los bloques de jugador ocupan dos bloques de alto
+      }
+    }
+    
+  }
+  
+}

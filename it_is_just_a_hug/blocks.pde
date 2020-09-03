@@ -34,7 +34,7 @@ void setupBlocks(){
 
 boolean checkCol(int _x, int _y, int _sizeX, int _sizeY){
   //Bloques
-  for(int i = 0; i < numBGroundMap; i++){
+  for(int i = 0; i <= numBGroundMap; i++){
     if(Ground[i].checkCol(_x, _y, _sizeX, _sizeY)){
       return true;
     }
@@ -44,7 +44,7 @@ boolean checkCol(int _x, int _y, int _sizeX, int _sizeY){
 
 boolean checkPort(int _x, int _y, int _sizeX, int _sizeY, int numPlayer){
   int port;
-  for(int i = 0; i < numBTeleportMap; i++){
+  for(int i = 0; i <= numBTeleportMap; i++){
     if(Teleport[i].checkCol(_x, _y, _sizeX, _sizeY) && !Players[numPlayer].port){
       do{
         port = round(random(0, numBTeleportMap-1));  //Escoge un portal aleatorio

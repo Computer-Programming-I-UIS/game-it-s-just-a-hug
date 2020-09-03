@@ -28,7 +28,7 @@ int numBlocksX = 35;
 int numBlocksY = 18;
 
 //Escena
-char scene = 'T';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas /  / 'C' = Creditos / 'H' = ¿Cómo Jugar?
+char scene = 'E';  //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas / 'E' = Editor de Mapas / 'C' = Creditos / 'H' = ¿Cómo Jugar?
 
 //TitleScreen
 PImage titleSBackground;
@@ -60,12 +60,21 @@ AudioPlayer musicGame;
 AudioSample soundButton;
 AudioSample soundExplosion;
 
+//Editor de mapas
+boolean showGrid = false;
+int numMap = 0;
+
+
 void setup(){
   //Configuraciones generales
-  setupScreen();
+  setupScreen(false);
   setupPlayers();
   setupBlocks();
   setupButtons();
+  //Editor
+  setupBlocksEditor();
+  setupTiles();
+  
   
   //TitleScreen
   titleSBackground = loadImage("titleScreen/only_background.png");
@@ -91,12 +100,21 @@ void setup(){
   
   //Importa un nivel cualquiera
   importMap(2);
+  
+  //Importar los fondos de los niveles
+  for(int i = 0; i < backgroundsFilesNames.length; i++){
+    if(!fileExists(backgroundsFilesNames[i], "backgrounds")){
+      println("¡ERROR!");
+      println("El archivo",backgroundsFilesNames[i],"NO existe");
+      exit();
+    }else{
+      backgroundsImages[i] = loadImage("data/backgrounds/"+backgroundsFilesNames[i]);
+    }
+  }
 }
 
 void draw(){
-  println("Game",musicGame.getGain());
-  println("Title",musicTitleS.getGain());
-  background(0);
+  //background(0);
   actionButtons();
   
   //Pantalla Inicio
@@ -135,6 +153,7 @@ void draw(){
       break;
     
     case 'I':  //Menu Inicio
+      setupScreen(false);
       if(!musicTitleS.isPlaying()){
         musicTitleS.loop();
         musicTitleS.shiftGain(musicTitleS.getGain(),-15, 2500);  //Fade-In
@@ -157,7 +176,7 @@ void draw(){
       
       image(backgroundMap, 0,0, backgroundMap.width, backgroundMap.height);  //Imagen del nivel
       
-      for(int t = 0; t < numBTeleportMap; t++){  //Imagen de los Teleports
+      for(int t = 0; t <= numBTeleportMap; t++){  //Imagen de los Teleports
         Teleport[t].display();
       }
       
@@ -220,6 +239,43 @@ void draw(){
       if(scapeKey)  scene = 'I';
       break;
       
+    case 'E':
+      setupScreen(true);
+      image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Fondo del nivel
+      
+      //Mostrar los Bloques
+      for(int i = 0; i < BlocksE.length; i++){
+        for(int j = 0; j < BlocksE[i].length; j++){
+          BlocksE[i][j].display();
+        }
+      }
+      for(int i = 0; i < BlocksE.length; i++){
+        for(int j = 0; j < BlocksE[i].length; j++){
+          if(BlocksE[i][j].type == 1 || BlocksE[i][j].type == 1)  BlocksE[i][j].display();  //Muestra a los jugadores encima de los bloques
+        }
+      }
+      
+      //Mostrar Botones
+      noStroke();
+      fill(100);
+      rect(numBlocksX*sizeBlocks, 0, sizeBlocks*5, height);
+      fill(255);
+      rect((numBlocksX+0.5)*sizeBlocks, sizeBlocks/2, sizeBlocks*4, (numBlocksY-1)*sizeBlocks);
+      
+      for(int b = 0; b < EButtons.length; b++){
+        EButtons[b].display();
+      }
+      for(int b = 0; b < TButtons.length; b++){
+        TButtons[b].display();
+      }
+      actionButtons();
+      
+      //Cuadrícula
+      if(showGrid)  showGrid();
+      
+      if(scapeKey)  scene = 'I';
+      break;
+    
     case 'C':  //Créditos
       if(!musicTitleS.isPlaying()){
         musicTitleS.loop();
@@ -278,11 +334,13 @@ void draw(){
 
 
 //Configurar el tamaño de la ventana
-void setupScreen(){
-  surface.setSize(numBlocksX*sizeBlocks, numBlocksY*sizeBlocks);  //Define el tamaño de la ventana
-  surface.setLocation((displayWidth/2) - numBlocksX*sizeBlocks/2, (displayHeight/2) - numBlocksY*sizeBlocks/2 - sizeBlocks);  //Aparezca centrada la ventana
-  surface.setTitle("It's just a Hug");  //Título de la ventana
+void setupScreen(boolean mapEditor){
+  int sizeScreenX = numBlocksX;
+  if(mapEditor)  sizeScreenX = numBlocksX+5;
   
+  surface.setSize((sizeScreenX)*sizeBlocks, numBlocksY*sizeBlocks);  //Define el tamaño de la ventana
+  surface.setLocation((displayWidth/2) - sizeScreenX*sizeBlocks/2, (displayHeight/2) - (numBlocksY+2)*sizeBlocks/2);  //Aparezca centrada la ventana
+  surface.setTitle("It's just a Hug");  //Título de la ventana
   //surface.setResizable(true);
 }
 
@@ -337,6 +395,28 @@ void mouseMoved(){
       }
       break;
     
+    case 'E':
+      for(int b = 0; b < TButtons.length; b++){
+        if(TButtons[b].checkMouse()){
+          cursor(HAND);
+          for(int i = b; i < TButtons.length; i++){  //Desactiva todos los otros botones para que no aparezcan dos seleccionados
+            if(i != b)  TButtons[i].mslc = false;
+          }
+          break;
+        }else  cursor(ARROW);
+      }
+      for(int b = 0; b < EButtons.length; b++){
+        if(EButtons[b].checkMouse()){
+          cursor(HAND);
+          for(int i = b; i < EButtons.length; i++){
+            if(i != b)  EButtons[i].mslc = false;
+          }
+          break;
+        }else  cursor(ARROW);
+      }
+      
+      break;
+    
     default:
         cursor(ARROW);
       break;
@@ -360,6 +440,22 @@ void mousePressed(){
       else if(BMapSelector[0].checkMouse())  mapMapSelected--;
       else if(BMapSelector[1].checkMouse())  mapMapSelected++;
       mapMapSelected = constrain(mapMapSelected, 0, numMaxMaps -1);
+      break;
+    
+    case 'E':
+      //Botones
+      for(int b = 0; b < TButtons.length; b++){
+        if(TButtons[b].checkMouse()){
+          TButtons[b].changeState();
+          break;
+        }
+      }
+      for(int b = 0; b < EButtons.length; b++){
+        if(EButtons[b].checkMouse()){
+          EButtons[b].changeState();
+          break;
+        }
+      }
       break;
     
     default:

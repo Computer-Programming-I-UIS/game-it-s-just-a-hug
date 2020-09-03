@@ -109,7 +109,7 @@ void importMap(int numMap){
       }else if(map[i][j] == 'P'){
         Teleport[numBTeleportMap].setXY(j*sizeBlocks, i*sizeBlocks);
         numBTeleportMap++;
-        numBTeleportMap = constrain(numBTeleportMap, 0, Teleport.length);
+        numBTeleportMap = constrain(numBTeleportMap, 0, Teleport.length-1);
       }
       
     }  //end for (j)

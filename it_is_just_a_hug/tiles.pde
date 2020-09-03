@@ -1,3 +1,30 @@
+/*****************************************************
+
+Este código el que se encarga de los diferentes tipos de tiles que tiene el videojuego
+
+Es necesario tener un archivo de imagen diferente para cada tipo de objeto, es decir uno para tierra, agua, letreros, etc.
+Cada tile debe de tener un tamaño de 32x32 píxeles (tamaño de la variable sizeTiles) y dependiendo del tamaño de la imágen el código detecta el comportamiento de ese tile.
+Ejemplo:
+  Para un el tile de ground, si el tamaño de la imágen es 96x96 el programa interpreta que hay 9 diferentes tiles para la tierra.
+  Cuando se diseñe el nivel, Solo se selecciona el tipo de bloque que se quiere, luego al hacer click sobre el bloque ese bloque queda con ese tipo
+  Y el programa automáticamente coloca el tile correspondiente.
+
+Al exportar el mapa se generan los archivos "mapX.png" y "mapX.txt" (X es el número del mapa). Donde esos archivos se guardan en la carpeta "data/maps/" del videojuego.
+
+Para insertar nuevos tipos de bloques debe de añadirse la imagen en la ruta "data/tiles/" (es recomendado imágenes en formato .png)
+Y se debe de añadir un nuevo objeto de la clase tile. Se debe de actualizar el tamaño del array Tiles y declarar ese tipo de bloque en la función setupTiles()
+  * Se debe especificar el nombre del archivo, el caráter que se almacena en el archivo mapX.txt y si ese bloque bloque es un objeto estático o no.
+  
+Para insertar nuevos backgrounds debe de añadirse la imagen en la ruta "data/backgrounds/" la imagen debe de tener un tamaño de 1120x576 pixeles (tamaño de la ventana del juego)
+Y se debe añadir el nombre del archivo en el array backgroundsFilesNames. 
+*****************************************************/
+
+tile [] Tiles = new tile[5];
+buttonEditor [] TButtons = new buttonEditor[Tiles.length];  //Botones para los tiles
+
+//Background
+String [] backgroundsFilesNames = {"sky01.png"};
+PImage [] backgroundsImages = new PImage [backgroundsFilesNames.length];
 
 void setupTiles() {
   //Siempre debe de ir primero el Vacio - Juagdor 1 - Jugador 2, en ese mismo orden y luego ya puede ir cualquier otro tile
@@ -8,9 +35,9 @@ void setupTiles() {
 
 
   Tiles[3] = new tile("Tierra", "tileground01.png", 'S', true, true);
-  Tiles[4] = new tile("Tierra", "tileground02.png", 'S', true, true);
-  Tiles[5] = new tile("Teleport", "teleport01.png", 'P', true, true);
+  Tiles[4] = new tile("Teleport", "teleport01.png", 'P', true, false);
 }
+
 
 class tile {
   PImage tileImage;
@@ -33,23 +60,23 @@ class tile {
     } else {
       tileImage = loadImage("data/tiles/"+_fileName);
 
-      if (tileImage.width%sizeTiles != 0 || tileImage.height%sizeTiles != 0) {  //Si el tamaño de la imagen no es correcta  (multiplo del tamaño de los tiles)
+      if (tileImage.width%sizeBlocks != 0 || tileImage.height%sizeBlocks != 0) {  //Si el tamaño de la imagen no es correcta  (multiplo del tamaño de los tiles)
         println("¡ERROR!");
-        println("La imagen", _fileName, "NO tiene el tamaño correcto \nCada tile de la imagen debe de ser de", sizeTiles, "x", sizeTiles, "píxeles");
+        println("La imagen", _fileName, "NO tiene el tamaño correcto \nCada tile de la imagen debe de ser de", sizeBlocks, "x", sizeBlocks, "píxeles");
         exit();  //Acaba el programa
       } else {
         letter = _letter;
         showInFile = _showInFile;
         showInImage = _showInImage;
 
-        sizeTile[0] = tileImage.width/sizeTiles;  //Catidad de tiles horizontal
-        sizeTile[1] = tileImage.height/sizeTiles;  //Cantidad de tiles vertical
+        sizeTile[0] = tileImage.width/sizeBlocks;  //Catidad de tiles horizontal
+        sizeTile[1] = tileImage.height/sizeBlocks;  //Cantidad de tiles vertical
 
         if (sizeTile[0] == 1 && sizeTile[1] == 1) {
           defaultTile[0] = 0;
           defaultTile[1] = 0;
         } else if ((sizeTile[0] == 3 && sizeTile[1] == 3) || (sizeTile[0] == 4 && sizeTile[1] == 4)) {
-          defaultTile[0] = sizeTiles;
+          defaultTile[0] = sizeBlocks;
           defaultTile[1] = 0;
         } else {
           defaultTile[0] = 0;
@@ -75,23 +102,23 @@ class tile {
       if (!_left && !_up && _right && _down) {  //Bloque arriba izquierda
         return "0,0";
       } else if (_left && !_up && _right && _down) {  //Bloque arriba centro
-        return Integer.toString(sizeTiles)+","+Integer.toString(0);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(0);
       } else if (_left && !_up && !_right && _down) {  //Bloque arriba derecha
-        return Integer.toString(2*sizeTiles)+","+Integer.toString(0);
+        return Integer.toString(2*sizeBlocks)+","+Integer.toString(0);
       } else if (!_left && _up && _right && _down) {  //Bloque centro izquierda
-        return Integer.toString(0)+","+Integer.toString(sizeTiles);
+        return Integer.toString(0)+","+Integer.toString(sizeBlocks);
       } else if (_left && _up && _right && _down) {  //Bloque centro
-        return Integer.toString(sizeTiles)+","+Integer.toString(sizeTiles);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(sizeBlocks);
       } else if (_left && _up && !_right && _down) {  //Bloque centro derecha
-        return Integer.toString(2*sizeTiles)+","+Integer.toString(sizeTiles);
+        return Integer.toString(2*sizeBlocks)+","+Integer.toString(sizeBlocks);
       } else if (!_left && _up && _right && !_down) {  //Bloque abajo izquierda
-        return Integer.toString(0)+","+Integer.toString(2*sizeTiles);
+        return Integer.toString(0)+","+Integer.toString(2*sizeBlocks);
       } else if (_left && _up && _right && !_down) {  //Bloque abajo centro
-        return Integer.toString(sizeTiles)+","+Integer.toString(2*sizeTiles);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(2*sizeBlocks);
       } else if (_left && _up && !_right && !_down) {  //Bloque abajo derecha
-        return Integer.toString(2*sizeTiles)+","+Integer.toString(2*sizeTiles);
+        return Integer.toString(2*sizeBlocks)+","+Integer.toString(2*sizeBlocks);
       } else {
-        return Integer.toString(sizeTiles)+","+Integer.toString(0);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(0);
       }
     }
     //Tipo de tiles 4x4
@@ -99,37 +126,37 @@ class tile {
       if (!_left && !_up && _right && _down) {  //Bloque arriba izquierda
         return "0,0";
       } else if (_left && !_up && _right && _down) {  //Bloque arriba centro
-        return Integer.toString(sizeTiles)+","+Integer.toString(0);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(0);
       } else if (_left && !_up && !_right && _down) {  //Bloque arriba derecha
-        return Integer.toString(2*sizeTiles)+","+Integer.toString(0);
+        return Integer.toString(2*sizeBlocks)+","+Integer.toString(0);
       } else if (!_left && _up && _right && _down) {  //Bloque centro izquierda
-        return Integer.toString(0)+","+Integer.toString(sizeTiles);
+        return Integer.toString(0)+","+Integer.toString(sizeBlocks);
       } else if (_left && _up && _right && _down) {  //Bloque centro
-        return Integer.toString(sizeTiles)+","+Integer.toString(sizeTiles);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(sizeBlocks);
       } else if (_left && _up && !_right && _down) {  //Bloque centro derecha
-        return Integer.toString(2*sizeTiles)+","+Integer.toString(sizeTiles);
+        return Integer.toString(2*sizeBlocks)+","+Integer.toString(sizeBlocks);
       } else if (!_left && _up && _right && !_down) {  //Bloque abajo izquierda
-        return Integer.toString(0)+","+Integer.toString(2*sizeTiles);
+        return Integer.toString(0)+","+Integer.toString(2*sizeBlocks);
       } else if (_left && _up && _right && !_down) {  //Bloque abajo centro
-        return Integer.toString(sizeTiles)+","+Integer.toString(2*sizeTiles);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(2*sizeBlocks);
       } else if (_left && _up && !_right && !_down) {  //Bloque abajo derecha
-        return Integer.toString(2*sizeTiles)+","+Integer.toString(2*sizeTiles);
+        return Integer.toString(2*sizeBlocks)+","+Integer.toString(2*sizeBlocks);
       } else if (!_left && !_up && !_right && _down) {  //Bloque vertica arriba
-        return Integer.toString(3*sizeTiles)+","+Integer.toString(0);
+        return Integer.toString(3*sizeBlocks)+","+Integer.toString(0);
       } else if (!_left && _up && !_right && _down) {  //Bloque vertical centro
-        return Integer.toString(3*sizeTiles)+","+Integer.toString(sizeTiles);
+        return Integer.toString(3*sizeBlocks)+","+Integer.toString(sizeBlocks);
       } else if (!_left && _up && !_right && !_down) {  //Bloque vertical abajo
-        return Integer.toString(3*sizeTiles)+","+Integer.toString(2*sizeTiles);
+        return Integer.toString(3*sizeBlocks)+","+Integer.toString(2*sizeBlocks);
       } else if (!_left && !_up && _right && !_down) {  //Bloque horizontal izquierda
-        return Integer.toString(0)+","+Integer.toString(3*sizeTiles);
+        return Integer.toString(0)+","+Integer.toString(3*sizeBlocks);
       } else if (_left && !_up && _right && !_down) {  //Bloque horizontal centro
-        return Integer.toString(sizeTiles)+","+Integer.toString(3*sizeTiles);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(3*sizeBlocks);
       } else if (_left && !_up && !_right && !_down) {  //Bloque horizontal derecha
-        return Integer.toString(2*sizeTiles)+","+Integer.toString(3*sizeTiles);
+        return Integer.toString(2*sizeBlocks)+","+Integer.toString(3*sizeBlocks);
       } else if (!_left && !_up && !_right && !_down) {  //Bloque solo
-        return Integer.toString(3*sizeTiles)+","+Integer.toString(3*sizeTiles);
+        return Integer.toString(3*sizeBlocks)+","+Integer.toString(3*sizeBlocks);
       } else {
-        return Integer.toString(sizeTiles)+","+Integer.toString(0);
+        return Integer.toString(sizeBlocks)+","+Integer.toString(0);
       }
     }else {
       return Integer.toString(0)+","+Integer.toString(0);

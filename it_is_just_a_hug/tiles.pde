@@ -19,7 +19,7 @@ Para insertar nuevos backgrounds debe de añadirse la imagen en la ruta "data/ba
 Y se debe añadir el nombre del archivo en el array backgroundsFilesNames. 
 *****************************************************/
 
-tile [] Tiles = new tile[5];
+tile [] Tiles = new tile[8];
 buttonEditor [] TButtons = new buttonEditor[Tiles.length];  //Botones para los tiles
 
 //Background
@@ -34,8 +34,11 @@ void setupTiles() {
   Tiles[2] = new tile("Jugador2", "player02.png", '2', true, false);
 
 
-  Tiles[3] = new tile("Tierra", "tileground01.png", 'S', true, true);
-  Tiles[4] = new tile("Teleport", "teleport01.png", 'P', true, true);
+  Tiles[3] = new tile("Tierra96x96", "tileground01_0.png", 'S', true, true);
+  Tiles[4] = new tile("Tierra128x128", "tileground01_1.png", 'S', true, true);
+  Tiles[5] = new tile("Nieve96x96", "tileground02_0.png", 'S', true, true);
+  Tiles[6] = new tile("Nieve128x128", "tileground02_1.png", 'S', true, true);
+  Tiles[7] = new tile("Teleport", "teleport01.png", 'P', true, true);
 }
 
 

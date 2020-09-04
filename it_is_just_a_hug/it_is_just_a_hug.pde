@@ -61,6 +61,7 @@ AudioSample soundButton;
 AudioSample soundExplosion;
 
 //Editor de mapas
+PImage titleBomb;
 boolean showGrid = false;
 int numMap = 0;
 boolean errorEditor = false;
@@ -113,6 +114,10 @@ void setup(){
       backgroundsImages[i] = loadImage("data/backgrounds/"+backgroundsFilesNames[i]);
     }
   }
+  
+  //Titulo con bomba
+  titleBomb = loadImage("data/titleScreen/title-bomb.png");
+  
 }
 
 void draw(){
@@ -269,7 +274,8 @@ void draw(){
       fill(100);
       rect(numBlocksX*sizeBlocks, 0, sizeBlocks*5, height);
       fill(255);
-      rect((numBlocksX+0.5)*sizeBlocks, sizeBlocks/2, sizeBlocks*4, (numBlocksY-1)*sizeBlocks);
+      rect((numBlocksX+0.5)*sizeBlocks, sizeBlocks/2, 4*sizeBlocks, (numBlocksY-1)*sizeBlocks);
+      image(titleBomb, numBlocksX*sizeBlocks, sizeBlocks, titleBomb.width, titleBomb.height);
       
       for(int b = 0; b < EButtons.length; b++){
         EButtons[b].display();

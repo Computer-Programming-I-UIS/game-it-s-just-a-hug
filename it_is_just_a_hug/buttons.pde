@@ -40,9 +40,9 @@ void setupButtons(){
   
   EButtons[0] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks -4, sizeBlocks -4, "CUADRÍCULA");  //Cuadrícula
   yButton += dxButtons;
-  EButtons[1] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "GUARDAR");  //Export
-  yButton += dxButtons;
   EButtons[2] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "FONDO");  //Background
+  yButton += dxButtons;
+  EButtons[1] = new buttonEditor(xButtons + xButton, yButtons + yButton, 3*sizeBlocks - 4, sizeBlocks -4, "GUARDAR");  //Export
   
   xErrorE = new buttonC((numBlocksX/2)*sizeBlocks + 8*sizeBlocks, (numBlocksY/2)*sizeBlocks - 3*sizeBlocks/2, 2*sizeBlocks/3, "X");  //Cerrar del mensaje de error
   
@@ -410,12 +410,18 @@ void actionButtons(){
       }
     }
     
-    if(BMapSelector[2].prsd){
+    if(BMapSelector[2].prsd){  //Editar mapa
       musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
-      numMap = mapMapSelected;
+      numMap = mapMapSelected+1;  //Como mapMapSelected es el index en el array y los mapas empiezan en 1
+      //Resetea los bloques
+      for(int i = 0; i < BlocksE.length; i++){
+        for(int j = 0; j < BlocksE[i].length; j++){
+          BlocksE[i][j].type = 0;
+        }
+      }
+      //Cambia a la escena del editor de mapas
       setupScreen(true);
       scene = 'E';
-      
       BMapSelector[2].prsd = false;
     }
   }
@@ -427,6 +433,11 @@ void actionButtons(){
     if(EButtons[0].prsd){
         showGrid = !showGrid;
         EButtons[0].prsd = false;
+    }
+    if(EButtons[2].prsd){  //Cambiar fondo
+      backgroundSelected++;
+      if(backgroundSelected > backgroundsFilesNames.length-1)  backgroundSelected = 0;
+      EButtons[2].prsd = false;
     }
     
     //Exportar mapa
@@ -453,7 +464,7 @@ void actionButtons(){
       }else{
         //Imagen
         PImage mapImage;
-        image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Limpia el nivel para ahora solo mostrar los bloques que sí se deben mostrar
+        image(backgroundsImages[backgroundSelected],0,0,backgroundsImages[backgroundSelected].width,backgroundsImages[backgroundSelected].height);  //Limpia el nivel para ahora solo mostrar los bloques que sí se deben mostrar
         for(int i = 0; i < BlocksE.length; i++){
           for(int j = 0; j < BlocksE[i].length; j++){
             if(Tiles[BlocksE[i][j].type].showInImage == true){  //Si ese tile se muestra en la imagen

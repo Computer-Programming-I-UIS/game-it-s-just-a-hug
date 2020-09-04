@@ -23,8 +23,9 @@ tile [] Tiles = new tile[8];
 buttonEditor [] TButtons = new buttonEditor[Tiles.length];  //Botones para los tiles
 
 //Background
-String [] backgroundsFilesNames = {"sky01.png"};
+String [] backgroundsFilesNames = {"background01.png", "background02.png", "background03.png"};
 PImage [] backgroundsImages = new PImage [backgroundsFilesNames.length];
+int backgroundSelected = 0;
 
 void setupTiles() {
   //Siempre debe de ir primero el Vacio - Juagdor 1 - Jugador 2, en ese mismo orden y luego ya puede ir cualquier otro tile

@@ -250,7 +250,7 @@ void draw(){
         musicTitleS.pause();
       }
       
-      image(backgroundsImages[0],0,0,backgroundsImages[0].width,backgroundsImages[0].height);  //Fondo del nivel
+      image(backgroundsImages[backgroundSelected],0,0,backgroundsImages[backgroundSelected].width,backgroundsImages[backgroundSelected].height);  //Fondo del nivel
       
       //Mostrar los Bloques
       for(int i = 0; i < BlocksE.length; i++){

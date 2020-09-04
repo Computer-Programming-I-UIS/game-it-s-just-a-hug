@@ -159,7 +159,7 @@ class player{
     ground = checkCol(x, y+1, sizeX, sizeY);
     checkPort(x, y, sizeX, sizeY, num);  //Checa los portales
     if(port){
-      for(int p = 0; p < numBTeleportMap; p++){
+      for(int p = 0; p <= numBTeleportMap; p++){
         if(dist(x, y, Teleport[p].x, Teleport[p].y) < 2*sizeBlocks){
           port = true;
           break;

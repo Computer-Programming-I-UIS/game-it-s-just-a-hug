@@ -47,7 +47,7 @@ boolean checkPort(int _x, int _y, int _sizeX, int _sizeY, int numPlayer){
   for(int i = 0; i <= numBTeleportMap; i++){
     if(Teleport[i].checkCol(_x, _y, _sizeX, _sizeY) && !Players[numPlayer].port){
       do{
-        port = round(random(0, numBTeleportMap-1));  //Escoge un portal aleatorio
+        port = round(random(0, numBTeleportMap));  //Escoge un portal aleatorio
       }while(port == i);
       Players[numPlayer].setXY(Teleport[port].x, Teleport[port].y);
       Players[numPlayer].velX = 0;

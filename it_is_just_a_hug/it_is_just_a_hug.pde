@@ -217,6 +217,10 @@ void draw(){
         Players[0].move = false;
         Players[1].move = false;
         Players[playerBomb].kaboom();
+        for(int p = 0; p < Players.length; p++){  //Aumenta el puntaje del jugador que ganó la ronda
+          if(p != playerBomb)  Players[p].score++;
+        }
+        
         soundExplosion.trigger();
       }
       frameBomb = (frameCount/6)%10;
@@ -227,6 +231,11 @@ void draw(){
       fill(255);
       textAlign(CENTER,CENTER);
       text(nf(timer,2),46,46);  //Muestra el tiempo encima de la bomba
+      
+      //Contadores de los jugadores
+      Players[0].counter(sizeBlocks/2, (numBlocksY-3)*sizeBlocks + sizeBlocks/2, true);
+      Players[1].counter((numBlocksX-3)*sizeBlocks + sizeBlocks/2, (numBlocksY-3)*sizeBlocks + sizeBlocks/2, false);
+      
       
       if(scapeKey){
         scene = 'I';

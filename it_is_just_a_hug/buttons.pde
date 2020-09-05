@@ -360,6 +360,9 @@ void actionButtons(){
       }while(_map == _pastMap || _mapEmpty);  //Para que el mapa no sea el mismo que se jugó antes
       
       importMap(_map);
+      Players[0].resetScore();
+      Players[1].resetScore();
+      
       musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
       musicGame.shiftGain(musicGame.getGain(),-20, 2500);  //Fade-in
       
@@ -401,6 +404,9 @@ void actionButtons(){
     for(int b = 0; b < BMaps.length; b++){
       if(BMaps[b].prsd){
         importMap(b+1);  //Importa el mapa seleccionado
+        Players[0].resetScore();
+        Players[1].resetScore();
+        
         musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
         musicGame.shiftGain(musicGame.getGain(),-20, 2500);  //Fade-in
         

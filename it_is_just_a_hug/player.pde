@@ -10,6 +10,7 @@ block PlayersCol [] = new block [Players.length];
 int playerBomb = 0;  //Jugador que tiene la bomba
 boolean passBomb = false;  //true si el jugador sí puede pasar la bomba
 
+
 //Generación de los jugadores
 void setupPlayers(){
   for(int i = 0; i < Players.length; i++){
@@ -79,6 +80,10 @@ class player{
   boolean lejos = true;
   boolean bomb = false;
   
+  //Puntaje
+  PImage skin;  //Imagen de la cara del jugador
+  int score = 0;
+  
   player(int _x, int _y, int _num){
     x = _x;
     y = _y;
@@ -100,6 +105,7 @@ class player{
     spriteWalk = loadImage("data/sprites/player01_walking.png");
     spriteBomb = loadImage("data/sprites/player01_bomb.png");
     spriteBurned = loadImage("data/sprites/player01_bomb_Actived.png");
+    skin = loadImage("data/sprites/player01_skin.png");
     sprite = spriteWalk;
   } 
   
@@ -113,6 +119,7 @@ class player{
     spriteWalk = loadImage("data/sprites/player0"+_spriteColor+"_walking.png");
     spriteBomb = loadImage("data/sprites/player0"+_spriteColor+"_bomb.png");
     spriteBurned = loadImage("data/sprites/player0"+_spriteColor+"_bomb_Actived.png");
+    skin = loadImage("data/sprites/player0"+_spriteColor+"_skin.png");
     
     sprite = spriteWalk;
     
@@ -148,6 +155,37 @@ class player{
     kaboom = false;
     bomb = false;
     lejos  = true;
+    
+  }
+  
+  void counter(int _x, int _y, boolean LeftRight){
+    boolean _scoreMax = false;
+    for(int p = 0; p < Players.length; p++){
+      if(p != num){
+        if(score >= Players[p].score){
+          _scoreMax = true;
+        }
+      }
+    }
+    
+    if(_scoreMax)  stroke(255,255,0);
+    else  stroke(255,0,0);
+    strokeWeight(2);
+    noFill();
+    square(_x, _y, skin.width + 4);
+    image(skin, _x+2, _y+2, skin.width, skin.height);
+    textAlign(CENTER, CENTER);
+    fill(255);
+    textFont(pixelFont);
+    textSize(70);
+    if(LeftRight)  text(score, _x + 3*(skin.width+4)/2, _y + (skin.width+4)/2 -3);  //Muestra el puntaje a la Derecha
+    else  text(score, _x - (skin.width+4)/2, _y + (skin.width+4)/2 -3);  //Muestra el Izquierda
+    
+  }
+  
+  void resetScore(){
+    //Puntaje
+    score = 0;
   }
   
   void update(){

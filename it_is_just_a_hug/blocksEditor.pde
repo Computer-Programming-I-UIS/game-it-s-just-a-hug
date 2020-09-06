@@ -176,3 +176,89 @@ class blockE{
   }
   
 }
+
+void resetBlocksE(){
+  for(int i = 0; i < BlocksE.length; i++){
+    for(int j = 0; j < BlocksE[i].length; j++){
+      BlocksE[i][j].type = 0;
+    }
+  }
+}
+
+void importSettingsMap(int numMap){  //Importar la configuración del mapa seleccionado para poder editarlo
+  String fileNameMapTXT = "map"+numMap+"_settings.txt";  //Nombre del archivo .txt
+  String mapSettingsFile [] = new String[numBlocksY];  //Almacena todo lo que tenga el archivo
+  
+  //Resetea los bloques
+  resetBlocksE();
+  
+  if(!fileExists(fileNameMapTXT, "maps")){  //Si no existe
+    println("¡ERROR!");
+    println("El archivo", fileNameMapTXT, "NO existe o no se ecuentra en la carpeta \"data/maps\"");
+    println("Revisa el nombre del archivo y la carpeta \"data/maps\"");
+    //exit();
+    resetBlocksE();
+    
+  }else{  //El archivo sí existe entonces lo importa
+    mapSettingsFile = loadStrings("data/maps/"+fileNameMapTXT);  //Carga el archivo
+    
+    if(mapSettingsFile.length != numBlocksY+1){  //No es del tamaño correcto
+      println("¡ERROR!");
+      resetBlocksE();
+      
+    }else{  //El archivo tiene la cantidad de filas correctas
+      
+      boolean valido = true;
+      for(int r = 0; r < mapSettingsFile.length; r++){  //Recorre cada string del array
+        //Si tiene una cantidad de carácteres diferente a la del ancho o el string no es un número entero (la primera linea es el número del fondo del mapa)
+        if(r != 0){
+          if(mapSettingsFile[r].length() != numBlocksX){
+            valido = false;  //No es valido
+            break;
+          }
+          for(int c = 0; c < mapSettingsFile[r].length(); c++){
+            String tempNum = String.valueOf(mapSettingsFile[r].charAt(c));
+            if(!isInteger(tempNum)){
+              valido = false;  //No es valido
+              break;
+            }
+          }
+        }
+      }
+      if(!valido){
+        println("¡ERROR!");
+        resetBlocksE();
+        
+      }else{  //Mapa válido
+        for(int r = 0; r < mapSettingsFile.length; r++){
+          for(int c = 0; c < mapSettingsFile[r].length(); c++){
+            if(r != 0){
+              BlocksE[r-1][c].type = Character.getNumericValue(mapSettingsFile[r].charAt(c));
+              BlocksE[r-1][c].type = constrain(BlocksE[r-1][c].type, 0, Tiles.length-1);
+            }else{  //El primer renglón
+              backgroundSelected = Character.getNumericValue(mapSettingsFile[r].charAt(c));
+              backgroundSelected = constrain(backgroundSelected, 0, backgroundsFilesNames.length -1);
+            }
+          }
+        }  //end for r
+      }
+    }  //end tiene la cantidad de filas correctas y es un número
+  }  //end el archivo existe
+  
+}
+
+void saveSettingsMap(int _numMap){
+  String [] mapSettingsTxt = new String[BlocksE.length+1];
+  //Inicial el string vacio  (no es lo mismo que nulo)
+  for(int i = 0; i < mapSettingsTxt.length; i++){
+    mapSettingsTxt[i] = "";
+  }
+  mapSettingsTxt[0] = Integer.toString(backgroundSelected);  //Guarda el fondo
+  
+  for(int i = 0; i < BlocksE.length; i++){
+    for(int j = 0; j < BlocksE[i].length; j++){
+      mapSettingsTxt[i+1] += Integer.toString(BlocksE[i][j].type);  //Guarda el tipo de bloque
+    }
+  }
+  saveStrings("data/maps/map"+_numMap+"_settings.txt", mapSettingsTxt);    //Guarda el archivo de texto
+}

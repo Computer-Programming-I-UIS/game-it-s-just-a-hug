@@ -419,12 +419,9 @@ void actionButtons(){
     if(BMapSelector[2].prsd){  //Editar mapa
       musicTitleS.shiftGain(musicTitleS.getGain(),-40, 2500);  //Fade-out
       numMap = mapMapSelected+1;  //Como mapMapSelected es el index en el array y los mapas empiezan en 1
-      //Resetea los bloques
-      for(int i = 0; i < BlocksE.length; i++){
-        for(int j = 0; j < BlocksE[i].length; j++){
-          BlocksE[i][j].type = 0;
-        }
-      }
+      //Importa la configuración de ese mapa
+      importSettingsMap(numMap);
+      
       //Cambia a la escena del editor de mapas
       setupScreen(true);
       scene = 'E';
@@ -498,6 +495,7 @@ void actionButtons(){
           }
         }
         saveStrings("data/maps/map"+numMap+".txt", mapTxt);    //Guarda el archivo de texto
+        saveSettingsMap(numMap);  //Guarda la configuración del mapa
       }  //Hay dos jugadores
       
       EButtons[1].prsd = false;

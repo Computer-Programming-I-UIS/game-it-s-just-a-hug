@@ -223,6 +223,7 @@ void draw(){
         
         soundExplosion.trigger();
       }
+      
       frameBomb = (frameCount/6)%10;
       copy(titleSBomb, frameBomb*200,0, 200,200, 16,16, 64,64);  //Imagen de la bomba
       
@@ -413,6 +414,16 @@ int sign(int num){
   if(num == 0)  return 0;
   else if(num < 0) return -1;
   else  return +1;
+}
+
+///Verificar si un string es un número entero
+boolean isInteger(String numero){
+    try{    //Intenta combertirlo a entete
+        Integer.parseInt(numero);    //Si sí se pudo es porque es entero
+        return true;
+    }catch(NumberFormatException e){    //Si genera error es porque no lo es
+        return false;
+    }
 }
 
 void mouseMoved(){

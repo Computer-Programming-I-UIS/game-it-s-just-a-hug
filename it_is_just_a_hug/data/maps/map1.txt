@@ -6,10 +6,10 @@ SS  SSSSS          SSSS     SS    S
 SS  SSSSSS       SSSSS     SSSS   S
 S     SSSSSSSS    SSS     SSSSS   S
 S         SSSSS         SSSSSSS   S
-S  1                       SSSS  SS
-SS              SSSSSS      SS   SS
-SS       SSSSSSSSSSSSSSS         SS
-SSSS    SSSSSSSSSSSSSSSSS        SS
+S                          SSSS   S
+SS 1            SSSSSS      SS    S
+SS       SSSSSSSSSSSSSSS          S
+SSSS    SSSSSSSSSSSSSSSSS         S
 SSSSS  SSSSSSSSSSSSSSSSSSSS   2  SS
 SSSSS      SSSSSSSSSSSSSSSSS    SSS
 SSSSSS                        SSSSS

@@ -3,8 +3,8 @@ SSS                            SSSS
 SS                              SSS
 S     SSSSSSSSSS                 SS
 S      SSSSSS             SSSS    S
-S 1     SSS               2 SSS   S
-SS                 SSSS      SS   S
+S 1     SSS                 SSS   S
+SS                 SSSS    2 SS   S
 SSSS             SSSSSSSS    SS P S
 SSSSSS        SSSSSSSSSSSSSSSSS   S
 SSSSSS             SSSSSSSSSSSS   S

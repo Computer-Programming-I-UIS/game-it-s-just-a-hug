@@ -7,12 +7,12 @@ S           SSSSS          SSSSSSSS
 S            SSS           SSSSSSSS
 S   SSSSS                    SSSSSS
 S    SSS                        SSS
-S                  SSSSS         SS
-S                   SSS   2       S
-S 1                               S
-S                        SSSS     S
-SSSSS      SSSS           SS      S
-SSSSS      SSSS               SSSSS
-SSP       SSSSSS                P S
-SS       SSSSSSSS     SSSS        S
+S                             P  SS
+S                 SSSSS   2       S
+S 1              SSSSS            S
+S                        SSSSSSSSSS
+SSSSSS     SSSS             SSSSSSS
+SSS P      SSSS               SSSSS
+SSS       SSSSSS                SSS
+SSS      SSSSSSSS     SSSS      SSS
 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS

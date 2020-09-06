@@ -230,15 +230,13 @@ void importSettingsMap(int numMap){  //Importar la configuración del mapa selec
         resetBlocksE();
         
       }else{  //Mapa válido
-        for(int r = 0; r < mapSettingsFile.length; r++){
+        backgroundSelected = Character.getNumericValue(mapSettingsFile[0].charAt(0));
+        backgroundSelected = constrain(backgroundSelected, 0, backgroundsFilesNames.length -1);
+        
+        for(int r = 1; r < mapSettingsFile.length; r++){
           for(int c = 0; c < mapSettingsFile[r].length(); c++){
-            if(r != 0){
-              BlocksE[r-1][c].type = Character.getNumericValue(mapSettingsFile[r].charAt(c));
-              BlocksE[r-1][c].type = constrain(BlocksE[r-1][c].type, 0, Tiles.length-1);
-            }else{  //El primer renglón
-              backgroundSelected = Character.getNumericValue(mapSettingsFile[r].charAt(c));
-              backgroundSelected = constrain(backgroundSelected, 0, backgroundsFilesNames.length -1);
-            }
+            BlocksE[r-1][c].type = Character.getNumericValue(mapSettingsFile[r].charAt(c));
+            BlocksE[r-1][c].type = constrain(BlocksE[r-1][c].type, 0, Tiles.length-1);
           }
         }  //end for r
       }

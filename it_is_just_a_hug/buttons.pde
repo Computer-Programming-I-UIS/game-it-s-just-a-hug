@@ -421,6 +421,7 @@ void actionButtons(){
       numMap = mapMapSelected+1;  //Como mapMapSelected es el index en el array y los mapas empiezan en 1
       //Importa la configuración de ese mapa
       importSettingsMap(numMap);
+      updateBlocksE();
       
       //Cambia a la escena del editor de mapas
       setupScreen(true);

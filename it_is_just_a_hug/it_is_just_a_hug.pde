@@ -391,6 +391,8 @@ void setupScreen(boolean mapEditor){
   surface.setSize((sizeScreenX)*sizeBlocks, numBlocksY*sizeBlocks);  //Define el tamaño de la ventana
   surface.setLocation((displayWidth/2) - sizeScreenX*sizeBlocks/2, (displayHeight/2) - (numBlocksY+2)*sizeBlocks/2);  //Aparezca centrada la ventana
   surface.setTitle("It's just a Hug");  //Título de la ventana
+  PImage icon = loadImage("data/icon.png");
+  surface.setIcon(icon);
   //surface.setResizable(true);
 }
 

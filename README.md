@@ -11,7 +11,9 @@ It's Just a Hug
 
 ### Instalacion:
 
-Para ejecutar el código y editarlo debe descargar [Processing.](https://processing.org/download/) en su dispositivo. 
+Descarga la última versión de It's Just a Hug [aqui.](https://github.com/Computer-Programming-I-UIS/game-it-s-just-a-hug/releases)
+
+Para ejecutar el código y editarlo debe descargar [Processing](https://processing.org/download/) en su dispositivo.
   
   Se hace uso de la librería de sonido minim, para poder instalarla siga los siguietes pasos:
   - Abra el proyecto en Proccesing

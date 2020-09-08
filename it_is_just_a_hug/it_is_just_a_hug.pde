@@ -38,6 +38,7 @@ int titleSfade = 0;
 PImage titleSTitle;
 PImage titleSBomb;
 PImage titleHow;
+PImage rating;
 boolean showPressSpace = true;
 
 //Fuentes
@@ -86,6 +87,7 @@ void setup(){
   titleSTitle = loadImage("titleScreen/title.png");
   titleSBomb = loadImage("titleScreen/bombAnimation.png");
   titleHow = loadImage("titleScreen/pantalla controles.png");
+  rating = loadImage("titleScreen/rating.png");
   
   pixelFont = createFont("fonts/monogram_extended.ttf",45);
   //pixelFont = loadFont("fonts/8-bitOperatorPlus-Regular-48.vlw");
@@ -156,6 +158,8 @@ void draw(){
       
       image(titleSPlayer1, -titleSfade*10, titleSfade*10, titleSPlayer1.width, titleSPlayer1.height); //Player_Azul
       image(titleSPlayer2, titleSfade*10, titleSfade*10, titleSPlayer2.width, titleSPlayer2.height); //Player_Rojo
+      
+      if(titleSfade == 0)  image(rating, sizeBlocks/3, (numBlocksY-3)*sizeBlocks);
       
       break;
     
@@ -338,17 +342,17 @@ void draw(){
       textSize(40);
       fill(0);
       textAlign(CENTER, TOP);
-      text("CRÉDITOS",width/2, sizeBlocks);
+      text("CRÉDITOS",width/2, sizeBlocks/2);
       
       textSize(35);  fill(100);
-      text("Programación", width/2, 3*sizeBlocks);
+      text("Programación", width/2, 2*sizeBlocks);
       textSize(30);  fill(0);
-      text("Sebastián García Angarita\nJuan Sebastian Guerrero Peña (Konat)", width/2, 4*sizeBlocks);
+      text("Sebastián García Angarita\nJuan Sebastian Guerrero Peña (Konat)", width/2, 3*sizeBlocks);
       
       textSize(35);  fill(100);
-      text("Gráficos", width/2, 6*sizeBlocks);
+      text("Gráficos", width/2, 5*sizeBlocks);
       textSize(30);  fill(0);
-      text("Juan Sebastian Guerrero Peña (Konat)", width/2, 7*sizeBlocks);
+      text("Juan Sebastian Guerrero Peña (Konat)\n Bayat Games bayat.itch.io", width/2, 6*sizeBlocks);
       
       textSize(35);  fill(100);
       text("Música", width/2, 8*sizeBlocks);
@@ -358,7 +362,7 @@ void draw(){
       textSize(35);  fill(100);
       text("Efectos Sonoros", width/2, 11*sizeBlocks);
       textSize(30);  fill(0);
-      text("Partners in Rhyme www.PartnersInRhyme.com\nFree Sound Effects www.freesoundeffects.com", width/2, 12*sizeBlocks);
+      text("Partners in Rhyme www.PartnersInRhyme.com\n Free Sound Effects www.freesoundeffects.com", width/2, 12*sizeBlocks);
       
       textSize(35);  fill(100);
       text("Agradecimientos", width/2, 14*sizeBlocks);

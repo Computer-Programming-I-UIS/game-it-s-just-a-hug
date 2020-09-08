@@ -29,10 +29,10 @@ Se hace uso de la librería de sonido minim, para poder instalarla siga los sigu
 
 ## Capturas de Pantalla
 <p align= "center">
-  <img src="https://user-images.githubusercontent.com/62948474/92427256-a91b3900-f151-11ea-8463-4ca291a3660f.PNG" width="450"/>
-  <img src="https://user-images.githubusercontent.com/62948474/92431235-9a864f00-f15c-11ea-893a-52aaf55b1f22.PNG" width="450"/>
+  <img src="https://user-images.githubusercontent.com/62948474/92427256-a91b3900-f151-11ea-8463-4ca291a3660f.PNG" width="350"/>
+  <img src="https://user-images.githubusercontent.com/62948474/92431235-9a864f00-f15c-11ea-893a-52aaf55b1f22.PNG" width="350"/>
 
-  <img src="https://user-images.githubusercontent.com/62948474/92431038-0e742780-f15c-11ea-99f7-94d171b52932.PNG" width="450"/>
+  <img src="https://user-images.githubusercontent.com/62948474/92431038-0e742780-f15c-11ea-99f7-94d171b52932.PNG" width="350"/>
 </p>
 
 ## Características Principales :heavy_check_mark:

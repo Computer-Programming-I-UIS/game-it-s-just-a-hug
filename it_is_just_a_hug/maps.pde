@@ -90,6 +90,7 @@ void importMap(int numMap){
       if(map[i][j] == 'S'){  //Recorre todo la matriz hasta que encuentra una S por primera vez
         
         numBGroundMap++;  //Aumenta el número de bloques Ground que hay
+        numBGroundMap = constrain(numBGroundMap, 0, Ground.length-1);  //Solución temporal al la "optimización de los bloques"
         Ground[numBGroundMap].setXY(j*sizeBlocks, i*sizeBlocks);  //Se establece esa la posición del bloque
         
         for(int sX = 1; sX < map[i].length -j; sX++){

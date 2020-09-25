@@ -230,8 +230,8 @@ class buttonEditor{
   int sizeX, sizeY;
   int type;
   
-  color Color1 = color(255,255,0);  //Color del borde cuando no está selecionado
-  color Color2 = color(255,0,0);  //Cuando el tile selecionado es el mismo del del boton
+  color Color1 = color(100);  //Color del borde cuando no está selecionado
+  color Color2 = color(#D00000);  //Cuando el tile selecionado es el mismo del del boton
   
   boolean prsd = false;  //Presionado o no
   boolean mslc = false;  //Mouse sobre el botón o no
@@ -275,14 +275,14 @@ class buttonEditor{
     if(info == null && type == tileSelected)  stroke(Color2);  //Si el tile seleccionado es el mismo del boton lo colorea de otro color
     else  stroke(Color1);
     if(mslc)  strokeWeight(3);  //Si el mouse está sobre el botón, el borde es más grueso
-    else  strokeWeight(1.5);
+    else  strokeWeight(2);
     
     //Dibujar botón
-    fill(250);
-    rect(x, y, sizeX, sizeY);
     if(info == null && Tiles[type].tileImage != null){  //Si es un botón de tile y ese tile SÍ tiene imagen
       copy(Tiles[type].tileImage, Tiles[type].defaultTile[0], Tiles[type].defaultTile[1], sizeBlocks,sizeBlocks, x,y, sizeX,sizeY);  //Pone la imagen del tile que corresponde
     }
+    noFill();
+    rect(x, y, sizeX, sizeY);
     //Texto
     if(info != null){
       fill(0);

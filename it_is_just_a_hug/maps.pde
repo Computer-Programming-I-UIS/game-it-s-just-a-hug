@@ -75,7 +75,7 @@ void importMap(int numMap){
   
   
   //Configuración
-  numBGroundMap = -1;  //Resetea la variable
+  numBGroundMap = -1;  //Resetea la variable  //Las variables de momento representan el index en el array NO el tamaño del array
   numBTeleportMap = -1;  //Resetea la variable
   //Reestablecer el tamaño y posición de los bloques a una unidad para que cuando se vuelva a importar pueda cambiarse de tamaño correcto
   for(int i = 0; i < Ground.length; i++){
@@ -93,11 +93,15 @@ void importMap(int numMap){
         numBGroundMap = constrain(numBGroundMap, 0, Ground.length-1);  //Solución temporal al la "optimización de los bloques"
         Ground[numBGroundMap].setXY(j*sizeBlocks, i*sizeBlocks);  //Se establece esa la posición del bloque
         
-        for(int sX = 1; sX < map[i].length -j; sX++){
-          if(map[i][j+sX] == 'S'){  //Si a la derecha hay más bloques S
-            Ground[numBGroundMap].setSize((sX+1)*sizeBlocks);  //Aumenta el ancho del bloque
+        for(int sX = j; sX < map[i].length; sX++){
+          if(map[i][sX] == 'S'){  //Si a la derecha hay más bloques S
+            Ground[numBGroundMap].setSize((sX-j+1)*sizeBlocks);  //Aumenta el ancho del bloque
           }else{  //Si no hay otra S seguida se detiene y continua para contruir un nuevo bloque
-            j += sX-1;
+            j = sX;
+            break;
+          }
+          if(sX == map[i].length-1){  //Actualiza j cuando llega al borde derecho de la pantalla
+            j = sX;
             break;
           }
         }
@@ -116,6 +120,8 @@ void importMap(int numMap){
       
     }  //end for (j)
   }  //end for (i)
+  
+  numBGroundMap++;  //Se actualiza a la cantidad de bloques del mapa (NO AL MAYOR INDEX DEL ARRAY)
   
   //Establecer jugador aleatorio con la bomba
   

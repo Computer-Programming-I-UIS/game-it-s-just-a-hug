@@ -195,9 +195,14 @@ void draw(){
         Players[p].update();
         Players[p].display();
       }
+      //Mascara de colision de los bloques tierra
+      /*
+      for(int i = 0; i < numBGroundMap; i++){
+        Ground[i].display();
+      }
+      */
       
       //Tiempo
-      
       if(secondsTimer != second()){  //Actualizar el tiempo cada segundo
         secondsTimer = second();
         timer--;

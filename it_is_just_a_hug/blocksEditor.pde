@@ -237,11 +237,14 @@ void importSettingsMap(int numMap){  //Importar la configuración del mapa selec
           for(int c = 0; c < mapSettingsFile[r].length(); c++){
             BlocksE[r-1][c].type = Character.getNumericValue(mapSettingsFile[r].charAt(c));
             BlocksE[r-1][c].type = constrain(BlocksE[r-1][c].type, 0, Tiles.length-1);
-          }
-        }  //end for r
+            
+          }  //end for (c)
+        }  //end for (r)
       }
     }  //end tiene la cantidad de filas correctas y es un número
   }  //end el archivo existe
+  
+  tileSelected = 0;  //Inicia el editor con el tipo de tile en blanco
   
 }
 

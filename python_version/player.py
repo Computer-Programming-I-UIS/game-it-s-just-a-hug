@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Mar 11 18:25:12 2023
+Created on Tue Mar 14 10:15:38 2023
 
 @author: User
 """
+import pygame
 
 # RGB Colores
 Black = (0, 0, 0)
@@ -23,76 +24,9 @@ numBlocksY = 18;
 screen_size_x = sizeBlocks*numBlocksX
 screen_size_y = sizeBlocks*numBlocksY
 
-
-import pygame, sys
-pygame.init()
-
-size = (screen_size_x, screen_size_y) # Tamaño de la ventana
-screen = pygame.display.set_mode(size) #Crear ventana
-clock = pygame.time.Clock()
-
 general_speed=4
 
-level_map = [
-    '                                   ',
-    '                        X          ',
-    '                  X                ',
-    '                  X  X             ',
-    '                 XX                ',
-    'X               X X                ',
-    'XX                X                ',
-    'XXX           XXXXX                ',
-    'XXXXX                              ',
-    'XXXXXXXXXXXXXX                     ',
-    '     X X  X                        ',
-    '     X X  X                        ',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   ',
-    '                                   ',
-    '                                  X',
-    '          XXXXXXXXXXXXXXXXXXXXXXXXX',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    ] 
 
-
-def events():
-    for event in pygame.event.get():
-        #print(event)
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-            
-
-class bordered_block():
-    def __init__(self, left, top, width, height, border):
-        self.left=left
-        self.top=top
-        self.width=width
-        self.height=height
-        self.x=self.left+self.width/2
-        self.y=self.top+self.height/2
-        
-        self.color=Green
-        self.border = border
-        self.block = pygame.Rect(left, top, width, height)
-        self.insideblock = pygame.Rect(left+border/2, top+border/2, width-border, height-border)
-        
-        
-        
-    
-    def draw(self):
-        
-        
-        
-        pygame.draw.rect(screen, (self.color), self.block)
-        pygame.draw.rect(screen, (Black), self.insideblock)
-        
-    
-        
-    def change_color(self, color):
-        self.color = color
-    
-        
-        
 class Player():
     
     
@@ -114,7 +48,7 @@ class Player():
         
         
         
-    def draw(self):
+    def draw(self, screen):
         self.color = Red
         pygame.draw.rect(screen, (self.color), self.Player)
     
@@ -263,51 +197,4 @@ class Player():
                 
         #print (len(close_objects), "objects close")
         return close_objects
-        
-        
-        
-    
-    
-player1 = Player(50, 50, sizeBlocks, sizeBlocks*2)
-#floor1 = [bordered_block(block*sizeBlocks, sizeBlocks*15, sizeBlocks, sizeBlocks, 4) for block in range(numBlocksX)]
-#floor2 = [bordered_block(block*sizeBlocks, sizeBlocks*14, sizeBlocks, sizeBlocks, 4) for block in range(numBlocksX-20)]
-#floor3 = [bordered_block(block*sizeBlocks, sizeBlocks*13, sizeBlocks, sizeBlocks, 4) for block in range(numBlocksX-20)]
-#floor4 = [bordered_block(block*sizeBlocks, sizeBlocks*12, sizeBlocks, sizeBlocks, 4) for block in range(numBlocksX-20)]
-#floor = floor1+floor2+floor3+floor4
-tiles=[]
-for raw, index_row in zip(level_map,range(len(level_map))):
-    for letter,index_letter in zip(raw,range(len(raw))):
-        if letter == 'X':
-            tiles.append(bordered_block(sizeBlocks*index_letter, sizeBlocks*index_row, sizeBlocks, sizeBlocks, 4))
-        
-while True:    
-    events()
-    screen.fill(White) #color de fondo y limpia pantalla   
-    
-    
-    #------------ ZONA DE DIBUJO -----------------#
-    
-    #for block in floor: block.draw()      
-    for block in tiles: block.draw()      
-     
-    
-    #player1.closest_object(floor)
-    #player1.move(floor)
-    
-    player1.closest_object(tiles)
-    player1.move(tiles)
-    player1.draw()
-    
-    
-    
-    
-        
-    
-    
-    #-----------FIN ZONA DE DIBUJO ---------------#
-
-
-            
-    #Actualizar pantalla
-    pygame.display.flip()
-    clock.tick(60)
+   

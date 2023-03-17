@@ -76,30 +76,17 @@ for raw, index_row in zip(level_map,range(len(level_map))):
 while True:    
     events()
     screen.fill(White) #color de fondo y limpia pantalla   
-    
-    
+
     #------------ ZONA DE DIBUJO -----------------#
-    
         
-    for block in tiles: block.draw(screen)      
-     
+    for block in tiles: block.draw(screen)
     
-   
-    
-    player1.closest_object(tiles)
+    near = player1.closest_object(tiles)
     player1.move(tiles)
     player1.draw(screen)
     
-    
-    
-    
-        
-    
-    
     #-----------FIN ZONA DE DIBUJO ---------------#
 
-
-            
     #Actualizar pantalla
     pygame.display.flip()
     clock.tick(60)

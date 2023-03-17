@@ -2,6 +2,8 @@
 *.aseprite
 
 #Ejecutable
+__pycache__/
+
 application.windows32/
 application.windows64/
 application.linux32/

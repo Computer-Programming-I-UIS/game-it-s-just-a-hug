@@ -36,65 +36,86 @@ class Player():
         self.top = top
         self.width = width
         self.height = height
-        self.Player = pygame.Rect(left, top, width, height)
+        self.player = pygame.Rect(left, top, width, height)
+        self.color = Red
         
-        self.x_acceleration=0
-        self.y_acceleration=0.5
+        self.x_acceleration = 0
+        self.y_acceleration = 1
         
-        self.x_speed=0
-        self.y_speed=0
+        self.x_speed = 0
+        self.y_speed = 0
         
-        self.direcctions={'Up': False ,'Down':False ,'Left':False , 'Right': False}
-        
-        
+        self.direcctions = {'Up': False ,'Down':False ,'Left':False , 'Right': False}
+
         
     def draw(self, screen):
-        self.color = Red
-        pygame.draw.rect(screen, (self.color), self.Player)
+        pygame.draw.rect(screen, (self.color), self.player)
     
     def move(self, bloques):
         
         self.check_keys()
         
-        
-        self.y_speed+=self.y_acceleration
-        # Tener en cuenta teclas presionadas y direcciones bloqueadas
-        if self.keys[pygame.K_d] and not self.direcctions['Right']:
-            self.x_speed=general_speed
-            
-        elif self.keys[pygame.K_a] and not self.direcctions['Left']:
-            self.x_speed=-general_speed
+        # Definir el desplazamiento que va a tener el jugador en cada eje
+
+        if self.keys[pygame.K_d] and not self.direcctions['Right']:  # Mover a la derecha
+            self.x_speed = general_speed
+        elif self.keys[pygame.K_a] and not self.direcctions['Left']:  # Mover a la izquierda
+            self.x_speed = -general_speed
         else:
-            self.x_speed=0
+            self.x_speed = 0
         
-        if self.keys[pygame.K_w] and not self.direcctions['Up'] and self.direcctions['Down']: 
-            #Si esta libre arriba y esta sobre el suelo
-            self.y_speed=-general_speed*2
-        elif not self.direcctions['Down']:
-            if self.y_speed > 10:
-                self.y_speed = 5
+        if self.keys[pygame.K_w] and not self.direcctions['Up'] and self.direcctions['Down']:  # Saltar
+            self.y_speed = round(-3.5 * general_speed)
+        elif not self.direcctions['Down']:  # Caer
+            if self.y_speed < 15:  # Limite de velocidad de caida
+                self.y_speed += self.y_acceleration
+        else:
+            self.y_speed = 0
+        
+        
+        # # Intentar mover al jugador lo máximo posible
+        # player_shadow = self.player.move(self.player.left + self.x_speed, self.player.top + self.y_speed)
+        # if not Player.check_collisions(player_shadow, bloques):
+        #     self.player.move_ip(self.player.left + self.x_speed, self.player.top + self.y_speed)
+        #     return
+        if False: 
+            pass
+        else:  # De lo contrario entonces mueve poco a poco
+            sign = lambda a: 1 if a>0 else -1 if a<0 else 0
+
+            self.direcctions = {'Up': False ,'Down':False ,'Left':False , 'Right': False}
+            player_shadow = self.player.copy()
+
+            # Mover shadow en x
+            for _ in range(abs(self.x_speed)):
+                player_shadow.left += sign(self.x_speed)
+                if Player.check_collisions(player_shadow, bloques):
+                    player_shadow.left -= sign(self.x_speed)  # Revierte el desplazamiento
+                    if sign(self.x_speed) == 1:
+                        self.direcctions['Right'] = True
+                    elif sign(self.x_speed) == -1:
+                        self.direcctions['Left'] = True
+                    break
             
-            #self.y_speed=-general_speed
-        else: 
-            self.y_speed=0
-         
-        
-        
-        self.Player.left+=self.x_speed      
-        self.Player.top+=self.y_speed      
+            # Mover shadow en y
+            for _ in range(abs(self.y_speed)):
+                player_shadow.top += sign(self.y_speed)
+                if Player.check_collisions(player_shadow, bloques):
+                    player_shadow.top -= sign(self.y_speed)  # Revierte el desplazamiento
+                    if sign(self.y_speed) == 1:
+                        self.direcctions['Down'] = True
+                    elif sign(self.y_speed) == -1:
+                        self.direcctions['Up'] = True
+                        self.y_speed = 0
+                    break
             
-        
-        self.direcctions={'Up': False ,'Down':False ,'Left':False , 'Right': False} #limpiar colisiones
-        
-        
-        self.check_collisions(bloques)
-             
-        #self.Player.top+=self.y_speed
-    
-        
-        
-        
-        # collision with screen borders
+            # Mover jugador
+            self.player.left = player_shadow.left
+            self.player.top = player_shadow.top 
+
+            # TODO: Checar colisioner con borde de pantalla
+
+
     def check_keys(self):
         self.keys = pygame.key.get_pressed()
         
@@ -107,9 +128,10 @@ class Player():
         #     print("a pressed")
         #else:
         #    print ("a not pressed")
-    def check_collisions(self,bloques): 
-        '''        
 
+
+    def check_collisions(player_shadow, bloques): 
+        '''        
         Parameters
         ----------
         bloques : List of blocks close
@@ -118,79 +140,15 @@ class Player():
 
         Returns
         -------
-        None.
+        Boolean
 
         '''
-        
         for bloque in bloques:
-            direcctions={'Up': False ,'Down':False ,'Left':False , 'Right': False} #limpiar colisiones
-            # La direccion en la que este true, sera una direccion que esta bloqueada
-            collisions_tolerance = 10
-            
-            
-            if self.Player.colliderect(bloque.block):
-                if abs(bloque.block.top-self.Player.bottom) < collisions_tolerance: #toca por arriba al bloque
-                    direcctions['Down']= True
-                    self.Player.bottom = bloque.block.top
-                if abs(bloque.block.bottom-self.Player.top) < collisions_tolerance: #toca por abajo al bloque
-                    direcctions['Up']= True
-                    #print("Blocking Up")
-                    self.Player.top = bloque.block.bottom
-                    
-                if abs(bloque.block.right-self.Player.left) < collisions_tolerance: #toca por derecha al bloque
-                    direcctions['Left']= True
-                    self.Player.left = bloque.block.right
-                    
-                if abs(bloque.block.left-self.Player.right) < collisions_tolerance:  #toca por izquierda al bloque
-                    direcctions['Right']= True
-                    self.Player.right = bloque.block.left
-                
-                # Si se encuentra con una esquina (hay dos direcciones bloqueadas por el mismo bloque)
-                if not (direcctions['Down'] ^ direcctions['Up'] ^ direcctions['Left'] ^ direcctions['Right']):
-                    print ("Encontre una esquina")
-                    print("En y: ",self.y_speed)
-                    print("En x: ",self.x_speed)
-                    if abs(self.y_speed) > 0:
-                        # Si estaba cayendo, entonces quitar el bloqueo vertical (de este bloque)
-                        direcctions['Up']= False
-                        direcctions['Down']= False                        
-                    elif  0 < abs(self.x_speed):
-                        # Si estaba moviendose a los lados, entonces quitar el bloqueo horizontal (de este bloque)
-                        direcctions['Left']= False
-                        direcctions['Right']= False    
-                    elif abs(self.y_speed) > 0 and abs(self.x_speed) > 0:
-                        # Si se va moviendo en las dos direcciones, entonces quitar todos los bloqueos y dejar que otro bloque decida
-                        direcctions['Up']= False
-                        direcctions['Down']= False
-                        direcctions['Left']= False
-                        direcctions['Right']= False 
-                        
-                else: 
-                    print("No encontre esquina")
-            
-            # Si hay un true debido a este bloque, se agrega a los bloqueos
-            self.direcctions['Up']=self.direcctions['Up'] or direcctions['Up']
-            self.direcctions['Down']=self.direcctions['Down'] or direcctions['Down']
-            self.direcctions['Left']=self.direcctions['Left'] or direcctions['Left']
-            self.direcctions['Right']=self.direcctions['Right'] or direcctions['Right']
-                        
-        
-        # Bloqueos con los bordes de la pantalla
-        if self.Player.right >= screen_size_x:
-            self.direcctions['Right']= True
-            #self.x_speed *= -1 #borrar
-        if self.Player.left <0:
-            self.direcctions['Left']= True            
-            #self.x_speed *= -1 #borrar
-        if self.Player.bottom >= screen_size_y:
-            self.direcctions['Down']= True
-            #self.y_speed *= 0 #borrar
-        if self.Player.top <0:
-            self.direcctions['Up']= True
-            
-       
-            #self.y_speed *= 0 #borrar
-            
+            if player_shadow.colliderect(bloque.block):
+                return True
+        return False
+
+
     def closest_object(self, list_objets):
         """
         Esta funcion calcula la lista de objetos que estan cerca
@@ -209,7 +167,7 @@ class Player():
         close_objects=[]
         for obj in list_objets:
             
-            if abs(obj.x-self.Player.centerx) < sizeBlocks*2 and abs(obj.y-self.Player.centery) < sizeBlocks*2:
+            if abs(obj.x-self.player.centerx) < sizeBlocks*2 and abs(obj.y-self.player.centery) < sizeBlocks*2:
                 # Si el objeto este menos distancia de bloque de distancia
                 close_objects.append(obj)
                 obj.change_color(Blue)

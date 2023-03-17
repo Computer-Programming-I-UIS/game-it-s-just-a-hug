@@ -99,7 +99,7 @@ class Player:
                 player_shadow.left += sign(self.x_speed)
                 if (
                     Player.check_collisions(player_shadow, bloques)
-                    or (sign(self.x_speed) == 1 and self.player.right >= screen_size_y)
+                    or (sign(self.x_speed) == 1 and self.player.right >= screen_size_x)
                     or (sign(self.x_speed) == -1 and self.player.left <= 0)
                 ):
                     player_shadow.left -= sign(

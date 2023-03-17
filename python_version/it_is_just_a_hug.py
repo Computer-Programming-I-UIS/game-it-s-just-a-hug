@@ -35,26 +35,11 @@ size = (screen_size_x, screen_size_y) # Tamaño de la ventana
 screen = pygame.display.set_mode(size) #Crear ventana
 clock = pygame.time.Clock()
 
+with open('../it_is_just_a_hug/data/maps/map2.txt') as archivo:
+    level_map=archivo.readlines()
+    print(archivo.readlines())
 
-level_map = [
-    '                                   ',
-    '                        X          ',
-    '                  X                ',
-    '                  X  X             ',
-    '                 XX                ',
-    'X               X X                ',
-    'XX                X                ',
-    'XXX           XXXXX                ',
-    'XXXXX                              ',
-    'XXXXXXXXXXXXX                      ',
-    '     X X  X  X                     ',
-    '     X X  X                        ',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   ',
-    '                                   ',
-    '                                  X',
-    '          XXXXXXXXXXXXXXXXXXXXXXXXX',
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    ] 
+
 
 
 def events():
@@ -65,12 +50,12 @@ def events():
             sys.exit()
 
     
-player1 = Player(50, 50, sizeBlocks, sizeBlocks*2)
+player1 = Player(50, 100, sizeBlocks, sizeBlocks*2)
 
 tiles=[]
 for raw, index_row in zip(level_map,range(len(level_map))):
     for letter,index_letter in zip(raw,range(len(raw))):
-        if letter == 'X':
+        if letter == 'S':
             tiles.append(bordered_block(sizeBlocks*index_letter, sizeBlocks*index_row, sizeBlocks, sizeBlocks, 4))
         
 while True:    

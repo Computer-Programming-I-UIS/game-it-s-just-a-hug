@@ -13,3 +13,4 @@ application.linux-armv6hf/
 *.zip
 *.rar
 *.ico
+python_version/__pycache__

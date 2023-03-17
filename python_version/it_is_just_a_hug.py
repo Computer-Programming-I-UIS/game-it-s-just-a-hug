@@ -81,8 +81,7 @@ while True:
         
     for block in tiles: block.draw(screen)
     
-    near = player1.closest_object(tiles)
-    player1.move(tiles)
+    player1.move(player1.closest_object(tiles))
     player1.draw(screen)
     
     #-----------FIN ZONA DE DIBUJO ---------------#

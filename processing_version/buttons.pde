@@ -118,7 +118,7 @@ class button{
       println("Revisa el nombre del archivo y la carpeta \"data\\",folder,"\\\"");
       exit();
     }else{
-      imageB = loadImage("data/"+folder+"/"+imageName);
+      imageB = loadImage("../shared_files/data/"+folder+"/"+imageName);
     }
   }
   
@@ -373,7 +373,7 @@ void actionButtons(){
     if(BTitle[1].prsd){
       //Vuelve a cargar las imágenes de los mapas
       for(int b = 0; b < BMaps.length; b++){
-        BMaps[b].imageB = loadImage("data/"+BMaps[b].folder+"/"+BMaps[b].imageName);
+        BMaps[b].imageB = loadImage("../shared_files/data/"+BMaps[b].folder+"/"+BMaps[b].imageName);
       }
       mapMapSelected = 0;  //Reaparece en el mapa 1
       scene = 'M';
@@ -477,7 +477,7 @@ void actionButtons(){
           }
         }
         mapImage = get(0, 0, numBlocksX*sizeBlocks, numBlocksY*sizeBlocks);  //Solo exporta la parte de la pantalla que tiene el mapa
-        mapImage.save("data/maps/map"+numMap+".png");  //La almacena en la carpeta "maps"
+        mapImage.save("../shared_files/data/maps/map"+numMap+".png");  //La almacena en la carpeta "maps"
         
         //Archivo texto
         String [] mapTxt = new String[BlocksE.length];
@@ -495,7 +495,7 @@ void actionButtons(){
             }
           }
         }
-        saveStrings("data/maps/map"+numMap+".txt", mapTxt);    //Guarda el archivo de texto
+        saveStrings("../shared_files/data/maps/map"+numMap+".txt", mapTxt);    //Guarda el archivo de texto
         saveSettingsMap(numMap);  //Guarda la configuración del mapa
       }  //Hay dos jugadores
       

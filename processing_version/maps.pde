@@ -24,14 +24,14 @@ void importMap(int numMap){
   }
   
   //Comprueba que el archivo exista antes de intentar importarlo
-  if(!fileExists(fileNameMapTXT, "maps")){  //Si no existe
+  if(!fileExists(fileNameMapTXT, "../shared_files/data/maps")){  //Si no existe
     println("¡ERROR!");
     println("El archivo", fileNameMapTXT, "NO existe o no se ecuentra en la carpeta \"data\\maps\"");
     println("Revisa el nombre del archivo y la carpeta \"data\\maps\"");
     exit();  //Acaba el programa
     
   }else{  //El archivo sí existe entonces lo importa
-    mapFile = loadStrings("data/maps/"+fileNameMapTXT);  //Carga el archivo
+    mapFile = loadStrings("../shared_files/data/maps/"+fileNameMapTXT);  //Carga el archivo
     
     if(mapFile.length != numBlocksY){  //El archivo tiene menos o más filas de la cantidad de bloques de alto
       println("¡ERROR!");
@@ -64,13 +64,13 @@ void importMap(int numMap){
   }  //end el archivo existe
   
   //Importar la imagen
-  if(!fileExists(fileNameMapPNG, "maps")){
+  if(!fileExists(fileNameMapPNG, "../shared_files/data/maps")){
     println("¡ERROR!");
     println("El archivo", fileNameMapPNG, "NO existe o no se ecuentra en la carpeta \"data\\maps\"");
     println("Revisa el nombre del archivo y la carpeta \"data\\maps\"");
     exit();  //Acaba el programa
   }else{
-    backgroundMap = loadImage("data/maps/"+fileNameMapPNG);
+    backgroundMap = loadImage("../shared_files/data/maps/"+fileNameMapPNG);
   }
   
   

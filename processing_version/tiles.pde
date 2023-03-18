@@ -60,7 +60,7 @@ class tile {
       println("Revisa el nombre del archivo y la carpeta \"data\\\" \nO elimina el tipo de tile");
       exit();  //Acaba el programa
     } else {
-      tileImage = loadImage("data/tiles/"+_fileName);
+      tileImage = loadImage("../shared_files/data/tiles/"+_fileName);
 
       if (tileImage.width%sizeBlocks != 0 || tileImage.height%sizeBlocks != 0) {  //Si el tamaño de la imagen no es correcta  (multiplo del tamaño de los tiles)
         println("¡ERROR!");

@@ -104,7 +104,7 @@ class port extends block{
   
   port(int _x, int _y){
     super(_x, _y);
-    sprite = loadImage("sprites/teleport.png");
+    sprite = loadImage("../shared_files/data/sprites/teleport.png");
   }
   
   void display(){

@@ -81,26 +81,26 @@ void setup(){
   
   
   //TitleScreen
-  titleSBackground = loadImage("titleScreen/only_background.png");
-  titleSPlayer1 = loadImage("titleScreen/player_azul.png");
-  titleSPlayer2 = loadImage("titleScreen/player_rojo.png");
-  titleSTitle = loadImage("titleScreen/title.png");
-  titleSBomb = loadImage("titleScreen/bombAnimation.png");
-  titleHow = loadImage("titleScreen/pantalla controles.png");
-  rating = loadImage("titleScreen/rating.png");
+  titleSBackground = loadImage("../shared_files/data/titleScreen/only_background.png");
+  titleSPlayer1 = loadImage("../shared_files/data/titleScreen/player_azul.png");
+  titleSPlayer2 = loadImage("../shared_files/data/titleScreen/player_rojo.png");
+  titleSTitle = loadImage("../shared_files/data/titleScreen/title.png");
+  titleSBomb = loadImage("../shared_files/data/titleScreen/bombAnimation.png");
+  titleHow = loadImage("../shared_files/data/titleScreen/pantalla controles.png");
+  rating = loadImage("../shared_files/data/titleScreen/rating.png");
   
-  pixelFont = createFont("fonts/monogram_extended.ttf",45);
+  pixelFont = createFont("../shared_files/data/fonts/monogram_extended.ttf",45);
   //pixelFont = loadFont("fonts/8-bitOperatorPlus-Regular-48.vlw");
   
   //Musica
   minim = new Minim(this);
-  musicTitleS = minim.loadFile("sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
+  musicTitleS = minim.loadFile("../shared_files/data/sounds/8bit-Smooth_Presentation_-_David_Fesliyan.mp3");
   musicTitleS.setGain(-40);  //Bajar el volumen
-  soundButton = minim.loadSample("sounds/pcmouseclick2.mp3"); 
+  soundButton = minim.loadSample("../shared_files/data/sounds/pcmouseclick2.mp3"); 
   soundButton.setGain(-20);
-  soundExplosion = minim.loadSample("sounds/explosion.mp3");
+  soundExplosion = minim.loadSample("../shared_files/data/sounds/explosion.mp3");
   soundExplosion.setGain(-5);
-  musicGame = minim.loadFile("sounds/Never_Surrender.mp3");
+  musicGame = minim.loadFile("../shared_files/data/sounds/Never_Surrender.mp3");
   musicGame.setGain(-40);
   
   //Importa un nivel cualquiera
@@ -113,12 +113,12 @@ void setup(){
       println("El archivo",backgroundsFilesNames[i],"NO existe");
       exit();
     }else{
-      backgroundsImages[i] = loadImage("data/backgrounds/"+backgroundsFilesNames[i]);
+      backgroundsImages[i] = loadImage("../shared_files/data/backgrounds/"+backgroundsFilesNames[i]);
     }
   }
   
   //Titulo con bomba
-  titleBomb = loadImage("data/titleScreen/title-bomb.png");
+  titleBomb = loadImage("../shared_files/data/titleScreen/title-bomb.png");
   
 }
 
@@ -400,7 +400,7 @@ void setupScreen(boolean mapEditor){
   surface.setSize((sizeScreenX)*sizeBlocks, numBlocksY*sizeBlocks);  //Define el tamaño de la ventana
   surface.setLocation((displayWidth/2) - sizeScreenX*sizeBlocks/2, (displayHeight/2) - (numBlocksY+2)*sizeBlocks/2);  //Aparezca centrada la ventana
   surface.setTitle("It's just a Hug");  //Título de la ventana
-  PImage icon = loadImage("data/icon.png");
+  PImage icon = loadImage("../shared_files/data/icon.png");
   surface.setIcon(icon);
   //surface.setResizable(true);
 }
@@ -410,14 +410,15 @@ void setupScreen(boolean mapEditor){
   //Creditos al usuario "Schred"  https://discourse.processing.org/t/checking-if-a-file-exists-strange-runtime-error/20276/5
 boolean fileExists(String fileName, String folder){
   //Para un archivo que está directamente en la carpeta data (folder = "")
-  File dataFolder = new File(dataPath(folder));
+  File dataFolder = new File(dataPath("../"+folder));
   
-  for (File file : dataFolder.listFiles()) {    //Escanea todos los archivos en la carpeta data  (*Otra sintaxis de for)
-    if (file.getName().equals(fileName)){    //Si el nombre del archivo es el mismo del que se necesita
-      return true;
-    }
-  }
-  return false;
+  //for (File file : dataFolder.listFiles()) {    //Escanea todos los archivos en la carpeta data  (*Otra sintaxis de for)
+  //  print(file.getName());
+  //  if (file.getName().equals(fileName)){    //Si el nombre del archivo es el mismo del que se necesita
+  //    return true;
+  //  }
+  //}
+  return true;
 }
 
 //Obtener el signo de un número

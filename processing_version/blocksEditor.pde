@@ -192,7 +192,7 @@ void importSettingsMap(int numMap){  //Importar la configuración del mapa selec
   //Resetea los bloques
   resetBlocksE();
   
-  if(!fileExists(fileNameMapTXT, "maps")){  //Si no existe
+  if(!fileExists(fileNameMapTXT, "../shared_files/data/maps")){  //Si no existe
     println("¡ERROR!");
     println("El archivo", fileNameMapTXT, "NO existe o no se ecuentra en la carpeta \"data/maps\"");
     println("Revisa el nombre del archivo y la carpeta \"data/maps\"");
@@ -200,7 +200,7 @@ void importSettingsMap(int numMap){  //Importar la configuración del mapa selec
     resetBlocksE();
     
   }else{  //El archivo sí existe entonces lo importa
-    mapSettingsFile = loadStrings("data/maps/"+fileNameMapTXT);  //Carga el archivo
+    mapSettingsFile = loadStrings("../shared_files/data/maps/"+fileNameMapTXT);  //Carga el archivo
     
     if(mapSettingsFile.length != numBlocksY+1){  //No es del tamaño correcto
       println("¡ERROR!");
@@ -261,5 +261,5 @@ void saveSettingsMap(int _numMap){
       mapSettingsTxt[i+1] += Integer.toString(BlocksE[i][j].type);  //Guarda el tipo de bloque
     }
   }
-  saveStrings("data/maps/map"+_numMap+"_settings.txt", mapSettingsTxt);    //Guarda el archivo de texto
+  saveStrings("../shared_files/data/maps/map"+_numMap+"_settings.txt", mapSettingsTxt);    //Guarda el archivo de texto
 }

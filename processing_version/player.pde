@@ -102,10 +102,10 @@ class player{
       }
     }
     */
-    spriteWalk = loadImage("data/sprites/player01_walking.png");
-    spriteBomb = loadImage("data/sprites/player01_bomb.png");
-    spriteBurned = loadImage("data/sprites/player01_bomb_Actived.png");
-    skin = loadImage("data/sprites/player01_skin.png");
+    spriteWalk = loadImage("../shared_files/data/sprites/player01_walking.png");
+    spriteBomb = loadImage("../shared_files/data/sprites/player01_bomb.png");
+    spriteBurned = loadImage("../shared_files/data/sprites/player01_bomb_Actived.png");
+    skin = loadImage("../shared_files/data/sprites/player01_skin.png");
     sprite = spriteWalk;
   } 
   
@@ -116,10 +116,10 @@ class player{
   
   void setSkin(int _spriteColor){
     spriteColor = _spriteColor;
-    spriteWalk = loadImage("data/sprites/player0"+_spriteColor+"_walking.png");
-    spriteBomb = loadImage("data/sprites/player0"+_spriteColor+"_bomb.png");
-    spriteBurned = loadImage("data/sprites/player0"+_spriteColor+"_bomb_Actived.png");
-    skin = loadImage("data/sprites/player0"+_spriteColor+"_skin.png");
+    spriteWalk = loadImage("../shared_files/data/sprites/player0"+_spriteColor+"_walking.png");
+    spriteBomb = loadImage("../shared_files/data/sprites/player0"+_spriteColor+"_bomb.png");
+    spriteBurned = loadImage("../shared_files/data/sprites/player0"+_spriteColor+"_bomb_Actived.png");
+    skin = loadImage("../shared_files/data/sprites/player0"+_spriteColor+"_skin.png");
     
     sprite = spriteWalk;
     

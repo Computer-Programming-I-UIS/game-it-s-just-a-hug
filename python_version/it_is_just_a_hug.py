@@ -35,7 +35,7 @@ size = (screen_size_x, screen_size_y) # Tamaño de la ventana
 screen = pygame.display.set_mode(size) #Crear ventana
 clock = pygame.time.Clock()
 
-with open('../it_is_just_a_hug/data/maps/map2.txt') as archivo:
+with open('../files_shared/data/maps/map2.txt') as archivo:
     level_map=archivo.readlines()
     print(archivo.readlines())
 

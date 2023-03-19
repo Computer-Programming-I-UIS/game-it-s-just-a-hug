@@ -5,7 +5,15 @@ Created on Sat Mar 18 21:24:32 2023
 @author: User
 """
 
+#Tamaño de los Bloques
+sizeBlocks = 32;
+#Cantidad de Bloques
+numBlocksX = 35;
+numBlocksY = 18; 
 
+screen_size_x = sizeBlocks*numBlocksX
+screen_size_y = sizeBlocks*numBlocksY
+import pygame
 
 class scene():
     
@@ -44,22 +52,37 @@ class titleScreen(scene):
     def __init__(self, fondo, musica, letra):
         super().__init__(fondo, musica, letra)        
         self.titleSfade=0
-    
+        self.last_update=pygame.time.get_ticks()
+        self.showbomb = True
         #cargar otras imagenes
-    def show(self, screen, titleSTitle, titleSPlayer1, titleSPlayer2, keys):
+    def show(self, screen, titleSTitle, titleSPlayer1, titleSPlayer2, keys, text):
         super().show(screen)
         screen.blit(titleSTitle,(0,0))
         screen.blit(titleSPlayer1,(-self.titleSfade*10,self.titleSfade*10))
         screen.blit(titleSPlayer2,(self.titleSfade*10,self.titleSfade*10))
         
-        self.fade(keys)
+        animation_cooldown=500 #milisegundos
+        current_time=pygame.time.get_ticks() 
+        if current_time-self.last_update>animation_cooldown: #its time to change             
+            self.last_update=current_time
+            self.showbomb= not self.showbomb
+        # solo mostrar cada 500 segundos
+        
+        self.fade(keys)    
+        
+        if self.showbomb: screen.blit(text, text.get_rect(center=(screen_size_x/2, screen_size_y*7/8)))
+        
+        
+        
         
         #cargar las otras imagenes
     def fade(self, keys):
         if(keys[32] and self.titleSfade == 0):
              self.titleSfade = 1;
-         
-        if( self.titleSfade != 0):  self.titleSfade+=1
+                      
+        if( self.titleSfade != 0):
+            self.titleSfade+=1
+            self.showbomb = False
         if(self.titleSfade >= 40): self.next_scene = 'G' 
  
     

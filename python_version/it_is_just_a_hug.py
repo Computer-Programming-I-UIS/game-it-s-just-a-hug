@@ -51,14 +51,13 @@ titleHow = pygame.image.load("../shared_files/data/titleScreen/pantalla controle
 titleSfade=0 #
 
 musica = 'Cargar cancion aqui'
-
 scene_title_screen=titleScreen(titleSBackground, musica, 'T')
-
-
+pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",35)
+textpresspace = pixelFont.render("Presione espacio para continuar", 0, 'gray30')
 #SpritesSheets
 sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.png').convert_alpha()
 player1=SpriteSheet.SpriteSheet(sprite_sheet)
-#----------------------
+
 
 #-------GAMESCREEN
 #Mapa del nivel
@@ -99,8 +98,10 @@ while True:
     
     
     if scene == 'T':
-        scene_title_screen.show(screen, titleSTitle, titleSPlayer1, titleSPlayer2, keys)
+        scene_title_screen.show(screen, titleSTitle, titleSPlayer1, titleSPlayer2, keys, textpresspace)
         scene = scene_title_screen.get_next_scene()
+        # Calcula el centro del texto para poder ubicarlo facilmente
+        
     
     elif scene == 'G':
         scene_game_screen.show(screen, player1, tiles)

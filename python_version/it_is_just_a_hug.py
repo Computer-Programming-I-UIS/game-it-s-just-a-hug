@@ -31,7 +31,7 @@ pygame.init()
 
 from player import Player
 from tiles import bordered_block
-from scenes import titleScreen
+from scenes import titleScreen, gamescreen
 
 size = (screen_size_x, screen_size_y) # Tamaño de la ventana
 screen = pygame.display.set_mode(size) #Crear ventana
@@ -60,12 +60,14 @@ sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.
 player1=SpriteSheet.SpriteSheet(sprite_sheet)
 #----------------------
 
+#-------GAMESCREEN
 #Mapa del nivel
+
 with open('../shared_files/data/maps/map2.txt') as archivo:
     level_map=archivo.readlines()
 img_mapa = pygame.image.load('../shared_files/data/maps/map2.png').convert_alpha()
-
-screen.blit(img_mapa,(0,0))
+#-----------------
+scene_game_screen = gamescreen(img_mapa,musica,'G')
 
 
 def events():
@@ -99,11 +101,12 @@ while True:
     if scene == 'T':
         scene_title_screen.show(screen, titleSTitle, titleSPlayer1, titleSPlayer2, keys)
         scene = scene_title_screen.get_next_scene()
-        
+    
     elif scene == 'G':
-        screen.blit(img_mapa,(0,0))
-        player1.move(player1.closest_object(tiles))
-        player1.draw(screen)
+        scene_game_screen.show(screen, player1, tiles)
+        scene = scene_game_screen.get_next_scene()
+    
+   
         
     
         

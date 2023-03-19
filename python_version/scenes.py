@@ -27,6 +27,19 @@ class scene():
     def get_next_scene(self):
         return  self.next_scene
 
+   
+class gamescreen(scene):
+    
+    def show(self, screen, player1, tiles):
+        super().show(screen)
+        player1.move(player1.closest_object(tiles))
+        player1.draw(screen)
+        
+        
+    
+
+
+
 class titleScreen(scene):
     def __init__(self, fondo, musica, letra):
         super().__init__(fondo, musica, letra)        
@@ -48,6 +61,6 @@ class titleScreen(scene):
          
         if( self.titleSfade != 0):  self.titleSfade+=1
         if(self.titleSfade >= 40): self.next_scene = 'G' 
-    
+ 
     
         

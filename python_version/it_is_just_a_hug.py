@@ -26,6 +26,7 @@ screen_size_y = sizeBlocks*numBlocksY
 general_speed=4
 
 import pygame, sys
+import SpriteSheet
 pygame.init()
 
 from player import Player
@@ -35,11 +36,18 @@ size = (screen_size_x, screen_size_y) # Tamaño de la ventana
 screen = pygame.display.set_mode(size) #Crear ventana
 clock = pygame.time.Clock()
 
-with open('../files_shared/data/maps/map2.txt') as archivo:
+#SpritesSheets
+sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.png').convert_alpha()
+player1=SpriteSheet.SpriteSheet(sprite_sheet)
+#----------------------
+
+#Mapa del nivel
+with open('../shared_files/data/maps/map2.txt') as archivo:
     level_map=archivo.readlines()
     print(archivo.readlines())
+img_mapa = pygame.image.load('../shared_files/data/maps/map2.png').convert_alpha()
 
-
+screen.blit(img_mapa,(0,0))
 
 
 def events():
@@ -50,7 +58,7 @@ def events():
             sys.exit()
 
     
-player1 = Player(50, 100, sizeBlocks, sizeBlocks*2)
+player1 = Player(50, 100, sizeBlocks, sizeBlocks*2, player1)
 
 tiles=[]
 for raw, index_row in zip(level_map,range(len(level_map))):
@@ -61,13 +69,15 @@ for raw, index_row in zip(level_map,range(len(level_map))):
 while True:    
     events()
     screen.fill(White) #color de fondo y limpia pantalla   
-
+    screen.blit(img_mapa,(0,0))
     #------------ ZONA DE DIBUJO -----------------#
         
-    for block in tiles: block.draw(screen)
+    #for block in tiles: block.draw(screen)
     
     player1.move(player1.closest_object(tiles))
     player1.draw(screen)
+    
+    
     
     #-----------FIN ZONA DE DIBUJO ---------------#
 

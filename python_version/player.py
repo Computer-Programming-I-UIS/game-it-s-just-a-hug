@@ -5,7 +5,7 @@ Created on Tue Mar 14 10:15:38 2023
 @author: User
 """
 import pygame
-
+import SpriteSheet
 # RGB Colores
 Black = (0, 0, 0)
 White = (255, 255, 255)
@@ -27,7 +27,7 @@ general_speed = 4
 
 
 class Player:
-    def __init__(self, left, top, width, height):
+    def __init__(self, left, top, width, height, spriteimage):
 
         self.left = left
         self.top = top
@@ -43,17 +43,55 @@ class Player:
         self.y_speed = 0
 
         self.direcctions = {"Up": False, "Down": False, "Left": False, "Right": False}
-
+        
+        ##Sprites
+        self.player_animation={}
+        
+        self.player_animation['ToRight'] = [spriteimage.get_image(step, 0, 64, 64, 1, Green)  for step in range(10)] #guarda en un diccionario los sprites enlistados a la derecha
+        self.player_animation['ToLeft']  = [spriteimage.get_image(step, 1, 64, 64, 1, Green)  for step in range(10)] #guarda en un diccionario los sprites enlistados a la izquierda
+        self.Last_State=True # True is right, False is left
+        self.last_update=pygame.time.get_ticks()
+        self.frame=0
+        
+    def frame_update(self):
+        # manipulador de frames
+        animation_cooldown=100
+        self.current_time=pygame.time.get_ticks()     
+        if self.current_time-self.last_update>animation_cooldown: #its time to change frame
+            self.frame+=1
+            self.last_update=self.current_time
+            if self.frame>=10:
+                self.frame=0
+            
+    
     def draw(self, screen):
-        pygame.draw.rect(screen, (self.color), self.player)
+        
+        self.frame_update()
+        
+        #pygame.draw.rect(screen, (self.color), self.player)
+        
+        if self.x_speed>0:
+            frames = self.player_animation['ToRight'][self.frame]
+            self.Last_State=True
+        elif self.x_speed<0:
+            frames = self.player_animation['ToLeft'][self.frame]
+            self.Last_State=False
+        else: 
+            if self.Last_State:
+                frames = self.player_animation['ToRight'][0]
+            else:
+                frames =self.player_animation['ToLeft'][0]
+        screen.blit(frames, (self.player.left-16,self.player.top))
 
     def move(self, bloques):
 
         self.check_keys()
 
         # Definir el desplazamiento que va a tener el jugador en cada eje
-
-        if (
+        if self.keys[pygame.K_d] and self.keys[pygame.K_a]:
+            # Si presiona izquierda y derecha al mismo tiempo no mover
+            self.x_speed = 0
+        elif (
             self.keys[pygame.K_d] and not self.direcctions["Right"]
         ):  # Mover a la derecha
             self.x_speed = general_speed

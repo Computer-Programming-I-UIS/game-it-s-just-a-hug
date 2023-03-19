@@ -5,14 +5,6 @@ Created on Tue Mar 14 10:15:38 2023
 @author: User
 """
 import pygame
-import SpriteSheet
-# RGB Colores
-Black = (0, 0, 0)
-White = (255, 255, 255)
-Green = (0, 255, 0)
-Red = (255, 0, 0)
-Blue = (0, 0, 255)
-
 # Blocks
 # Tamaño de los Bloques
 sizeBlocks = 32
@@ -29,26 +21,23 @@ general_speed = 4
 class Player:
     def __init__(self, left, top, width, height, spriteimage):
 
-        self.left = left
-        self.top = top
-        self.width = width
-        self.height = height
         self.player = pygame.Rect(left, top, width, height)
-        self.color = Red
+        self.color = 'red'
 
         self.x_acceleration = 0
         self.y_acceleration = 1
 
         self.x_speed = 0
         self.y_speed = 0
-
+        
+        #direcciones bloqueadas
         self.direcctions = {"Up": False, "Down": False, "Left": False, "Right": False}
         
         ##Sprites
         self.player_animation={}
         
-        self.player_animation['ToRight'] = [spriteimage.get_image(step, 0, 64, 64, 1, Green)  for step in range(10)] #guarda en un diccionario los sprites enlistados a la derecha
-        self.player_animation['ToLeft']  = [spriteimage.get_image(step, 1, 64, 64, 1, Green)  for step in range(10)] #guarda en un diccionario los sprites enlistados a la izquierda
+        self.player_animation['ToRight'] = [spriteimage.get_image(step, 0, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la derecha
+        self.player_animation['ToLeft']  = [spriteimage.get_image(step, 1, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la izquierda
         self.Last_State=True # True is right, False is left
         self.last_update=pygame.time.get_ticks()
         self.frame=0
@@ -56,10 +45,10 @@ class Player:
     def frame_update(self):
         # manipulador de frames
         animation_cooldown=100
-        self.current_time=pygame.time.get_ticks()     
-        if self.current_time-self.last_update>animation_cooldown: #its time to change frame
+        current_time=pygame.time.get_ticks()     
+        if current_time-self.last_update>animation_cooldown: #its time to change frame
             self.frame+=1
-            self.last_update=self.current_time
+            self.last_update=current_time
             if self.frame>=10:
                 self.frame=0
             
@@ -226,9 +215,9 @@ class Player:
             ):
                 # Si el objeto esta a menos distancia de bloque de distancia
                 close_objects.append(obj)
-                obj.change_color(Blue)
+                obj.change_color('blue')
             else:
-                obj.change_color(Green)
+                obj.change_color('green')
 
         # print (len(close_objects), "objects close")
         return close_objects

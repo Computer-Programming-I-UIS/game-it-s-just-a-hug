@@ -5,39 +5,49 @@ Created on Sat Mar 18 21:24:32 2023
 @author: User
 """
 
-def titleScreen(titleSBackground, screen, titleSTitle, titleSPlayer1, titleSPlayer2, spaceKey, titleSfade):
+
+
+class scene():
     
-    screen.blit(titleSBackground,(0,0))
-    screen.blit(titleSTitle,(0,0))
+    def __init__(self, fondo, musica, letra):
+        self.letra = letra
+        self.next_scene=letra
+        self.fondo = fondo
+        self.musica = musica
+        
+        #cargar musica
+        pass
     
-    # if(spaceKey and titleSfade == 0):
-    #     titleSfade = 1;
-     
-    # if( titleSfade != 0):  titleSfade+=1
-    # if(titleSfade >= 40):
-    #     pass
-         #cambiar la escena
+    def show(self, screen):
+        #dibujar el fondo
+        screen.blit(self.fondo,(0,0))
+                
+        #sonar musica
+        
+    def get_next_scene(self):
+        return  self.next_scene
+
+class titleScreen(scene):
+    def __init__(self, fondo, musica, letra):
+        super().__init__(fondo, musica, letra)        
+        self.titleSfade=0
     
+        #cargar otras imagenes
+    def show(self, screen, titleSTitle, titleSPlayer1, titleSPlayer2, keys):
+        super().show(screen)
+        screen.blit(titleSTitle,(0,0))
+        screen.blit(titleSPlayer1,(-self.titleSfade*10,self.titleSfade*10))
+        screen.blit(titleSPlayer2,(self.titleSfade*10,self.titleSfade*10))
+        
+        self.fade(keys)
+        
+        #cargar las otras imagenes
+    def fade(self, keys):
+        if(keys[32] and self.titleSfade == 0):
+             self.titleSfade = 1;
          
-    screen.blit(titleSPlayer1,(0,0))
-    screen.blit(titleSPlayer2,(0,0))
-
-def startMenu():
-    pass
-
-def game():
-    pass
-
-def mapas():
-    pass
-
-def mapEditor():
-    pass
-
-def Creditos():
-    pass
-
-def howToPlay():
-    pass
-
-dict_scene = {'T':  titleScreen, 'I': startMenu, 'G': game, 'M': mapas, 'E': mapEditor, 'C': Creditos, 'H': howToPlay}
+        if( self.titleSfade != 0):  self.titleSfade+=1
+        if(self.titleSfade >= 40): self.next_scene = 'G' 
+    
+    
+        

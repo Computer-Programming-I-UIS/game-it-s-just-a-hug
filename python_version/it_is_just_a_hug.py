@@ -44,7 +44,6 @@ player1=SpriteSheet.SpriteSheet(sprite_sheet)
 #Mapa del nivel
 with open('../shared_files/data/maps/map2.txt') as archivo:
     level_map=archivo.readlines()
-    print(archivo.readlines())
 img_mapa = pygame.image.load('../shared_files/data/maps/map2.png').convert_alpha()
 
 screen.blit(img_mapa,(0,0))

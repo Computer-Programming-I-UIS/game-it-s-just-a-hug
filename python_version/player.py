@@ -59,10 +59,10 @@ class Player:
         
         #pygame.draw.rect(screen, (self.color), self.player)
         
-        if self.x_speed>0:
+        if self.x_speed>0 and not self.direcctions["Right"]:
             frames = self.player_animation['ToRight'][self.frame]
             self.Last_State=True
-        elif self.x_speed<0:
+        elif self.x_speed<0 and not self.direcctions["Left"]:
             frames = self.player_animation['ToLeft'][self.frame]
             self.Last_State=False
         else: 

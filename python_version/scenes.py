@@ -17,7 +17,7 @@ import pygame
 import SpriteSheet
 from buttons import textbutton
 
-class scene():
+class Scene():
     
     def __init__(self, fondo, musica, letra):
         self.letra = letra
@@ -35,10 +35,14 @@ class scene():
         #sonar musica
         
     def get_next_scene(self):
+        
+        if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+            self.next_scene = 'I'
+        
         return  self.next_scene
 
    
-class gamescreen(scene):
+class gamescreen(Scene):
     
     def show(self, screen, player1, tiles):
         super().show(screen)
@@ -50,7 +54,7 @@ class gamescreen(scene):
 
 
 
-class titleScreen(scene):
+class titleScreen(Scene):
     def __init__(self, fondo, musica, letra):
         super().__init__(fondo, musica, letra)        
         self.titleSfade=0
@@ -78,7 +82,7 @@ class titleScreen(scene):
                
         
     def fade(self, keys):
-        if(keys[32] and self.titleSfade == 0):
+        if(keys[pygame.K_SPACE] and self.titleSfade == 0):
              self.titleSfade = 1;
                       
         if( self.titleSfade != 0):
@@ -86,7 +90,7 @@ class titleScreen(scene):
             self.showtext = False
         if(self.titleSfade >= 40): self.next_scene = 'I' 
  
-class mainMenu(scene):
+class mainMenu(Scene):
     def __init__(self, fondo, musica, letra, fuente):
         super().__init__(fondo, musica, letra)
         self.jugar = textbutton('Jugar', fuente)
@@ -128,6 +132,6 @@ class mainMenu(scene):
             self.howtoplay.clicked=False #Reseteo
             
         if self.salir.mouseClicked(): 
-            self.next_scene = 'X' 
+            self.next_scene = 'E' 
             self.salir.clicked=False #Reseteo
             

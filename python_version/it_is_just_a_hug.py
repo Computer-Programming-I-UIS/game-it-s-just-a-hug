@@ -31,7 +31,7 @@ pygame.init()
 
 from player import Player
 from tiles import bordered_block
-from scenes import titleScreen, gamescreen, mainMenu
+from scenes import titleScreen, gamescreen, mainMenu, Scene
 
 size = (screen_size_x, screen_size_y) # Tamaño de la ventana
 screen = pygame.display.set_mode(size) #Crear ventana
@@ -62,6 +62,8 @@ player1=SpriteSheet.SpriteSheet(sprite_sheet)
 pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",60)
 scene_menu = mainMenu(titleSBackground, musica, 'I', pixelFont)
 
+#-----how to play screen 
+scene_howtoplay = Scene(titleHow, musica, 'H')
 #-------GAMESCREEN
 #Mapa del nivel
 
@@ -97,7 +99,6 @@ while True:
     #for block in tiles: block.draw(screen)
     
     
-    print(pygame.mouse.get_pressed())
     
     
     if scene == 'T':
@@ -112,7 +113,15 @@ while True:
         scene_game_screen.show(screen, player1, tiles)
         scene = scene_game_screen.get_next_scene()
     
-   
+    elif scene == 'H':
+        scene_howtoplay.show(screen)
+        scene = scene_howtoplay.get_next_scene()
+        
+    
+    elif scene == 'E':
+        pygame.quit()
+        sys.exit()
+        
         
     
         

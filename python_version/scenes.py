@@ -14,6 +14,8 @@ numBlocksY = 18;
 screen_size_x = sizeBlocks*numBlocksX
 screen_size_y = sizeBlocks*numBlocksY
 import pygame
+import SpriteSheet
+from buttons import textbutton
 
 class scene():
     
@@ -44,7 +46,7 @@ class gamescreen(scene):
         player1.draw(screen)
         
         
-    
+
 
 
 
@@ -53,7 +55,7 @@ class titleScreen(scene):
         super().__init__(fondo, musica, letra)        
         self.titleSfade=0
         self.last_update=pygame.time.get_ticks()
-        self.showbomb = True
+        self.showtext = True
         #cargar otras imagenes
     def show(self, screen, titleSTitle, titleSPlayer1, titleSPlayer2, keys, text):
         super().show(screen)
@@ -65,25 +67,33 @@ class titleScreen(scene):
         current_time=pygame.time.get_ticks() 
         if current_time-self.last_update>animation_cooldown: #its time to change             
             self.last_update=current_time
-            self.showbomb= not self.showbomb
+            self.showtext= not self.showtext
         # solo mostrar cada 500 segundos
         
         self.fade(keys)    
         
-        if self.showbomb: screen.blit(text, text.get_rect(center=(screen_size_x/2, screen_size_y*7/8)))
+        if self.showtext: screen.blit(text, text.get_rect(center=(screen_size_x/2, screen_size_y*7/8)))
         
         
+               
         
-        
-        #cargar las otras imagenes
     def fade(self, keys):
         if(keys[32] and self.titleSfade == 0):
              self.titleSfade = 1;
                       
         if( self.titleSfade != 0):
             self.titleSfade+=1
-            self.showbomb = False
-        if(self.titleSfade >= 40): self.next_scene = 'G' 
+            self.showtext = False
+        if(self.titleSfade >= 40): self.next_scene = 'I' 
  
+class mainMenu(scene):
+    def __init__(self, fondo, musica, letra, fuente):
+        super().__init__(fondo, musica, letra)
+        self.jugar = textbutton('Jugar', fuente)        
+        
+    def show(self, screen,titleSTitle ):
+        super().show(screen)
+        screen.blit(titleSTitle,(0,0))
+        self.jugar.draw(screen, 0, 0) #modifcar lo de 0.0
     
         

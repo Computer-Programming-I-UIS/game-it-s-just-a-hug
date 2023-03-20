@@ -31,7 +31,7 @@ pygame.init()
 
 from player import Player
 from tiles import bordered_block
-from scenes import titleScreen, gamescreen
+from scenes import titleScreen, gamescreen, mainMenu
 
 size = (screen_size_x, screen_size_y) # Tamaño de la ventana
 screen = pygame.display.set_mode(size) #Crear ventana
@@ -58,6 +58,8 @@ textpresspace = pixelFont.render("Presione espacio para continuar", 0, 'gray30')
 sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.png').convert_alpha()
 player1=SpriteSheet.SpriteSheet(sprite_sheet)
 
+#--------------Main Menu
+scene_menu = mainMenu(titleSBackground, musica, 'I', pixelFont)
 
 #-------GAMESCREEN
 #Mapa del nivel
@@ -102,7 +104,9 @@ while True:
         scene = scene_title_screen.get_next_scene()
         # Calcula el centro del texto para poder ubicarlo facilmente
         
-    
+    elif scene == 'I':
+        scene_menu.show(screen, titleSTitle)
+        scene = scene_menu.get_next_scene()
     elif scene == 'G':
         scene_game_screen.show(screen, player1, tiles)
         scene = scene_game_screen.get_next_scene()

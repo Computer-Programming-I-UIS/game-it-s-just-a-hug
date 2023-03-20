@@ -98,7 +98,7 @@ class mainMenu(scene):
         
                 
         
-        self.dyButtons = self.jugar.rect.height + 5;
+        self.dyButtons = self.jugar.text.get_rect().height + 5;
         
     def show(self, screen, titleSTitle ):
         super().show(screen)

@@ -24,10 +24,15 @@ class textbutton():
         pos = pygame.mouse.get_pos()
         if (self.rect.collidepoint(pos)):
             self.text = pygame.transform.scale_by(self.text_original, 1.3)
+            if pygame.mouse.get_pressed()[0]:
+                #Si ademas se presiona el boton
+                self.clicked = True
+                
         else: 
             self.text = self.text_original
+       
                         
-        pass
-        
+    def mouseClicked(self):
+        return self.clicked
         
     

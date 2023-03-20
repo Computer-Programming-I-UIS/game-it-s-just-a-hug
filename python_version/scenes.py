@@ -110,5 +110,24 @@ class mainMenu(scene):
         self.howtoplay.draw(screen, screen.get_width()/2, screen.get_height()/2+self.dyButtons*3) 
         self.salir.draw(screen, screen.get_width()/2, screen.get_height()/2+self.dyButtons*4) 
         
+        # //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas / 'E' = Editor de Mapas / 'C' = Creditos / 'H' = ¿Cómo Jugar?
+        if self.jugar.mouseClicked(): 
+            self.next_scene = 'G' 
+            self.jugar.clicked=False #Reseteo
+            
+        if self.mapas.mouseClicked(): 
+            self.next_scene = 'M' 
+            self.mapas.clicked=False #Reseteo
         
-        
+        if self.credits.mouseClicked(): 
+            self.next_scene = 'C' 
+            self.credits.clicked=False #Reseteo
+            
+        if self.howtoplay.mouseClicked(): 
+            self.next_scene = 'H' 
+            self.howtoplay.clicked=False #Reseteo
+            
+        if self.salir.mouseClicked(): 
+            self.next_scene = 'X' 
+            self.salir.clicked=False #Reseteo
+            

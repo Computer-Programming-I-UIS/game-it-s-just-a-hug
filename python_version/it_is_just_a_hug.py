@@ -97,7 +97,7 @@ while True:
     #for block in tiles: block.draw(screen)
     
     
-    
+    print(pygame.mouse.get_pressed())
     
     
     if scene == 'T':

@@ -89,11 +89,26 @@ class titleScreen(scene):
 class mainMenu(scene):
     def __init__(self, fondo, musica, letra, fuente):
         super().__init__(fondo, musica, letra)
-        self.jugar = textbutton('Jugar', fuente)        
+        self.jugar = textbutton('Jugar', fuente)
+        self.mapas = textbutton('Mapas', fuente)
+        self.credits = textbutton('Créditos', fuente)
+        self.howtoplay = textbutton('¿Cómo Jugar?', fuente)
+        self.salir = textbutton('Salir', fuente)
         
-    def show(self, screen,titleSTitle ):
+        
+                
+        
+        self.dyButtons = self.jugar.rect.height + 5;
+        
+    def show(self, screen, titleSTitle ):
         super().show(screen)
         screen.blit(titleSTitle,(0,0))
-        self.jugar.draw(screen, 0, 0) #modifcar lo de 0.0
-    
+        
+        self.jugar.draw(screen, screen.get_width()/2, screen.get_height()/2+self.dyButtons*0) 
+        self.mapas.draw(screen, screen.get_width()/2, screen.get_height()/2+self.dyButtons*1) 
+        self.credits.draw(screen, screen.get_width()/2, screen.get_height()/2+self.dyButtons*2) 
+        self.howtoplay.draw(screen, screen.get_width()/2, screen.get_height()/2+self.dyButtons*3) 
+        self.salir.draw(screen, screen.get_width()/2, screen.get_height()/2+self.dyButtons*4) 
+        
+        
         

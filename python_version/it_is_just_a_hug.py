@@ -59,6 +59,7 @@ sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.
 player1=SpriteSheet.SpriteSheet(sprite_sheet)
 
 #--------------Main Menu
+pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",60)
 scene_menu = mainMenu(titleSBackground, musica, 'I', pixelFont)
 
 #-------GAMESCREEN

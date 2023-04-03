@@ -38,7 +38,7 @@ screen = pygame.display.set_mode(size) #Crear ventana
 clock = pygame.time.Clock()
 
 #---------Escena-----
-scene = 'T' # //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas / 'E' = Editor de Mapas / 'C' = Creditos / 'H' = ¿Cómo Jugar?
+scene = 'G' # //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas / 'E' = Editor de Mapas / 'C' = Creditos / 'H' = ¿Cómo Jugar?
 
 #--------Title
 
@@ -54,9 +54,13 @@ musica = 'Cargar cancion aqui'
 scene_title_screen=titleScreen(titleSBackground, musica, 'T')
 pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",35)
 textpresspace = pixelFont.render("Presione espacio para continuar", 0, 'gray30')
+
 #SpritesSheets
 sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.png').convert_alpha()
 player1=SpriteSheet.SpriteSheet(sprite_sheet)
+
+sprite_sheet2 = pygame.image.load('../shared_files/data/sprites/player02_walking.png').convert_alpha()
+player2=SpriteSheet.SpriteSheet(sprite_sheet2)
 
 #--------------Main Menu
 pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",60)
@@ -67,12 +71,21 @@ scene_howtoplay = Scene(titleHow, musica, 'H')
 #-------GAMESCREEN
 #Mapa del nivel
 
-with open('../shared_files/data/maps/map2.txt') as archivo:
+with open('../shared_files/data/maps/map4.txt') as archivo:
     level_map=archivo.readlines()
-img_mapa = pygame.image.load('../shared_files/data/maps/map2.png').convert_alpha()
+img_mapa = pygame.image.load('../shared_files/data/maps/map4.png').convert_alpha()
 #-----------------
 scene_game_screen = gamescreen(img_mapa,musica,'G')
 
+def findPosition(txtmap, number):
+    
+    for indiceY, level in enumerate(txtmap):
+        for indiceX, char in enumerate(level):
+            if char==number:
+                return (indiceX*sizeBlocks,indiceY*sizeBlocks)
+            
+        
+    return (0, 0)
 
 def events():
     for event in pygame.event.get():
@@ -80,9 +93,11 @@ def events():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-
-    
-player1 = Player(50, 100, sizeBlocks, sizeBlocks*2, player1)
+# 33 12
+positionP1 = findPosition(level_map, "2")
+positionP2 = findPosition(level_map, "1")
+player1 = Player(positionP1[0], positionP1[1], sizeBlocks, sizeBlocks*2, player1)
+player2 = Player(positionP2[0], positionP2[1], sizeBlocks, sizeBlocks*2, player2)
 
 tiles=[]
 for raw, index_row in zip(level_map,range(len(level_map))):
@@ -97,7 +112,12 @@ while True:
     #------------ ZONA DE DIBUJO -----------------#
         
     #for block in tiles: block.draw(screen)
-    
+    print("--Player 1--")
+    print("up: ", player1.player.top)
+    print("left: ", player1.player.left)
+    print("--Player 2--")
+    print("up: ", player2.player.top)
+    print("left: ", player2.player.left)
     
     
     
@@ -110,7 +130,7 @@ while True:
         scene_menu.show(screen, titleSTitle)
         scene = scene_menu.get_next_scene()
     elif scene == 'G':
-        scene_game_screen.show(screen, player1, tiles)
+        scene_game_screen.show(screen, player1,player2, tiles)
         scene = scene_game_screen.get_next_scene()
     
     elif scene == 'H':

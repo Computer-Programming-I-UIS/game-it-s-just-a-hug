@@ -44,8 +44,12 @@ class Scene():
    
 class gamescreen(Scene):
     
-    def show(self, screen, player1, tiles):
+    def show(self, screen, player1,player2, tiles):
         super().show(screen)
+        
+        player2.move(player1.closest_object(tiles))
+        player2.draw(screen)
+        
         player1.move(player1.closest_object(tiles))
         player1.draw(screen)
         

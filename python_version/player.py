@@ -57,7 +57,7 @@ class Player:
         
         self.frame_update()
         
-        #pygame.draw.rect(screen, (self.color), self.player)
+        pygame.draw.rect(screen, (self.color), self.player)
         
         if self.x_speed>0 and not self.direcctions["Right"]:
             frames = self.player_animation['ToRight'][self.frame]

@@ -93,11 +93,14 @@ def events():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-# 33 12
-positionP1 = findPosition(level_map, "2")
-positionP2 = findPosition(level_map, "1")
-player1 = Player(positionP1[0], positionP1[1], sizeBlocks, sizeBlocks*2, player1)
-player2 = Player(positionP2[0], positionP2[1], sizeBlocks, sizeBlocks*2, player2)
+# playes initials
+control1 = {"Left": pygame.K_a , "Right": pygame.K_d , "Up": pygame.K_w, "Down": pygame.K_s}
+control2 = {"Left": pygame.K_LEFT, "Right": pygame.K_RIGHT, "Up":  pygame.K_UP,"Down": pygame.K_DOWN}
+
+positionP1 = findPosition(level_map, "1")
+positionP2 = findPosition(level_map, "2")
+player1 = Player(positionP1[0], positionP1[1], sizeBlocks, sizeBlocks*2, player1, control1)
+player2 = Player(positionP2[0], positionP2[1], sizeBlocks, sizeBlocks*2, player2, control2)
 
 tiles=[]
 for raw, index_row in zip(level_map,range(len(level_map))):

@@ -19,8 +19,9 @@ general_speed = 4
 
 
 class Player:
-    def __init__(self, left, top, width, height, spriteimage):
-
+    def __init__(self, left, top, width, height, spriteimage, control):
+        
+        self.control = control
         self.player = pygame.Rect(left, top, width, height)
         self.color = 'red'
 
@@ -75,24 +76,25 @@ class Player:
     def move(self, bloques):
 
         self.check_keys()
+        # Keys: controls: (izquierda, derecha, arriba, abajo)
 
         # Definir el desplazamiento que va a tener el jugador en cada eje
-        if self.keys[pygame.K_d] and self.keys[pygame.K_a]:
+        if self.keys[self.control["Right"]] and self.keys[self.control["Left"]]:
             # Si presiona izquierda y derecha al mismo tiempo no mover
             self.x_speed = 0
         elif (
-            self.keys[pygame.K_d] and not self.direcctions["Right"]
+            self.keys[self.control["Right"]] and not self.direcctions["Right"]
         ):  # Mover a la derecha
             self.x_speed = general_speed
         elif (
-            self.keys[pygame.K_a] and not self.direcctions["Left"]
+            self.keys[self.control["Left"]] and not self.direcctions["Left"]
         ):  # Mover a la izquierda
             self.x_speed = -general_speed
         else:
             self.x_speed = 0
 
         if (
-            self.keys[pygame.K_w]
+            self.keys[self.control["Up"]]
             and not self.direcctions["Up"]
             and self.direcctions["Down"]
         ):  # Saltar
@@ -168,7 +170,7 @@ class Player:
         # else:
         #     print ("up not pressed")
 
-        # if keys[pygame.K_a]:
+        # if keys[self.control["Left"]]:
         #     print("a pressed")
         # else:
         #    print ("a not pressed")

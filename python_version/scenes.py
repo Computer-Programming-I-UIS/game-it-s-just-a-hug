@@ -29,6 +29,7 @@ class Scene():
         pass
     
     def show(self, screen):
+        self.next_scene = self.letra
         #dibujar el fondo
         screen.blit(self.fondo,(0,0))
                 

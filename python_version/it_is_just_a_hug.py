@@ -28,7 +28,7 @@ general_speed=4
 import pygame, sys
 import SpriteSheet
 pygame.init()
-
+import random
 from player import Player
 from tiles import bordered_block
 from scenes import titleScreen, gamescreen, mainMenu, Scene
@@ -57,10 +57,12 @@ textpresspace = pixelFont.render("Presione espacio para continuar", 0, 'gray30')
 
 #SpritesSheets
 sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.png').convert_alpha()
-player1=SpriteSheet.SpriteSheet(sprite_sheet)
+sprite_sheetB = pygame.image.load('../shared_files/data/sprites/player01_bomb.png').convert_alpha()
+player1=(SpriteSheet.SpriteSheet(sprite_sheet),SpriteSheet.SpriteSheet(sprite_sheetB))
 
 sprite_sheet2 = pygame.image.load('../shared_files/data/sprites/player02_walking.png').convert_alpha()
-player2=SpriteSheet.SpriteSheet(sprite_sheet2)
+sprite_sheet2B = pygame.image.load('../shared_files/data/sprites/player02_bomb.png').convert_alpha()
+player2=(SpriteSheet.SpriteSheet(sprite_sheet2), SpriteSheet.SpriteSheet(sprite_sheet2B))
 
 #--------------Main Menu
 pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",60)
@@ -99,8 +101,9 @@ control2 = {"Left": pygame.K_LEFT, "Right": pygame.K_RIGHT, "Up":  pygame.K_UP,"
 
 positionP1 = findPosition(level_map, "1")
 positionP2 = findPosition(level_map, "2")
-player1 = Player(positionP1[0], positionP1[1], sizeBlocks, sizeBlocks*2, player1, control1)
-player2 = Player(positionP2[0], positionP2[1], sizeBlocks, sizeBlocks*2, player2, control2)
+bomb = bool(random.getrandbits(1)) #define quien tiene la bomba
+player1 = Player(positionP1[0], positionP1[1], sizeBlocks, sizeBlocks*2, player1, control1, bomb)
+player2 = Player(positionP2[0], positionP2[1], sizeBlocks, sizeBlocks*2, player2, control2, not bomb)
 
 tiles=[]
 for raw, index_row in zip(level_map,range(len(level_map))):

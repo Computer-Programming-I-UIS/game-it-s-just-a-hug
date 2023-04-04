@@ -19,8 +19,9 @@ general_speed = 4
 
 
 class Player:
-    def __init__(self, left, top, width, height, spriteimage, control):
+    def __init__(self, left, top, width, height, spriteimage, control, isbomb):
         
+        self.isbomb =isbomb
         self.control = control
         self.player = pygame.Rect(left, top, width, height)
         self.color = 'red'
@@ -37,8 +38,12 @@ class Player:
         ##Sprites
         self.player_animation={}
         
-        self.player_animation['ToRight'] = [spriteimage.get_image(step, 0, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la derecha
-        self.player_animation['ToLeft']  = [spriteimage.get_image(step, 1, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la izquierda
+        self.player_animation['ToRight'] = [spriteimage[0].get_image(step, 0, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la derecha
+        self.player_animation['ToLeft']  = [spriteimage[0].get_image(step, 1, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la izquierda
+        
+        self.player_animation['ToRightB'] = [spriteimage[1].get_image(step, 0, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la derecha
+        self.player_animation['ToLeftB']  = [spriteimage[1].get_image(step, 1, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la izquierda
+        
         self.Last_State=True # True is right, False is left
         self.last_update=pygame.time.get_ticks()
         self.frame=0
@@ -55,22 +60,28 @@ class Player:
             
     
     def draw(self, screen):
-        
+        animation={}
         self.frame_update()
+        if self.isbomb:
+            animation["ToRight"]=self.player_animation['ToRightB']
+            animation["ToLeft"]=self.player_animation['ToLeftB']
+        else:
+            animation["ToRight"]=self.player_animation['ToRight']
+            animation["ToLeft"]=self.player_animation['ToLeft']
         
-        pygame.draw.rect(screen, (self.color), self.player)
+        #pygame.draw.rect(screen, (self.color), self.player)
         
         if self.x_speed>0 and not self.direcctions["Right"]:
-            frames = self.player_animation['ToRight'][self.frame]
+            frames = animation['ToRight'][self.frame]
             self.Last_State=True
         elif self.x_speed<0 and not self.direcctions["Left"]:
-            frames = self.player_animation['ToLeft'][self.frame]
+            frames = animation['ToLeft'][self.frame]
             self.Last_State=False
         else: 
             if self.Last_State:
-                frames = self.player_animation['ToRight'][0]
+                frames = animation['ToRight'][0]
             else:
-                frames =self.player_animation['ToLeft'][0]
+                frames =animation['ToLeft'][0]
         screen.blit(frames, (self.player.left-16,self.player.top))
 
     def move(self, bloques):

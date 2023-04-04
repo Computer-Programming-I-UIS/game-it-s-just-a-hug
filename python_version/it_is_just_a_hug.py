@@ -77,7 +77,7 @@ with open('../shared_files/data/maps/map2.txt') as archivo:
     level_map=archivo.readlines()
 img_mapa = pygame.image.load('../shared_files/data/maps/map2.png').convert_alpha()
 #-----------------
-scene_game_screen = gamescreen(img_mapa,musica,'G')
+scene_game_screen = gamescreen(img_mapa,musica,'G',titleSBomb)
 
 
 
@@ -156,7 +156,7 @@ while True:
         scene_menu.show(screen, titleSTitle)
         scene = scene_menu.get_next_scene()
     elif scene == 'G':
-        scene_game_screen.show(screen, player1,player2, tiles)
+        scene_game_screen.show(screen, player1,player2, tiles, titleSBomb)
         scene = scene_game_screen.get_next_scene()
     
     elif scene == 'H':

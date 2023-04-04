@@ -44,9 +44,12 @@ class Scene():
 
    
 class gamescreen(Scene):
+    def __init__(self, fondo, musica, letra, bomb):
+        super().__init__(fondo, musica, letra)
+        self.bomb = SpriteSheet.SpriteSheet(bomb)
     
-    def show(self, screen, player1,player2, tiles):
-        super().show(screen)
+    def show(self, screen, player1,player2, tiles, bomb):
+        super().show(screen) # dibuja el fondo y el mapa
         
         
         
@@ -57,8 +60,13 @@ class gamescreen(Scene):
         player1.draw(screen, player2)
         
         self.checkponchado(player1,player2)
-        
-        
+        self.showbombacontador(screen, bomb)
+    def showbombacontador(self, screen, bomb):
+                
+        screen.blit(self.bomb.animation(0, 200, 200, 0.32,'green', 10), (15,15))
+        # The 0.32 scale make than (200,200) -> (64,64)
+         
+    
     def checkponchado(self, player1, player2):
         """
         Revisa que los jugadores se hayan alejado lo suficiente para poder poncharse

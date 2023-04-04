@@ -38,7 +38,7 @@ screen = pygame.display.set_mode(size) #Crear ventana
 clock = pygame.time.Clock()
 
 #---------Escena-----
-scene = 'G' # //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas / 'E' = Editor de Mapas / 'C' = Creditos / 'H' = ¿Cómo Jugar?
+scene = 'T' # //'T' = TitleScreen / 'I' = Menu Inicio / 'G' = Juego / 'M' = Mapas / 'E' = Editor de Mapas / 'C' = Creditos / 'H' = ¿Cómo Jugar?
 
 #--------Title
 
@@ -51,7 +51,7 @@ titleHow = pygame.image.load("../shared_files/data/titleScreen/pantalla controle
 titleSfade=0 #
 
 musica = 'Cargar cancion aqui'
-scene_title_screen=titleScreen(titleSBackground, musica, 'T')
+scene_title_screen=titleScreen(titleSBackground, musica, 'T',titleSBomb)
 pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",35)
 textpresspace = pixelFont.render("Presione espacio para continuar", 0, 'gray30')
 
@@ -66,16 +66,16 @@ player2=(SpriteSheet.SpriteSheet(sprite_sheet2), SpriteSheet.SpriteSheet(sprite_
 
 #--------------Main Menu
 pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",60)
-scene_menu = mainMenu(titleSBackground, musica, 'I', pixelFont)
+scene_menu = mainMenu(titleSBackground, musica, 'I', pixelFont, titleSBomb)
 
 #-----how to play screen 
 scene_howtoplay = Scene(titleHow, musica, 'H')
 #-------GAMESCREEN
 #Mapa del nivel
 
-with open('../shared_files/data/maps/map4.txt') as archivo:
+with open('../shared_files/data/maps/map2.txt') as archivo:
     level_map=archivo.readlines()
-img_mapa = pygame.image.load('../shared_files/data/maps/map4.png').convert_alpha()
+img_mapa = pygame.image.load('../shared_files/data/maps/map2.png').convert_alpha()
 #-----------------
 scene_game_screen = gamescreen(img_mapa,musica,'G')
 

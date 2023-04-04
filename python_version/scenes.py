@@ -60,17 +60,23 @@ class gamescreen(Scene):
 
 
 class titleScreen(Scene):
-    def __init__(self, fondo, musica, letra):
+    def __init__(self, fondo, musica, letra, bomb):
         super().__init__(fondo, musica, letra)        
         self.titleSfade=0
         self.last_update=pygame.time.get_ticks()
         self.showtext = True
+        self.bomb = SpriteSheet.SpriteSheet(bomb)
         #cargar otras imagenes
     def show(self, screen, titleSTitle, titleSPlayer1, titleSPlayer2, keys, text):
-        super().show(screen)
+        super().show(screen)        
+        
+        screen.blit(self.bomb.animation(0, 200, 200, 1,'green', 10), (660,20))
+        
         screen.blit(titleSTitle,(0,0))
         screen.blit(titleSPlayer1,(-self.titleSfade*10,self.titleSfade*10))
         screen.blit(titleSPlayer2,(self.titleSfade*10,self.titleSfade*10))
+        
+        
         
         animation_cooldown=500 #milisegundos
         current_time=pygame.time.get_ticks() 
@@ -96,14 +102,14 @@ class titleScreen(Scene):
         if(self.titleSfade >= 40): self.next_scene = 'I' 
  
 class mainMenu(Scene):
-    def __init__(self, fondo, musica, letra, fuente):
+    def __init__(self, fondo, musica, letra, fuente, bomb):
         super().__init__(fondo, musica, letra)
         self.jugar = textbutton('Jugar', fuente)
         self.mapas = textbutton('Mapas', fuente)
         self.credits = textbutton('Créditos', fuente)
         self.howtoplay = textbutton('¿Cómo Jugar?', fuente)
         self.salir = textbutton('Salir', fuente)
-        
+        self.bomb = SpriteSheet.SpriteSheet(bomb)
         
                 
         
@@ -111,6 +117,7 @@ class mainMenu(Scene):
         
     def show(self, screen, titleSTitle ):
         super().show(screen)
+        screen.blit(self.bomb.animation(0, 200, 200, 1,'green', 10), (660,20))
         screen.blit(titleSTitle,(0,0))
         
         self.jugar.draw(screen, screen.get_width()/2, screen.get_height()/2+self.dyButtons*0) 

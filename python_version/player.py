@@ -82,6 +82,8 @@ class Player:
                 frames = animation['ToRight'][0]
             else:
                 frames =animation['ToLeft'][0]
+                
+        
         screen.blit(frames, (self.player.left-16,self.player.top))
 
     def move(self, bloques):

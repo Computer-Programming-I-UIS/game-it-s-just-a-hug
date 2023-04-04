@@ -5,6 +5,7 @@ Created on Tue Mar 14 10:15:38 2023
 @author: User
 """
 import pygame
+import numpy as np
 # Blocks
 # Tamaño de los Bloques
 sizeBlocks = 32
@@ -22,9 +23,14 @@ class Player:
     def __init__(self, left, top, width, height, spriteimage, control, isbomb):
         
         self.isbomb =isbomb
+        self.issepareted = True
+        
+        
         self.control = control
         self.player = pygame.Rect(left, top, width, height)
         self.color = 'red'
+        
+        
 
         self.x_acceleration = 0
         self.y_acceleration = 1
@@ -59,9 +65,10 @@ class Player:
                 self.frame=0
             
     
-    def draw(self, screen):
+    def draw(self, screen, otherplayer):
         animation={}
         self.frame_update()
+        self.distance = np.sqrt((self.player.centerx-otherplayer.player.centerx)**2+(self.player.centery-otherplayer.player.centery)**2) #pitagoras
         if self.isbomb:
             animation["ToRight"]=self.player_animation['ToRightB']
             animation["ToLeft"]=self.player_animation['ToLeftB']

@@ -48,11 +48,44 @@ class gamescreen(Scene):
     def show(self, screen, player1,player2, tiles):
         super().show(screen)
         
+        
+        
         player2.move(player2.closest_object(tiles))
-        player2.draw(screen)
+        player2.draw(screen,player1)
         
         player1.move(player1.closest_object(tiles))
-        player1.draw(screen)
+        player1.draw(screen, player2)
+        
+        self.checkponchado(player1,player2)
+        
+        
+    def checkponchado(self, player1, player2):
+        """
+        Revisa que los jugadores se hayan alejado lo suficiente para poder poncharse
+        Parameters, modifica el estado bomba o no d elos jugadores
+        ----------
+        player1 : player
+            .
+        player2 : player
+            .
+
+        Returns
+        -------
+        None.
+
+        """
+        print(player1.distance)
+        if player1.distance > 80:
+            player1.issepareted = True
+            player2.issepareted = True
+        if (player1.issepareted and player2.issepareted) and player1.player.colliderect(player2.player):
+            # si ya se habian separado y ahora se estan tocando
+            player1.isbomb = not player1.isbomb # Invierte estados si tiene o no la bomba
+            player2.isbomb = not player1.isbomb # Es lo contrario de del player 1
+            player1.issepareted = False
+            player2.issepareted = False
+      
+        
         
         
 

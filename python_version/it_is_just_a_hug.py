@@ -79,7 +79,27 @@ img_mapa = pygame.image.load('../shared_files/data/maps/map2.png').convert_alpha
 #-----------------
 scene_game_screen = gamescreen(img_mapa,musica,'G')
 
+
+
 def findPosition(txtmap, number):
+    """
+    Busca dentro del mapa de texto donde esta la ubicacion de algun jugador
+
+    Parameters
+    ----------
+    txtmap : lista de strings
+        Es el mapa leido como strings.
+    number : int
+        Es el numero de jugador.
+
+    Returns
+    -------
+    int
+        posicion en x.
+    int
+        posicion en Y.
+
+    """
     
     for indiceY, level in enumerate(txtmap):
         for indiceX, char in enumerate(level):

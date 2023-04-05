@@ -53,6 +53,7 @@ titleSfade=0 #
 musica = 'Cargar cancion aqui'
 scene_title_screen=titleScreen(titleSBackground, musica, 'T',titleSBomb)
 pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",35)
+pixelFont50 =pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",50)
 textpresspace = pixelFont.render("Presione espacio para continuar", 0, 'gray30')
 
 #SpritesSheets
@@ -77,7 +78,7 @@ with open('../shared_files/data/maps/map2.txt') as archivo:
     level_map=archivo.readlines()
 img_mapa = pygame.image.load('../shared_files/data/maps/map2.png').convert_alpha()
 #-----------------
-scene_game_screen = gamescreen(img_mapa,musica,'G',titleSBomb)
+scene_game_screen = gamescreen(img_mapa,musica,'G',titleSBomb, pixelFont50)
 
 
 
@@ -137,13 +138,13 @@ while True:
     keys = pygame.key.get_pressed()
     #------------ ZONA DE DIBUJO -----------------#
         
-    #for block in tiles: block.draw(screen)
-    print("--Player 1--")
-    print("up: ", player1.player.top)
-    print("left: ", player1.player.left)
-    print("--Player 2--")
-    print("up: ", player2.player.top)
-    print("left: ", player2.player.left)
+    # #for block in tiles: block.draw(screen)
+    # print("--Player 1--")
+    # print("up: ", player1.player.top)
+    # print("left: ", player1.player.left)
+    # print("--Player 2--")
+    # print("up: ", player2.player.top)
+    # print("left: ", player2.player.left)
     
     
     

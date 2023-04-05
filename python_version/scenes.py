@@ -44,13 +44,31 @@ class Scene():
 
    
 class gamescreen(Scene):
-    def __init__(self, fondo, musica, letra, bomb):
+    def __init__(self, fondo, musica, letra, bomb, font):
         super().__init__(fondo, musica, letra)
-        self.bomb = SpriteSheet.SpriteSheet(bomb)
+        self.bomb = SpriteSheet.SpriteSheet(bomb) 
+        self.font = font
+        
+        self.lastupdate = pygame.time.get_ticks()
+        self.time_remaining = 60
+        
+        
+    def timecount(self):
+        if pygame.time.get_ticks()-self.lastupdate>1000:
+            
+            self.lastupdate = pygame.time.get_ticks()
+            self.time_remaining -=1
+            self.text_time = self.font.render(str(self.time_remaining), 0, 'white')
+            print(self.time_remaining)
+        
+        
+        
+    
     
     def show(self, screen, player1,player2, tiles, bomb):
         super().show(screen) # dibuja el fondo y el mapa
         
+        self.timecount() #update timer
         
         
         player2.move(player2.closest_object(tiles))
@@ -62,10 +80,10 @@ class gamescreen(Scene):
         self.checkponchado(player1,player2)
         self.showbombacontador(screen, bomb)
     def showbombacontador(self, screen, bomb):
-                
+        
         screen.blit(self.bomb.animation(0, 200, 200, 0.32,'green', 10), (15,15))
         # The 0.32 scale make than (200,200) -> (64,64)
-         
+        screen.blit(self.text_time, (27,27))
     
     def checkponchado(self, player1, player2):
         """
@@ -82,7 +100,7 @@ class gamescreen(Scene):
         None.
 
         """
-        print(player1.distance)
+        #print(player1.distance)
         if player1.distance > 80:
             player1.issepareted = True
             player2.issepareted = True

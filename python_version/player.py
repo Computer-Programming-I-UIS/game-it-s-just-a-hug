@@ -23,6 +23,7 @@ class Player:
     def __init__(self, left, top, width, height, spriteimage, control, isbomb):
         
         self.isbomb =isbomb
+        self.kaboom = False
         self.issepareted = True
         
         
@@ -31,6 +32,7 @@ class Player:
         self.color = 'red'
         
         self.stopmove=False
+        self.reset_frame = False
 
         self.x_acceleration = 0
         self.y_acceleration = 1
@@ -50,12 +52,19 @@ class Player:
         self.player_animation['ToRightB'] = [spriteimage[1].get_image(step, 0, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la derecha
         self.player_animation['ToLeftB']  = [spriteimage[1].get_image(step, 1, 64, 64, 1, 'green')  for step in range(10)] #guarda en un diccionario los sprites enlistados a la izquierda
         
+        self.player_animation['kaboomRight'] = [spriteimage[2].get_image(step, 0, 64, 64, 1, 'green')  for step in range(10)]
+        self.player_animation['kaboomLeft'] = [spriteimage[2].get_image(step, 1, 64, 64, 1, 'green')  for step in range(10)]
+        
         self.Last_State=True # True is right, False is left
         self.last_update=pygame.time.get_ticks()
         self.frame=0
     
     
-        
+    def Reset_frame(self):
+        if self.reset_frame == False:            
+            self.frame = 0
+            self.reset_frame=True
+    
     def frame_update(self):
         # manipulador de frames
         animation_cooldown=100
@@ -65,12 +74,33 @@ class Player:
             self.last_update=current_time
             if self.frame>=10:
                 self.frame=0
-            
+    def Kaboom(self):
+        self.Reset_frame()
+        animation_cooldown=100
+        current_time=pygame.time.get_ticks()     
+        if current_time-self.last_update>animation_cooldown: #its time to change frame
+            self.frame+=1
+            self.last_update=current_time
+            if self.frame>=10:
+                self.frame=9
     
     def draw(self, screen, otherplayer):
+        
+        if self.kaboom and self.isbomb:            
+            self.Kaboom()
+            if self.Last_State:
+                frames = self.player_animation['kaboomRight'][self.frame]
+            else:
+                frames =self.player_animation['kaboomLeft'][self.frame]
+            screen.blit(frames, (self.player.left-16,self.player.top))
+            return
+        
         animation={}
         self.frame_update()
         self.distance = np.sqrt((self.player.centerx-otherplayer.player.centerx)**2+(self.player.centery-otherplayer.player.centery)**2) #pitagoras
+        
+        
+        
         if self.isbomb:
             animation["ToRight"]=self.player_animation['ToRightB']
             animation["ToLeft"]=self.player_animation['ToLeftB']
@@ -92,6 +122,8 @@ class Player:
             else:
                 frames =animation['ToLeft'][0]
                 
+        
+            
         
         screen.blit(frames, (self.player.left-16,self.player.top))
     def stopMove(self, status): 

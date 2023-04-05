@@ -68,6 +68,8 @@ class gamescreen(Scene):
                 self.time_after_explotion-=1
                 player1.stopMove(True)
                 player2.stopMove(True)
+                player1.kaboom = True
+                player2.kaboom = True
                 # Ejecutar explosion
                 if self.time_after_explotion ==0:
                     player1.stopMove(False)
@@ -78,7 +80,11 @@ class gamescreen(Scene):
                     self.time_after_explotion = self.time_after_explotionMax
                     self.time_remaining = self.time_max
                     
-     
+                    #Limpiar estados
+                    player1.kaboom = False
+                    player2.kaboom = False
+                    player1.reset_frame = False
+                    player2.reset_frame = False
     
     def show(self, screen, player1,player2, tiles, bomb):
         super().show(screen) # dibuja el fondo y el mapa
@@ -100,7 +106,7 @@ class gamescreen(Scene):
         # The 0.32 scale make than (200,200) -> (64,64)
         #screen.blit(, (27,27))
         screen.blit(self.text_time, self.text_time.get_rect(center=(45, 49)))
-        print(pygame.mouse.get_pos())
+        
     
     def checkponchado(self, player1, player2):
         """

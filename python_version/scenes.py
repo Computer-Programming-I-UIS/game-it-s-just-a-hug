@@ -50,25 +50,40 @@ class gamescreen(Scene):
         self.font = font
         
         self.lastupdate = pygame.time.get_ticks()
-        self.time_remaining = 60
+        self.time_max = 10
+        self.time_remaining = self.time_max
+        self.time_after_explotionMax = 4
+        self.time_after_explotion =  self.time_after_explotionMax
         
+    def change_map(self):
+        pass
         
-    def timecount(self):
-        if pygame.time.get_ticks()-self.lastupdate>1000:
-            
+    def timecount(self, player1, player2):
+        if (pygame.time.get_ticks()-self.lastupdate>1000):
             self.lastupdate = pygame.time.get_ticks()
-            self.time_remaining -=1
-            self.text_time = self.font.render(str(self.time_remaining), 0, 'white')
-            print(self.time_remaining)
-        
-        
-        
-    
+            if self.time_remaining>0:                
+                self.time_remaining -=1
+                self.text_time = self.font.render(str(self.time_remaining), 0, 'white')
+            elif(self.time_remaining==0): # Se acabo el tiempo
+                self.time_after_explotion-=1
+                player1.stopMove(True)
+                player2.stopMove(True)
+                # Ejecutar explosion
+                if self.time_after_explotion ==0:
+                    player1.stopMove(False)
+                    player2.stopMove(False)
+                    #Cambiar de escena
+                    self.change_map()
+                    # Iniciar contadores de nuevo
+                    self.time_after_explotion = self.time_after_explotionMax
+                    self.time_remaining = self.time_max
+                    
+     
     
     def show(self, screen, player1,player2, tiles, bomb):
         super().show(screen) # dibuja el fondo y el mapa
         
-        self.timecount() #update timer
+        self.timecount(player1, player2) #update timer
         
         
         player2.move(player2.closest_object(tiles))

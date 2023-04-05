@@ -30,7 +30,7 @@ class Player:
         self.player = pygame.Rect(left, top, width, height)
         self.color = 'red'
         
-        
+        self.stopmove=False
 
         self.x_acceleration = 0
         self.y_acceleration = 1
@@ -53,6 +53,8 @@ class Player:
         self.Last_State=True # True is right, False is left
         self.last_update=pygame.time.get_ticks()
         self.frame=0
+    
+    
         
     def frame_update(self):
         # manipulador de frames
@@ -92,9 +94,15 @@ class Player:
                 
         
         screen.blit(frames, (self.player.left-16,self.player.top))
-
+    def stopMove(self, status): 
+        self.stopmove = status
+        
     def move(self, bloques):
-
+        
+        if self.stopmove:
+            return
+            
+        
         self.check_keys()
         # Keys: controls: (izquierda, derecha, arriba, abajo)
 

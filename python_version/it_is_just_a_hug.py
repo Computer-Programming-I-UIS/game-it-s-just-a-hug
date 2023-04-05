@@ -59,11 +59,13 @@ textpresspace = pixelFont.render("Presione espacio para continuar", 0, 'gray30')
 #SpritesSheets
 sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.png').convert_alpha()
 sprite_sheetB = pygame.image.load('../shared_files/data/sprites/player01_bomb.png').convert_alpha()
-player1=(SpriteSheet.SpriteSheet(sprite_sheet),SpriteSheet.SpriteSheet(sprite_sheetB))
+sprite_sheetB_Activated = pygame.image.load('../shared_files/data/sprites/player01_bomb_Actived.png').convert_alpha()
+player1=(SpriteSheet.SpriteSheet(sprite_sheet),SpriteSheet.SpriteSheet(sprite_sheetB),SpriteSheet.SpriteSheet(sprite_sheetB_Activated))
 
 sprite_sheet2 = pygame.image.load('../shared_files/data/sprites/player02_walking.png').convert_alpha()
 sprite_sheet2B = pygame.image.load('../shared_files/data/sprites/player02_bomb.png').convert_alpha()
-player2=(SpriteSheet.SpriteSheet(sprite_sheet2), SpriteSheet.SpriteSheet(sprite_sheet2B))
+sprite_sheet2B_Activated = pygame.image.load('../shared_files/data/sprites/player02_bomb_Actived.png').convert_alpha()
+player2=(SpriteSheet.SpriteSheet(sprite_sheet2), SpriteSheet.SpriteSheet(sprite_sheet2B),SpriteSheet.SpriteSheet(sprite_sheet2B_Activated))
 
 #--------------Main Menu
 pixelFont = pygame.font.Font("../shared_files/data/fonts/monogram_extended.ttf",60)

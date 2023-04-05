@@ -83,7 +83,9 @@ class gamescreen(Scene):
         
         screen.blit(self.bomb.animation(0, 200, 200, 0.32,'green', 10), (15,15))
         # The 0.32 scale make than (200,200) -> (64,64)
-        screen.blit(self.text_time, (27,27))
+        #screen.blit(, (27,27))
+        screen.blit(self.text_time, self.text_time.get_rect(center=(45, 49)))
+        print(pygame.mouse.get_pos())
     
     def checkponchado(self, player1, player2):
         """

@@ -106,13 +106,13 @@ class gamescreen(Scene):
         
         control1 = {"Left": pygame.K_a , "Right": pygame.K_d , "Up": pygame.K_w, "Down": pygame.K_s}
         control2 = {"Left": pygame.K_LEFT, "Right": pygame.K_RIGHT, "Up":  pygame.K_UP,"Down": pygame.K_DOWN}
-
+        
         positionP1 = findPosition(self.maps[self.actual_map-1][0], "1")
         positionP2 = findPosition(self.maps[self.actual_map-1][0], "2")
         bomb = bool(random.getrandbits(1)) #define quien tiene la bomba
         self.player1 = Player(positionP1[0], positionP1[1], sizeBlocks, sizeBlocks*2, player1, control1, bomb)
         self.player2 = Player(positionP2[0], positionP2[1], sizeBlocks, sizeBlocks*2, player2, control2, not bomb)
-        
+    
     def change_map(self, maps):
         #elije aletoriamente entre los mapas sin repetir y sin que este vacio
         index = random.randint(1,self.max_maps)
@@ -128,7 +128,12 @@ class gamescreen(Scene):
                 if letter == 'S':
                     self.tiles.append(bordered_block(sizeBlocks*index_letter, sizeBlocks*index_row, sizeBlocks, sizeBlocks, 4))
         # Una vez elegido el mapa, hacemos los cargues:
-            
+        positionP1 = findPosition(self.maps[self.actual_map-1][0], "1")
+        positionP2 = findPosition(self.maps[self.actual_map-1][0], "2")
+        print(positionP2)
+        self.player1.respawn(positionP2[0], positionP2[1])
+        self.player2.respawn(positionP1[0], positionP1[1])
+        
         self.choosed_map = True 
         
     def load_maps(self):
@@ -172,8 +177,9 @@ class gamescreen(Scene):
     def show(self, screen, bomb):
         
         if  self.choosed_map==False:
-            self.change_map(self.maps)
             self.initial_Set()
+            self.change_map(self.maps)
+            
         super().show(screen) # dibuja el fondo y el mapa
         
         self.timecount() #update timer
@@ -213,13 +219,13 @@ class gamescreen(Scene):
         #print(player1.distance)
         if self.player1.distance > 80:
             self.player1.issepareted = True
-            self.player1.issepareted = True
-        if (self.player1.issepareted and self.player1.issepareted) and self.player1.player.colliderect(self.player1.player):
+            self.player2.issepareted = True
+        if (self.player1.issepareted and self.player2.issepareted) and self.player1.player.colliderect(self.player2.player):
             # si ya se habian separado y ahora se estan tocando
             self.player1.isbomb = not self.player1.isbomb # Invierte estados si tiene o no la bomba
-            self.player1.isbomb = not self.player1.isbomb # Es lo contrario de del player 1
+            self.player2.isbomb = not self.player1.isbomb # Es lo contrario de del player 1
             self.player1.issepareted = False
-            self.player1.issepareted = False
+            self.player2.issepareted = False
       
         
         

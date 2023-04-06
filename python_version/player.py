@@ -83,7 +83,12 @@ class Player:
             self.last_update=current_time
             if self.frame>=10:
                 self.frame=9
-    
+    def respawn(self, left, top):
+        # Reposicion al jugador para la siguiente ronda
+        self.player.left = left
+        self.player.top = top
+        
+        
     def draw(self, screen, otherplayer):
         
         if self.kaboom and self.isbomb:            

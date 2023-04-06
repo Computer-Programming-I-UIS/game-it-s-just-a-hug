@@ -16,6 +16,37 @@ screen_size_y = sizeBlocks*numBlocksY
 import pygame
 import SpriteSheet
 from buttons import textbutton
+import random
+from tiles import bordered_block
+from player import Player
+
+def findPosition(txtmap, number):
+    """
+    Busca dentro del mapa de texto donde esta la ubicacion de algun jugador
+
+    Parameters
+    ----------
+    txtmap : lista de strings
+        Es el mapa leido como strings.
+    number : int
+        Es el numero de jugador.
+
+    Returns
+    -------
+    int
+        posicion en x.
+    int
+        posicion en Y.
+
+    """
+    
+    for indiceY, level in enumerate(txtmap):
+        for indiceX, char in enumerate(level):
+            if char==number:
+                return (indiceX*sizeBlocks,indiceY*sizeBlocks)
+            
+        
+    return (0, 0)
 
 class Scene():
     
@@ -26,7 +57,7 @@ class Scene():
         self.musica = musica
         
         #cargar musica
-        pass
+        
     
     def show(self, screen):
         self.next_scene = self.letra
@@ -44,21 +75,73 @@ class Scene():
 
    
 class gamescreen(Scene):
-    def __init__(self, fondo, musica, letra, bomb, font):
-        super().__init__(fondo, musica, letra)
+    def __init__(self, musica, letra, bomb, font):
+        self.letra = letra
+        self.next_scene=letra        
+        self.musica = musica        
         self.bomb = SpriteSheet.SpriteSheet(bomb) 
         self.font = font
+        self.max_maps = 5 # numero maximo de mapas por cargar
+        self.actual_map = 0
+        self.choosed_map = False
         
         self.lastupdate = pygame.time.get_ticks()
         self.time_max = 10
         self.time_remaining = self.time_max
         self.time_after_explotionMax = 4
-        self.time_after_explotion =  self.time_after_explotionMax
+        self.time_after_explotion =  self.time_after_explotionMax        
+        self.load_maps()
         
-    def change_map(self):
-        pass
+    def initial_Set(self):
+        #SpritesSheets
+        sprite_sheet = pygame.image.load('../shared_files/data/sprites/player01_walking.png').convert_alpha()
+        sprite_sheetB = pygame.image.load('../shared_files/data/sprites/player01_bomb.png').convert_alpha()
+        sprite_sheetB_Activated = pygame.image.load('../shared_files/data/sprites/player01_bomb_Actived.png').convert_alpha()
+        player1=(SpriteSheet.SpriteSheet(sprite_sheet),SpriteSheet.SpriteSheet(sprite_sheetB),SpriteSheet.SpriteSheet(sprite_sheetB_Activated))
+
+        sprite_sheet2 = pygame.image.load('../shared_files/data/sprites/player02_walking.png').convert_alpha()
+        sprite_sheet2B = pygame.image.load('../shared_files/data/sprites/player02_bomb.png').convert_alpha()
+        sprite_sheet2B_Activated = pygame.image.load('../shared_files/data/sprites/player02_bomb_Actived.png').convert_alpha()
+        player2=(SpriteSheet.SpriteSheet(sprite_sheet2), SpriteSheet.SpriteSheet(sprite_sheet2B),SpriteSheet.SpriteSheet(sprite_sheet2B_Activated))
         
-    def timecount(self, player1, player2):
+        control1 = {"Left": pygame.K_a , "Right": pygame.K_d , "Up": pygame.K_w, "Down": pygame.K_s}
+        control2 = {"Left": pygame.K_LEFT, "Right": pygame.K_RIGHT, "Up":  pygame.K_UP,"Down": pygame.K_DOWN}
+
+        positionP1 = findPosition(self.maps[self.actual_map-1][0], "1")
+        positionP2 = findPosition(self.maps[self.actual_map-1][0], "2")
+        bomb = bool(random.getrandbits(1)) #define quien tiene la bomba
+        self.player1 = Player(positionP1[0], positionP1[1], sizeBlocks, sizeBlocks*2, player1, control1, bomb)
+        self.player2 = Player(positionP2[0], positionP2[1], sizeBlocks, sizeBlocks*2, player2, control2, not bomb)
+        
+    def change_map(self, maps):
+        #elije aletoriamente entre los mapas sin repetir y sin que este vacio
+        index = random.randint(1,self.max_maps)
+        while (index == self.actual_map):
+            index = random.randint(1,self.max_maps)
+        self.actual_map = index
+        print("chossed map:", index)
+        self.fondo = maps[index-1][1]
+        
+        self.tiles=[]
+        for raw, index_row in zip(maps[index-1][0],range(len(maps[index-1][0]))):
+            for letter,index_letter in zip(raw,range(len(raw))):
+                if letter == 'S':
+                    self.tiles.append(bordered_block(sizeBlocks*index_letter, sizeBlocks*index_row, sizeBlocks, sizeBlocks, 4))
+        # Una vez elegido el mapa, hacemos los cargues:
+            
+        self.choosed_map = True 
+        
+    def load_maps(self):
+        self.maps = []
+        for n in range(1,self.max_maps+1,1): # cuenta de 1 a max_maps    
+            with open('../shared_files/data/maps/map'+str(n)+'.txt') as archivo:
+                level_map=archivo.readlines()
+            img_mapa = pygame.image.load('../shared_files/data/maps/map'+str(n)+'.png').convert_alpha()
+            self.maps.append((level_map, img_mapa))
+        
+        
+        
+    def timecount(self):
         if (pygame.time.get_ticks()-self.lastupdate>1000):
             self.lastupdate = pygame.time.get_ticks()
             if self.time_remaining>0:                
@@ -66,39 +149,43 @@ class gamescreen(Scene):
                 self.text_time = self.font.render(str(self.time_remaining), 0, 'white')
             elif(self.time_remaining==0): # Se acabo el tiempo
                 self.time_after_explotion-=1
-                player1.stopMove(True)
-                player2.stopMove(True)
-                player1.kaboom = True
-                player2.kaboom = True
+                self.player1.stopMove(True)
+                self.player2.stopMove(True)
+                self.player1.kaboom = True
+                self.player2.kaboom = True
                 # Ejecutar explosion
                 if self.time_after_explotion ==0:
-                    player1.stopMove(False)
-                    player2.stopMove(False)
+                    self.player1.stopMove(False)
+                    self.player2.stopMove(False)
                     #Cambiar de escena
-                    self.change_map()
+                    self.change_map(self.maps)
                     # Iniciar contadores de nuevo
                     self.time_after_explotion = self.time_after_explotionMax
                     self.time_remaining = self.time_max
                     
                     #Limpiar estados
-                    player1.kaboom = False
-                    player2.kaboom = False
-                    player1.reset_frame = False
-                    player2.reset_frame = False
+                    self.player1.kaboom = False
+                    self.player2.kaboom = False
+                    self.player1.reset_frame = False
+                    self.player2.reset_frame = False
     
-    def show(self, screen, player1,player2, tiles, bomb):
+    def show(self, screen, bomb):
+        
+        if  self.choosed_map==False:
+            self.change_map(self.maps)
+            self.initial_Set()
         super().show(screen) # dibuja el fondo y el mapa
         
-        self.timecount(player1, player2) #update timer
+        self.timecount() #update timer
         
         
-        player2.move(player2.closest_object(tiles))
-        player2.draw(screen,player1)
+        self.player2.move(self.player2.closest_object(self.tiles))
+        self.player2.draw(screen,self.player1)
         
-        player1.move(player1.closest_object(tiles))
-        player1.draw(screen, player2)
+        self.player1.move(self.player1.closest_object(self.tiles))
+        self.player1.draw(screen, self.player2)
         
-        self.checkponchado(player1,player2)
+        self.checkponchado()
         self.showbombacontador(screen, bomb)
     def showbombacontador(self, screen, bomb):
         
@@ -108,7 +195,7 @@ class gamescreen(Scene):
         screen.blit(self.text_time, self.text_time.get_rect(center=(45, 49)))
         
     
-    def checkponchado(self, player1, player2):
+    def checkponchado(self):
         """
         Revisa que los jugadores se hayan alejado lo suficiente para poder poncharse
         Parameters, modifica el estado bomba o no d elos jugadores
@@ -124,15 +211,15 @@ class gamescreen(Scene):
 
         """
         #print(player1.distance)
-        if player1.distance > 80:
-            player1.issepareted = True
-            player2.issepareted = True
-        if (player1.issepareted and player2.issepareted) and player1.player.colliderect(player2.player):
+        if self.player1.distance > 80:
+            self.player1.issepareted = True
+            self.player1.issepareted = True
+        if (self.player1.issepareted and self.player1.issepareted) and self.player1.player.colliderect(self.player1.player):
             # si ya se habian separado y ahora se estan tocando
-            player1.isbomb = not player1.isbomb # Invierte estados si tiene o no la bomba
-            player2.isbomb = not player1.isbomb # Es lo contrario de del player 1
-            player1.issepareted = False
-            player2.issepareted = False
+            self.player1.isbomb = not self.player1.isbomb # Invierte estados si tiene o no la bomba
+            self.player1.isbomb = not self.player1.isbomb # Es lo contrario de del player 1
+            self.player1.issepareted = False
+            self.player1.issepareted = False
       
         
         

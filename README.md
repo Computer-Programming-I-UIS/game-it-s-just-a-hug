@@ -2,10 +2,14 @@ It's Just a Hug
 ================
 
 <p align= "center">
-	<img src="https://user-images.githubusercontent.com/68023761/91249232-15db1000-e71c-11ea-910e-5a27f9632ae0.png">
+	<img src="https://github.com/user-attachments/assets/a0dbac47-3fd7-451e-91ea-0110e257591a">
 </p>
 
 It's Just a Hug es un videoJuego multijugador local para dos jugadores donde cada uno tiene la misión de deshacerse de la bomba, para hacerlo deberá pegársela a su compañero y salir corriendo para no ser atrapado de nuevo. Al comienzo de una ronda un temporizador de 60 segundos empieza a correr, cuando el tiempo acabe el jugador que tenga la bomba en la mano le explotará y su contrincante ganará un punto y pasarán a otro mapa aleatorio.
+
+<p align= "center">
+	<img src="https://user-images.githubusercontent.com/68023761/91249232-15db1000-e71c-11ea-910e-5a27f9632ae0.png">
+</p>
 
 ## GamePlay Lanzamiento
 https://www.youtube.com/watch?v=eyfwnJ-hQec&ab_channel=Konat
